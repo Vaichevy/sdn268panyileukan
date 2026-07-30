@@ -25,6 +25,7 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
+  const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -39,9 +40,20 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      navigate({ to: "/admin" });
+      if (mode === "signup") {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: `${window.location.origin}/admin` },
+        });
+        if (error) throw error;
+        toast.success("Akun dibuat. Silakan masuk.");
+        setMode("login");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        navigate({ to: "/admin" });
+      }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Terjadi kesalahan");
     } finally {
@@ -57,7 +69,7 @@ function AuthPage() {
           <GraduationCap className="h-6 w-6" />
         </span>
         <h1 className="mt-5 text-center font-display text-2xl font-semibold text-foreground">
-          Masuk Panel Admin
+          {mode === "login" ? "Masuk Panel Admin" : "Daftar Akun Admin"}
         </h1>
         <p className="mt-2 text-center text-sm text-muted-foreground">
           Pengelolaan konten website SDN 268 Panyileukan
@@ -89,12 +101,21 @@ function AuthPage() {
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            Masuk
+            {mode === "login" ? "Masuk" : "Daftar"}
           </Button>
         </form>
 
+        <button
+          type="button"
+          onClick={() => setMode(mode === "login" ? "signup" : "login")}
+          className="mt-5 w-full text-center text-sm text-muted-foreground hover:text-primary"
+        >
+          {mode === "login"
+            ? "Belum punya akun? Daftar di sini"
+            : "Sudah punya akun? Masuk di sini"}
+        </button>
         <p className="mt-4 text-center text-xs text-muted-foreground">
-          Akun admin hanya dibuat oleh pengelola sekolah. Hubungi pengelola jika belum memiliki akses.
+          Akun pertama yang didaftarkan otomatis menjadi admin sekolah.
         </p>
       </div>
     </div>
