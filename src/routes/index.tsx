@@ -1,24 +1,57 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AnimatedBackground } from "@/components/site/AnimatedBackground";
+import { SiteNav } from "@/components/site/SiteNav";
+import { Hero } from "@/components/site/Hero";
+import { Profil } from "@/components/site/Profil";
+import { Sambutan } from "@/components/site/Sambutan";
+import { Galeri } from "@/components/site/Galeri";
+import { Berita } from "@/components/site/Berita";
+import { Kontak } from "@/components/site/Kontak";
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { useGallery, useNews, useSiteSettings, FALLBACK_SETTINGS } from "@/lib/cms";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "SDN 268 Panyileukan — Sekolah Dasar Negeri Kota Bandung" },
+      {
+        name: "description",
+        content:
+          "Website resmi SDN 268 Panyileukan, Cipadung Kidul, Panyileukan, Kota Bandung. Profil sekolah, sambutan kepala sekolah, galeri kegiatan, dan informasi kontak.",
+      },
+      { property: "og:title", content: "SDN 268 Panyileukan — Website Resmi Sekolah" },
+      {
+        property: "og:description",
+        content:
+          "Profil sekolah, sambutan kepala sekolah Maria Rosa, S.Pd., M.M., galeri momen kegiatan, dan lokasi SDN 268 Panyileukan Kota Bandung.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Beranda,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Beranda() {
+  const { data: settings } = useSiteSettings();
+  const { data: gallery } = useGallery();
+  const { data: news } = useNews();
+
+  const value = settings ?? (FALLBACK_SETTINGS as never);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="relative min-h-screen">
+      <AnimatedBackground />
+      <SiteNav schoolName={value?.school_name ?? FALLBACK_SETTINGS.school_name} />
+      <main>
+        <Hero settings={value} />
+        <Profil settings={value} />
+        <Sambutan settings={value} />
+        <Galeri items={gallery ?? []} />
+        <Berita items={news ?? []} />
+        <Kontak settings={value} />
+      </main>
+      <SiteFooter settings={value} />
     </div>
   );
 }
