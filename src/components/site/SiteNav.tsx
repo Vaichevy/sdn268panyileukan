@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { GraduationCap, Menu, X, ShieldCheck } from "lucide-react";
+import { Menu, X, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import logoAsset from "@/assets/logo-sdn268.png.asset.json";
 
 const LINKS = [
   { href: "#beranda", label: "Beranda" },
@@ -39,9 +40,13 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
         )}
       >
         <a href="#beranda" className="flex items-center gap-3">
-          <span className="gradient-hero flex h-10 w-10 items-center justify-center rounded-xl text-primary-foreground">
-            <GraduationCap className="h-5 w-5" />
-          </span>
+          <img
+            src={logoAsset.url}
+            alt="Logo SDN 268 Panyileukan"
+            width={40}
+            height={40}
+            className="h-10 w-10 shrink-0 object-contain"
+          />
           <span className="font-display text-base leading-tight font-semibold text-foreground sm:text-lg">
             {schoolName}
           </span>
