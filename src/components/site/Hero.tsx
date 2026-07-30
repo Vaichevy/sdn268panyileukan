@@ -1,0 +1,85 @@
+import { ArrowRight, MapPin, Phone, Sparkles } from "lucide-react";
+import heroImage from "@/assets/hero-sekolah.jpg";
+import type { SiteSettings } from "@/lib/cms";
+
+export function Hero({ settings }: { settings: SiteSettings | null }) {
+  const stats = [
+    { label: "Peserta Didik", value: settings?.stat_students },
+    { label: "Guru & Tenaga", value: settings?.stat_teachers },
+    { label: "Ruang Kelas", value: settings?.stat_classrooms },
+    { label: "Akreditasi", value: settings?.stat_accreditation },
+  ].filter((s) => s.value);
+
+  return (
+    <section id="beranda" className="relative pt-32 pb-16 sm:pt-40 sm:pb-24">
+      <div className="section-shell grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="animate-rise">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-1.5 text-xs font-semibold tracking-wide text-primary uppercase backdrop-blur">
+            <Sparkles className="h-3.5 w-3.5" />
+            NPSN {settings?.npsn || "20245726"} · Kota Bandung
+          </span>
+
+          <h1 className="mt-6 font-display text-4xl leading-[1.05] font-semibold text-foreground sm:text-6xl">
+            {settings?.school_name || "SDN 268 Panyileukan"}
+          </h1>
+
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            {settings?.tagline}
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a
+              href="#profil"
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition-transform hover:scale-[1.03]"
+            >
+              Profil Sekolah <ArrowRight className="h-4 w-4" />
+            </a>
+            <a
+              href="#galeri"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
+            >
+              Momen Kegiatan
+            </a>
+          </div>
+
+          <div className="mt-8 space-y-2 text-sm text-muted-foreground">
+            <p className="flex items-start gap-2">
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+              <span>{settings?.address}</span>
+            </p>
+            <p className="flex items-center gap-2">
+              <Phone className="h-4 w-4 shrink-0 text-primary" />
+              <span>{settings?.phone}</span>
+            </p>
+          </div>
+        </div>
+
+        <div className="animate-rise relative" style={{ animationDelay: "150ms" }}>
+          <div className="gradient-hero absolute -inset-4 rounded-[2.5rem] opacity-20 blur-2xl" />
+          <img
+            src={settings?.hero_image_url || heroImage}
+            alt={`Gedung ${settings?.school_name || "SDN 268 Panyileukan"}`}
+            width={1600}
+            height={1008}
+            className="relative aspect-[4/3] w-full rounded-[2rem] border border-border object-cover shadow-[var(--shadow-lift)]"
+          />
+        </div>
+      </div>
+
+      {stats.length > 0 ? (
+        <div className="section-shell mt-14">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {stats.map((stat) => (
+              <div key={stat.label} className="surface-card px-6 py-5 text-center">
+                <p className="font-display text-3xl font-semibold text-primary">{stat.value}</p>
+                <p className="mt-1 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </section>
+  );
+}
