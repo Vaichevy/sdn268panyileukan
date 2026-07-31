@@ -20,7 +20,7 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
           </span>
 
           <h1 className="mt-6 font-display text-4xl leading-[1.05] font-semibold text-foreground sm:text-6xl">
-            {settings?.school_name || "SDN 268 Panyileukan"}
+            {settings?.school_name || "SDN 268 Panyileukan"} — Sekolah Dasar Negeri Kota Bandung
           </h1>
 
           <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -61,6 +61,9 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
             alt={`Gedung ${settings?.school_name || "SDN 268 Panyileukan"}`}
             width={1600}
             height={1008}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             className="relative aspect-[4/3] w-full rounded-[2rem] border border-border object-cover shadow-[var(--shadow-lift)]"
           />
         </div>
