@@ -1,26 +1,17 @@
 import { Users, GraduationCap, Trees, Building2 } from "lucide-react";
 import { Reveal } from "./Reveal";
+import { useSiteSettings } from "@/lib/cms";
 
-const cards = [
-  {
-    icon: Users,
-    title: "Karakteristik Murid",
-    body: "Latar belakang keluarga beragam secara ekonomi & sosial — pekerja formal (UMR–subprofesional) 62,77%, profesional/wirausaha 12,77%, sektor informal 12,77%, keluarga prasejahtera 11,70%. Mayoritas beragama Islam (99%). Minat dan bakat murid sangat beragam: akademik, seni, olahraga, hingga IT.",
-  },
-  {
-    icon: GraduationCap,
-    title: "Pendidik & Tenaga Kependidikan",
-    body: "25 guru (termasuk Kepala Sekolah) dan 7 tenaga kependidikan. Terdiri atas PNS, PPPK, dan Guru Honor — mayoritas berkualifikasi S-1, sebagian S-2, dan bersertifikat pendidik.",
-  },
-];
-
-const lingkungan = [
+const DEFAULT_MURID =
+  "Latar belakang keluarga beragam secara ekonomi & sosial — pekerja formal (UMR–subprofesional) 62,77%, profesional/wirausaha 12,77%, sektor informal 12,77%, keluarga prasejahtera 11,70%. Mayoritas beragama Islam (99%). Minat dan bakat murid sangat beragam: akademik, seni, olahraga, hingga IT.";
+const DEFAULT_PTK =
+  "25 guru (termasuk Kepala Sekolah) dan 7 tenaga kependidikan. Terdiri atas PNS, PPPK, dan Guru Honor — mayoritas berkualifikasi S-1, sebagian S-2, dan bersertifikat pendidik.";
+const DEFAULT_LINGKUNGAN = [
   "Lokasi strategis: dekat kelurahan, Puskesmas, terminal, stasiun, GBLA, tempat ibadah, dan pasar.",
   "Kawasan Tanpa Rokok (KTR) & Rumah Mijel (daur ulang minyak jelantah).",
   "Masyarakat Sunda yang menjunjung gotong royong dan kepedulian lingkungan.",
 ];
-
-const sarana = [
+const DEFAULT_SARANA = [
   "Lab Komputer",
   "Perpustakaan",
   "Ruang Multimedia",
@@ -29,16 +20,41 @@ const sarana = [
   "14 CCTV",
 ];
 
+const toList = (value: string | null | undefined, fallback: string[]) => {
+  const items = (value ?? "")
+    .split("\n")
+    .map((line) => line.replace(/^[-•]\s*/, "").trim())
+    .filter(Boolean);
+  return items.length ? items : fallback;
+};
+
 export function Sekilas() {
+  const { data: settings } = useSiteSettings();
+
+  const cards = [
+    {
+      icon: Users,
+      title: "Karakteristik Murid",
+      body: settings?.sekilas_murid?.trim() || DEFAULT_MURID,
+    },
+    {
+      icon: GraduationCap,
+      title: "Pendidik & Tenaga Kependidikan",
+      body: settings?.sekilas_ptk?.trim() || DEFAULT_PTK,
+    },
+  ];
+  const lingkungan = toList(settings?.sekilas_lingkungan, DEFAULT_LINGKUNGAN);
+  const sarana = toList(settings?.sekilas_sarana, DEFAULT_SARANA);
+
   return (
     <section id="sekilas" className="py-20">
       <div className="section-shell">
         <Reveal className="max-w-2xl">
           <p className="text-xs font-semibold tracking-[0.2em] text-primary uppercase">
-            Sekilas Tentang Kami
+            {settings?.sekilas_eyebrow?.trim() || "Sekilas Tentang Kami"}
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-foreground sm:text-4xl">
-            Potret singkat warga dan lingkungan sekolah
+            {settings?.sekilas_heading?.trim() || "Potret singkat warga dan lingkungan sekolah"}
           </h2>
         </Reveal>
 
