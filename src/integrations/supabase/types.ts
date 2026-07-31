@@ -95,6 +95,12 @@ export type Database = {
           npsn: string
           phone: string
           school_name: string
+          sekilas_eyebrow: string
+          sekilas_heading: string
+          sekilas_lingkungan: string
+          sekilas_murid: string
+          sekilas_ptk: string
+          sekilas_sarana: string
           stat_accreditation: string
           stat_classrooms: string
           stat_students: string
@@ -120,6 +126,12 @@ export type Database = {
           npsn?: string
           phone?: string
           school_name?: string
+          sekilas_eyebrow?: string
+          sekilas_heading?: string
+          sekilas_lingkungan?: string
+          sekilas_murid?: string
+          sekilas_ptk?: string
+          sekilas_sarana?: string
           stat_accreditation?: string
           stat_classrooms?: string
           stat_students?: string
@@ -145,6 +157,12 @@ export type Database = {
           npsn?: string
           phone?: string
           school_name?: string
+          sekilas_eyebrow?: string
+          sekilas_heading?: string
+          sekilas_lingkungan?: string
+          sekilas_murid?: string
+          sekilas_ptk?: string
+          sekilas_sarana?: string
           stat_accreditation?: string
           stat_classrooms?: string
           stat_students?: string
