@@ -18,7 +18,9 @@ export const Route = createFileRoute("/auth")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
+      { property: "og:url", content: "https://sdn268panyileukan.lovable.app/auth" },
     ],
+    links: [{ rel: "canonical", href: "https://sdn268panyileukan.lovable.app/auth" }],
   }),
   component: AuthPage,
 });
