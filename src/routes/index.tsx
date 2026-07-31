@@ -3,6 +3,7 @@ import { AnimatedBackground } from "@/components/site/AnimatedBackground";
 import { SiteNav } from "@/components/site/SiteNav";
 import { Hero } from "@/components/site/Hero";
 import { Profil } from "@/components/site/Profil";
+import { Sekilas } from "@/components/site/Sekilas";
 import { Sambutan } from "@/components/site/Sambutan";
 import { Galeri } from "@/components/site/Galeri";
 import { Berita } from "@/components/site/Berita";
@@ -69,6 +70,7 @@ function Beranda() {
       <main>
         <Hero settings={value} />
         <Profil settings={value} />
+        <Sekilas />
         <Sambutan settings={value} />
         <Galeri items={gallery ?? []} />
         <Berita items={news ?? []} />
