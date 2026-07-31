@@ -279,6 +279,56 @@ function AdminPage() {
 
                 <section className="surface-card space-y-4 p-6">
                   <h2 className="font-display text-xl font-semibold">Kepala Sekolah</h2>
+                </section>
+
+                <section className="surface-card space-y-4 p-6">
+                  <h2 className="font-display text-xl font-semibold">Sekilas Tentang Kami</h2>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field
+                      label="Label Kecil"
+                      value={form.sekilas_eyebrow}
+                      onChange={(v) => set("sekilas_eyebrow", v)}
+                    />
+                    <Field
+                      label="Judul Bagian"
+                      value={form.sekilas_heading}
+                      onChange={(v) => set("sekilas_heading", v)}
+                    />
+                  </div>
+                  <Field
+                    label="Karakteristik Murid"
+                    textarea
+                    rows={5}
+                    value={form.sekilas_murid}
+                    onChange={(v) => set("sekilas_murid", v)}
+                  />
+                  <Field
+                    label="Pendidik & Tenaga Kependidikan"
+                    textarea
+                    rows={4}
+                    value={form.sekilas_ptk}
+                    onChange={(v) => set("sekilas_ptk", v)}
+                  />
+                  <Field
+                    label="Sosial Budaya & Lingkungan"
+                    textarea
+                    rows={5}
+                    value={form.sekilas_lingkungan}
+                    onChange={(v) => set("sekilas_lingkungan", v)}
+                    hint="Satu baris = satu poin."
+                  />
+                  <Field
+                    label="Sarana & Prasarana"
+                    textarea
+                    rows={6}
+                    value={form.sekilas_sarana}
+                    onChange={(v) => set("sekilas_sarana", v)}
+                    hint="Satu baris = satu sarana."
+                  />
+                </section>
+
+                <section className="surface-card space-y-4 p-6">
+                  <h2 className="font-display text-xl font-semibold">Kepala Sekolah</h2>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <Field
                       label="Nama Kepala Sekolah"
