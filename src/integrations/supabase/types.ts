@@ -173,6 +173,42 @@ export type Database = {
         }
         Relationships: []
       }
+      testimonials: {
+        Row: {
+          created_at: string
+          external_id: string | null
+          id: string
+          is_approved: boolean
+          message: string
+          name: string
+          rating: number
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          external_id?: string | null
+          id?: string
+          is_approved?: boolean
+          message?: string
+          name?: string
+          rating?: number
+          source?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          external_id?: string | null
+          id?: string
+          is_approved?: boolean
+          message?: string
+          name?: string
+          rating?: number
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
