@@ -5,6 +5,7 @@ import type { Tables } from "@/integrations/supabase/types";
 export type SiteSettings = Tables<"site_settings">;
 export type GalleryItem = Tables<"gallery_items">;
 export type NewsItem = Tables<"news_items">;
+export type Testimonial = Tables<"testimonials">;
 
 export const FALLBACK_SETTINGS = {
   school_name: "SDN 268 Panyileukan",
@@ -62,6 +63,35 @@ export function useNews() {
 }
 
 /** Uploads a file to the private media bucket and returns a long-lived signed URL. */
+export function useTestimonials() {
+  return useQuery({
+    queryKey: ["testimonials", "approved"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("testimonials")
+        .select("*")
+        .eq("is_approved", true)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as Testimonial[];
+    },
+  });
+}
+
+export function useAllTestimonials() {
+  return useQuery({
+    queryKey: ["testimonials", "all"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("testimonials")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as Testimonial[];
+    },
+  });
+}
+
 export async function uploadMedia(file: File, folder = "umum") {
   const ext = file.name.split(".").pop() ?? "jpg";
   const path = `${folder}/${crypto.randomUUID()}.${ext}`;

@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, ImagePlus, Loader2, LogOut, Plus, Save, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, ImagePlus, Loader2, LogOut, Plus, Save, Star, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdmin } from "@/hooks/useAdmin";
-import { useGallery, useNews, useSiteSettings, uploadMedia, type SiteSettings } from "@/lib/cms";
+import {
+  formatDateID,
+  useAllTestimonials,
+  useGallery,
+  useNews,
+  useSiteSettings,
+  uploadMedia,
+  type SiteSettings,
+} from "@/lib/cms";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -181,6 +189,7 @@ function AdminPage() {
             <TabsTrigger value="identitas">Identitas & Profil</TabsTrigger>
             <TabsTrigger value="galeri">Galeri Kegiatan</TabsTrigger>
             <TabsTrigger value="berita">Berita</TabsTrigger>
+            <TabsTrigger value="komentar">Komentar</TabsTrigger>
           </TabsList>
 
           <TabsContent value="identitas" className="mt-6">
@@ -382,8 +391,117 @@ function AdminPage() {
           <TabsContent value="berita" className="mt-6">
             <NewsManager items={news ?? []} />
           </TabsContent>
+
+          <TabsContent value="komentar" className="mt-6">
+            <TestimonialManager />
+          </TabsContent>
         </Tabs>
       </div>
+    </div>
+  );
+}
+
+function TestimonialManager() {
+  const qc = useQueryClient();
+  const { data: items, isLoading } = useAllTestimonials();
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  const refresh = () => qc.invalidateQueries({ queryKey: ["testimonials"] });
+
+  const setApproved = async (id: string, value: boolean) => {
+    setBusyId(id);
+    const { error } = await supabase
+      .from("testimonials")
+      .update({ is_approved: value })
+      .eq("id", id);
+    setBusyId(null);
+    if (error) return toast.error(error.message);
+    toast.success(value ? "Komentar ditampilkan di beranda" : "Komentar disembunyikan");
+    void refresh();
+  };
+
+  const remove = async (id: string) => {
+    setBusyId(id);
+    const { error } = await supabase.from("testimonials").delete().eq("id", id);
+    setBusyId(null);
+    if (error) return toast.error(error.message);
+    toast.success("Komentar dihapus");
+    void refresh();
+  };
+
+  if (isLoading) return <Loader2 className="h-5 w-5 animate-spin text-primary" />;
+
+  const list = items ?? [];
+
+  return (
+    <div className="space-y-4">
+      <p className="text-sm text-muted-foreground">
+        Komentar dari formulir Tally masuk sebagai belum terverifikasi. Verifikasi agar tampil di
+        beranda.
+      </p>
+
+      {list.length === 0 ? (
+        <p className="surface-card p-6 text-sm text-muted-foreground">Belum ada komentar masuk.</p>
+      ) : (
+        list.map((item) => (
+          <div key={item.id} className="surface-card space-y-3 p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold text-foreground">{item.name}</p>
+                <p className="text-xs text-muted-foreground">{formatDateID(item.created_at)}</p>
+              </div>
+              <span className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Star
+                    key={i}
+                    className={
+                      i <= item.rating
+                        ? "h-4 w-4 fill-primary text-primary"
+                        : "h-4 w-4 text-muted-foreground/40"
+                    }
+                  />
+                ))}
+              </span>
+            </div>
+            <p className="text-sm leading-relaxed text-foreground">{item.message}</p>
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                  item.is_approved
+                    ? "bg-primary/10 text-primary"
+                    : "bg-secondary text-muted-foreground"
+                }`}
+              >
+                {item.is_approved ? "Terverifikasi" : "Menunggu verifikasi"}
+              </span>
+              <Button
+                size="sm"
+                variant={item.is_approved ? "outline" : "default"}
+                disabled={busyId === item.id}
+                onClick={() => void setApproved(item.id, !item.is_approved)}
+              >
+                {item.is_approved ? (
+                  <>
+                    <X className="mr-1 h-4 w-4" /> Sembunyikan
+                  </>
+                ) : (
+                  <>
+                    <Check className="mr-1 h-4 w-4" /> Verifikasi
+                  </>
+                )}
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                disabled={busyId === item.id}
+                onClick={() => void remove(item.id)}
+              >
+                <Trash2 className="mr-1 h-4 w-4" /> Hapus
+              </Button>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 }

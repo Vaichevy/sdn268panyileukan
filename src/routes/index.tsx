@@ -8,6 +8,7 @@ import { Sambutan } from "@/components/site/Sambutan";
 import { Galeri } from "@/components/site/Galeri";
 import { Berita } from "@/components/site/Berita";
 import { Kontak } from "@/components/site/Kontak";
+import { Komentar } from "@/components/site/Komentar";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { useGallery, useNews, useSiteSettings, FALLBACK_SETTINGS } from "@/lib/cms";
 
@@ -75,6 +76,7 @@ function Beranda() {
         <Galeri items={gallery ?? []} />
         <Berita items={news ?? []} />
         <Kontak settings={value} />
+        <Komentar />
       </main>
       <SiteFooter settings={value} />
     </div>
