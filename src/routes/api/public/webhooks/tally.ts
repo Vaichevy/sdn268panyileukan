@@ -50,12 +50,17 @@ export const Route = createFileRoute("/api/public/webhooks/tally")({
 
         const externalId = payload.data?.responseId ?? payload.eventId ?? null;
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        if (externalId) {
+          const { data: existing } = await supabaseAdmin
+            .from("testimonials")
+            .select("id")
+            .eq("external_id", externalId)
+            .maybeSingle();
+          if (existing) return new Response("ok");
+        }
         const { error } = await supabaseAdmin
           .from("testimonials")
-          .upsert(
-            { name, message, rating, source: "tally", external_id: externalId, is_approved: false },
-            { onConflict: "external_id", ignoreDuplicates: true },
-          );
+          .insert({ name, message, rating, source: "tally", external_id: externalId, is_approved: false });
         if (error) {
           console.error("[tally-webhook] insert failed", error.message);
           return new Response("Insert failed", { status: 500 });
