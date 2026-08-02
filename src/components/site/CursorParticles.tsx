@@ -104,23 +104,6 @@ export function CursorParticles() {
         ctx.fill();
       }
 
-      // connecting lines
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i]!;
-          const b = particles[j]!;
-          const d = Math.hypot(a.x - b.x, a.y - b.y);
-          if (d < 120) {
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `oklch(0.52 0.11 172 / ${(1 - d / 120) * 0.16})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        }
-      }
-
       for (let i = trail.length - 1; i >= 0; i--) {
         const t = trail[i]!;
         t.x += t.vx;
