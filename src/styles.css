@@ -59,6 +59,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-link: var(--link);
 }
 
 :root {
@@ -77,6 +78,7 @@
   --muted-foreground: oklch(0.5 0.03 155);
   --accent: oklch(0.8 0.14 78);
   --accent-foreground: oklch(0.28 0.06 60);
+  --link: oklch(0.55 0.19 255);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(0.9 0.02 140);
