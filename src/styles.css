@@ -208,3 +208,30 @@
     color-mix(in oklab, var(--primary) 60%, var(--accent)) 100%
   );
 }
+
+.dark {
+  --link: oklch(0.78 0.14 250);
+}
+
+@keyframes link-zoom {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0.35;
+  }
+}
+
+@utility content-link {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  display: inline-block;
+  overflow-wrap: anywhere;
+  transition: color 200ms ease;
+}
+
+@utility content-link-zooming {
+  animation: link-zoom 500ms ease-in forwards;
+}
