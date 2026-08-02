@@ -224,12 +224,19 @@
 }
 
 @utility content-link {
-  color: var(--link);
+  color: inherit;
   text-decoration: underline;
   text-underline-offset: 3px;
   display: inline-block;
   overflow-wrap: anywhere;
   transition: color 200ms ease;
+}
+
+@utility content-link {
+  &:hover,
+  &:focus-visible {
+    color: var(--link);
+  }
 }
 
 @utility content-link-zooming {
