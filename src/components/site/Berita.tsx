@@ -1,4 +1,5 @@
-import { Newspaper } from "lucide-react";
+import { ArrowRight, Newspaper } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
 import { formatDateID, type NewsItem } from "@/lib/cms";
 
@@ -33,7 +34,7 @@ export function Berita({ items }: { items: NewsItem[] }) {
                     <Newspaper className="h-7 w-7" />
                   </span>
                 )}
-                <div>
+                <div className="flex min-w-0 flex-col">
                   <p className="text-xs font-medium text-primary">
                     {formatDateID(item.published_at)}
                   </p>
@@ -43,6 +44,14 @@ export function Berita({ items }: { items: NewsItem[] }) {
                   <p className="mt-2 line-clamp-4 text-sm leading-relaxed text-muted-foreground">
                     {item.content}
                   </p>
+                  <Link
+                    to="/berita/$id"
+                    params={{ id: item.id }}
+                    className="mt-3 inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-accent"
+                  >
+                    Selengkapnya
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </div>
               </article>
             </Reveal>
