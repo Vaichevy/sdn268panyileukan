@@ -154,7 +154,7 @@ export function CursorParticles() {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="pointer-events-none fixed inset-0 -z-10"
+      className="pointer-events-none fixed inset-0 -z-[5]"
     />
   );
 }

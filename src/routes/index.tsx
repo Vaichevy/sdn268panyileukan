@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
+import { CursorParticles } from "@/components/site/CursorParticles";
 import { SiteNav } from "@/components/site/SiteNav";
 import { Hero } from "@/components/site/Hero";
 import { Profil } from "@/components/site/Profil";
@@ -67,6 +68,7 @@ function Beranda() {
   return (
     <div className="relative min-h-screen">
       <AnimatedBackground />
+      <CursorParticles />
       <SiteNav schoolName={value?.school_name ?? FALLBACK_SETTINGS.school_name} />
       <main>
         <Hero settings={value} />
