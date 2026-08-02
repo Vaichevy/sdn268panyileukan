@@ -2,6 +2,7 @@ import { ArrowRight, Newspaper } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
 import { formatDateID, type NewsItem } from "@/lib/cms";
+import { Linkify } from "./Linkify";
 
 export function Berita({ items }: { items: NewsItem[] }) {
   if (items.length === 0) return null;
@@ -42,7 +43,7 @@ export function Berita({ items }: { items: NewsItem[] }) {
                     {item.title}
                   </h3>
                   <p className="mt-2 line-clamp-4 text-sm leading-relaxed text-muted-foreground">
-                    {item.content}
+                    <Linkify text={item.content} />
                   </p>
                   <Link
                     to="/berita/$id"
