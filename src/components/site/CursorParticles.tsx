@@ -104,7 +104,6 @@ export function CursorParticles() {
         ctx.fill();
       }
 
-
       for (let i = trail.length - 1; i >= 0; i--) {
         const t = trail[i]!;
         t.x += t.vx;
