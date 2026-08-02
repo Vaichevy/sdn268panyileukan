@@ -6,6 +6,7 @@ import { AnimatedBackground } from "@/components/site/AnimatedBackground";
 import { SiteNav } from "@/components/site/SiteNav";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { formatDateID, useSiteSettings, FALLBACK_SETTINGS, type NewsItem } from "@/lib/cms";
+import { Linkify } from "@/components/site/Linkify";
 
 export const Route = createFileRoute("/berita/$id")({
   head: () => ({
@@ -89,7 +90,7 @@ function BeritaDetail() {
                   {item.title}
                 </h1>
                 <div className="mt-6 space-y-4 text-base leading-relaxed whitespace-pre-line text-muted-foreground">
-                  {item.content}
+                  <Linkify text={item.content} />
                 </div>
               </div>
             </article>
