@@ -385,6 +385,78 @@ function AdminPage() {
             )}
           </TabsContent>
 
+          <TabsContent value="pembelajaran" className="mt-6">
+            {form ? (
+              <div className="space-y-6">
+                <section className="surface-card space-y-4 p-6">
+                  <h2 className="font-display text-xl font-semibold">Halaman Pembelajaran</h2>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field
+                      label="Label Kecil"
+                      value={form.pembelajaran_eyebrow}
+                      onChange={(v) => set("pembelajaran_eyebrow", v)}
+                    />
+                    <Field
+                      label="Judul Halaman"
+                      value={form.pembelajaran_heading}
+                      onChange={(v) => set("pembelajaran_heading", v)}
+                    />
+                  </div>
+                  <Field
+                    label="Keterangan / Sumber"
+                    value={form.pembelajaran_intro}
+                    onChange={(v) => set("pembelajaran_intro", v)}
+                  />
+                  <Field
+                    label="Tiga Fase Belajar"
+                    textarea
+                    rows={4}
+                    value={form.pembelajaran_fase}
+                    onChange={(v) => set("pembelajaran_fase", v)}
+                    hint="Satu baris = satu fase, format: Fase | Kelas | Fokus"
+                  />
+                  <Field
+                    label="Pembelajaran Mendalam"
+                    textarea
+                    rows={4}
+                    value={form.pembelajaran_deep}
+                    onChange={(v) => set("pembelajaran_deep", v)}
+                    hint="Satu baris = satu prinsip."
+                  />
+                  <Field
+                    label="Siklus Belajar 3M"
+                    textarea
+                    rows={3}
+                    value={form.pembelajaran_siklus}
+                    onChange={(v) => set("pembelajaran_siklus", v)}
+                  />
+                  <Field
+                    label="8 Dimensi Profil Lulusan"
+                    textarea
+                    rows={8}
+                    value={form.pembelajaran_dimensi}
+                    onChange={(v) => set("pembelajaran_dimensi", v)}
+                    hint="Satu baris = satu dimensi."
+                  />
+                  <Field
+                    label="Sesi Belajar"
+                    textarea
+                    rows={4}
+                    value={form.pembelajaran_sesi}
+                    onChange={(v) => set("pembelajaran_sesi", v)}
+                  />
+                </section>
+
+                <Button onClick={saveSettings} disabled={saving} size="lg">
+                  {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                  Simpan Perubahan
+                </Button>
+              </div>
+            ) : (
+              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+            )}
+          </TabsContent>
+
           <TabsContent value="galeri" className="mt-6">
             <GalleryManager items={gallery ?? []} />
           </TabsContent>
