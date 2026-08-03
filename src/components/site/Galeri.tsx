@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { CalendarDays, X } from "lucide-react";
+import { ArrowRight, CalendarDays, X } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
-import { formatDateID, type GalleryItem } from "@/lib/cms";
+import { formatDateID, sortGallery, type GalleryItem } from "@/lib/cms";
 import belajar from "@/assets/kegiatan-belajar.jpg";
 import upacara from "@/assets/upacara-bendera.jpg";
 import ekskul from "@/assets/kegiatan-ekstrakurikuler.jpg";
@@ -30,9 +31,10 @@ const FALLBACK: Array<Pick<GalleryItem, "id" | "title" | "description" | "image_
   },
 ];
 
-export function Galeri({ items }: { items: GalleryItem[] }) {
+export function Galeri({ items, limit }: { items: GalleryItem[]; limit?: number }) {
   const [active, setActive] = useState<string | null>(null);
-  const data = items.length > 0 ? items : FALLBACK;
+  const all = items.length > 0 ? sortGallery(items) : FALLBACK;
+  const data = typeof limit === "number" ? all.slice(0, limit) : all;
   const selected = data.find((d) => d.id === active);
 
   return (
@@ -86,6 +88,18 @@ export function Galeri({ items }: { items: GalleryItem[] }) {
             </Reveal>
           ))}
         </div>
+
+        {typeof limit === "number" && all.length > limit ? (
+          <div className="mt-10 flex justify-center">
+            <Link
+              to="/galeri"
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              Selengkapnya
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        ) : null}
       </div>
 
       {selected ? (
