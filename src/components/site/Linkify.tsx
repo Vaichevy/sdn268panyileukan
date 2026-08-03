@@ -1,28 +1,8 @@
-import { useState, type MouseEvent } from "react";
-
 const URL_PATTERN = /(https?:\/\/[^\s<>()]+[^\s<>().,;:!?'"])/gi;
 
 function ContentLink({ href }: { href: string }) {
-  const [zooming, setZooming] = useState(false);
-
-  const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
-    event.preventDefault();
-    setZooming(true);
-    window.setTimeout(() => {
-      setZooming(false);
-      window.open(href, "_blank", "noopener,noreferrer");
-    }, 500);
-  };
-
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={handleClick}
-      className={`content-link ${zooming ? "content-link-zooming" : ""}`}
-    >
+    <a href={href} target="_blank" rel="noopener noreferrer" className="content-link">
       {href}
     </a>
   );
