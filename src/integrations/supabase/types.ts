@@ -93,6 +93,14 @@ export type Database = {
           maps_embed_url: string
           mission: string
           npsn: string
+          pembelajaran_deep: string
+          pembelajaran_dimensi: string
+          pembelajaran_eyebrow: string
+          pembelajaran_fase: string
+          pembelajaran_heading: string
+          pembelajaran_intro: string
+          pembelajaran_sesi: string
+          pembelajaran_siklus: string
           phone: string
           school_name: string
           sekilas_eyebrow: string
@@ -124,6 +132,14 @@ export type Database = {
           maps_embed_url?: string
           mission?: string
           npsn?: string
+          pembelajaran_deep?: string
+          pembelajaran_dimensi?: string
+          pembelajaran_eyebrow?: string
+          pembelajaran_fase?: string
+          pembelajaran_heading?: string
+          pembelajaran_intro?: string
+          pembelajaran_sesi?: string
+          pembelajaran_siklus?: string
           phone?: string
           school_name?: string
           sekilas_eyebrow?: string
@@ -155,6 +171,14 @@ export type Database = {
           maps_embed_url?: string
           mission?: string
           npsn?: string
+          pembelajaran_deep?: string
+          pembelajaran_dimensi?: string
+          pembelajaran_eyebrow?: string
+          pembelajaran_fase?: string
+          pembelajaran_heading?: string
+          pembelajaran_intro?: string
+          pembelajaran_sesi?: string
+          pembelajaran_siklus?: string
           phone?: string
           school_name?: string
           sekilas_eyebrow?: string
