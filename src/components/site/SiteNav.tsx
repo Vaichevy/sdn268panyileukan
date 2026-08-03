@@ -4,7 +4,7 @@ import { Menu, X, ShieldCheck, ChevronDown, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import logoAsset from "@/assets/logo-sdn268.png.asset.json";
 
-const LINKS = [
+const LINKS: { href?: string; to?: string; label: string }[] = [
   { href: "#beranda", label: "Beranda" },
   { href: "#profil", label: "Profil" },
   { href: "#sambutan", label: "Sambutan" },
