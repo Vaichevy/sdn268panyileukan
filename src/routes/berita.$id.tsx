@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Newspaper } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
-import { SiteNav } from "@/components/site/SiteNav";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { formatDateID, useSiteSettings, FALLBACK_SETTINGS, type NewsItem } from "@/lib/cms";
 import { Linkify } from "@/components/site/Linkify";
@@ -50,7 +49,6 @@ function BeritaDetail() {
   return (
     <div className="relative min-h-screen">
       <AnimatedBackground />
-      <SiteNav schoolName={value?.school_name ?? FALLBACK_SETTINGS.school_name} />
       <main className="py-16">
         <div className="section-shell">
           <Link
