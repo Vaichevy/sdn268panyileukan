@@ -236,6 +236,3 @@
   }
 }
 
-@utility content-link-zooming {
-  animation: link-zoom 500ms ease-in forwards;
-}
