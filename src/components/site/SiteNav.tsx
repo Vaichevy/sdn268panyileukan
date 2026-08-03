@@ -8,6 +8,7 @@ const LINKS = [
   { href: "#beranda", label: "Beranda" },
   { href: "#profil", label: "Profil" },
   { href: "#sambutan", label: "Sambutan" },
+  { to: "/pembelajaran", label: "Pembelajaran" },
   { href: "#galeri", label: "Galeri" },
   { href: "#berita", label: "Berita" },
   { href: "#kontak", label: "Kontak" },
@@ -71,15 +72,25 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
         </a>
 
         <nav className="hidden items-center gap-1 lg:flex">
-          {LINKS.map((link) => (
+          {LINKS.map((link) =>
+            link.to ? (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-secondary-foreground"
+              >
+                {link.label}
+              </Link>
+            ) : (
             <a
               key={link.href}
-              href={link.href}
+              href={link.href!}
               className="rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-secondary-foreground"
             >
               {link.label}
             </a>
-          ))}
+            ),
+          )}
           <div ref={appsRef} className="relative">
             <button
               type="button"
@@ -143,16 +154,27 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
       {open ? (
         <div className="section-shell lg:hidden">
           <div className="mt-2 rounded-3xl border border-border bg-card/95 p-3 shadow-[var(--shadow-soft)] backdrop-blur-xl">
-            {LINKS.map((link) => (
+            {LINKS.map((link) =>
+              link.to ? (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onClick={() => setOpen(false)}
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                >
+                  {link.label}
+                </Link>
+              ) : (
               <a
                 key={link.href}
-                href={link.href}
+                href={link.href!}
                 onClick={() => setOpen(false)}
                 className="block rounded-2xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
               >
                 {link.label}
               </a>
-            ))}
+              ),
+            )}
             <div className="mt-1 rounded-2xl bg-secondary/50 p-2">
               <p className="px-2 py-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                 Aplikasi
