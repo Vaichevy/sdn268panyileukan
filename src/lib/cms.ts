@@ -115,3 +115,27 @@ export function formatDateID(value?: string | null) {
     year: "numeric",
   });
 }
+
+/** Sorts gallery items newest-first by event date, falling back to created_at. */
+export function sortGallery(items: GalleryItem[]): GalleryItem[] {
+  return [...items].sort((a, b) => {
+    const ta = new Date(a.event_date ?? a.created_at).getTime();
+    const tb = new Date(b.event_date ?? b.created_at).getTime();
+    return tb - ta;
+  });
+}
+
+/** Groups news items into month-year buckets, newest first. */
+export function groupNewsByMonth(items: NewsItem[]) {
+  const map = new Map<string, { key: string; label: string; items: NewsItem[] }>();
+  for (const item of [...items].sort(
+    (a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime(),
+  )) {
+    const date = new Date(item.published_at);
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+    const label = date.toLocaleDateString("id-ID", { month: "long", year: "numeric" });
+    if (!map.has(key)) map.set(key, { key, label, items: [] });
+    map.get(key)!.items.push(item);
+  }
+  return [...map.values()];
+}

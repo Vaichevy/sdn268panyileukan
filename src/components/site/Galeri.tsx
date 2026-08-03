@@ -7,7 +7,9 @@ import belajar from "@/assets/kegiatan-belajar.jpg";
 import upacara from "@/assets/upacara-bendera.jpg";
 import ekskul from "@/assets/kegiatan-ekstrakurikuler.jpg";
 
-const FALLBACK: Array<Pick<GalleryItem, "id" | "title" | "description" | "image_url" | "event_date">> = [
+type Card = Pick<GalleryItem, "id" | "title" | "description" | "image_url" | "event_date">;
+
+const FALLBACK: Card[] = [
   {
     id: "f1",
     title: "Upacara Bendera Senin",
@@ -33,7 +35,7 @@ const FALLBACK: Array<Pick<GalleryItem, "id" | "title" | "description" | "image_
 
 export function Galeri({ items, limit }: { items: GalleryItem[]; limit?: number }) {
   const [active, setActive] = useState<string | null>(null);
-  const all = items.length > 0 ? sortGallery(items) : FALLBACK;
+  const all: Card[] = items.length > 0 ? sortGallery(items) : FALLBACK;
   const data = typeof limit === "number" ? all.slice(0, limit) : all;
   const selected = data.find((d) => d.id === active);
 
