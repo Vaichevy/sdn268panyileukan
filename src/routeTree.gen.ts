@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as GaleriRouteImport } from './routes/galeri'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as BeritaIndexRouteImport } from './routes/berita.index'
 import { Route as BeritaIdRouteImport } from './routes/berita.$id'
 import { Route as ApiPublicWebhooksTallyRouteImport } from './routes/api/public/webhooks/tally'
 
@@ -31,6 +33,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GaleriRoute = GaleriRouteImport.update({
+  id: '/galeri',
+  path: '/galeri',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -40,6 +47,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const BeritaIndexRoute = BeritaIndexRouteImport.update({
+  id: '/berita/',
+  path: '/berita/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const BeritaIdRoute = BeritaIdRouteImport.update({
   id: '/berita/$id',
@@ -55,17 +67,21 @@ const ApiPublicWebhooksTallyRoute = ApiPublicWebhooksTallyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/galeri': typeof GaleriRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/berita/$id': typeof BeritaIdRoute
+  '/berita/': typeof BeritaIndexRoute
   '/api/public/webhooks/tally': typeof ApiPublicWebhooksTallyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/galeri': typeof GaleriRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/berita/$id': typeof BeritaIdRoute
+  '/berita': typeof BeritaIndexRoute
   '/api/public/webhooks/tally': typeof ApiPublicWebhooksTallyRoute
 }
 export interface FileRoutesById {
@@ -73,9 +89,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/galeri': typeof GaleriRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/berita/$id': typeof BeritaIdRoute
+  '/berita/': typeof BeritaIndexRoute
   '/api/public/webhooks/tally': typeof ApiPublicWebhooksTallyRoute
 }
 export interface FileRouteTypes {
@@ -83,26 +101,32 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/galeri'
     | '/sitemap.xml'
     | '/admin'
     | '/berita/$id'
+    | '/berita/'
     | '/api/public/webhooks/tally'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/galeri'
     | '/sitemap.xml'
     | '/admin'
     | '/berita/$id'
+    | '/berita'
     | '/api/public/webhooks/tally'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/galeri'
     | '/sitemap.xml'
     | '/_authenticated/admin'
     | '/berita/$id'
+    | '/berita/'
     | '/api/public/webhooks/tally'
   fileRoutesById: FileRoutesById
 }
@@ -110,8 +134,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  GaleriRoute: typeof GaleriRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   BeritaIdRoute: typeof BeritaIdRoute
+  BeritaIndexRoute: typeof BeritaIndexRoute
   ApiPublicWebhooksTallyRoute: typeof ApiPublicWebhooksTallyRoute
 }
 
@@ -138,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/galeri': {
+      id: '/galeri'
+      path: '/galeri'
+      fullPath: '/galeri'
+      preLoaderRoute: typeof GaleriRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -151,6 +184,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/berita/': {
+      id: '/berita/'
+      path: '/berita'
+      fullPath: '/berita/'
+      preLoaderRoute: typeof BeritaIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/berita/$id': {
       id: '/berita/$id'
@@ -184,8 +224,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  GaleriRoute: GaleriRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   BeritaIdRoute: BeritaIdRoute,
+  BeritaIndexRoute: BeritaIndexRoute,
   ApiPublicWebhooksTallyRoute: ApiPublicWebhooksTallyRoute,
 }
 export const routeTree = rootRouteImport

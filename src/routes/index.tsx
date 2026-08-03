@@ -75,8 +75,8 @@ function Beranda() {
         <Profil settings={value} />
         <Sekilas />
         <Sambutan settings={value} />
-        <Galeri items={gallery ?? []} />
-        <Berita items={news ?? []} />
+        <Galeri items={gallery ?? []} limit={9} />
+        <Berita items={news ?? []} limit={5} />
         <Kontak settings={value} />
         <Komentar />
       </main>

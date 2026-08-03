@@ -4,8 +4,9 @@ import { Reveal } from "./Reveal";
 import { formatDateID, type NewsItem } from "@/lib/cms";
 import { Linkify } from "./Linkify";
 
-export function Berita({ items }: { items: NewsItem[] }) {
+export function Berita({ items, limit }: { items: NewsItem[]; limit?: number }) {
   if (items.length === 0) return null;
+  const visible = typeof limit === "number" ? items.slice(0, limit) : items;
 
   return (
     <section id="berita" className="py-20">
@@ -20,7 +21,7 @@ export function Berita({ items }: { items: NewsItem[] }) {
         </Reveal>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          {items.map((item, index) => (
+          {visible.map((item, index) => (
             <Reveal key={item.id} delay={index * 70}>
               <article className="surface-card flex h-full gap-5 p-5">
                 {item.image_url ? (
@@ -58,6 +59,18 @@ export function Berita({ items }: { items: NewsItem[] }) {
             </Reveal>
           ))}
         </div>
+
+        {typeof limit === "number" && items.length > limit ? (
+          <div className="mt-10 flex justify-center">
+            <Link
+              to="/berita"
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              Arsip Berita
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        ) : null}
       </div>
     </section>
   );
