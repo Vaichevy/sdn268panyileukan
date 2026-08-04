@@ -1,7 +1,19 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Check, ImagePlus, Loader2, LogOut, Plus, Save, Star, Trash2, X } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  ImagePlus,
+  Loader2,
+  LogOut,
+  Pencil,
+  Plus,
+  Save,
+  Star,
+  Trash2,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdmin } from "@/hooks/useAdmin";
@@ -516,64 +528,95 @@ function TestimonialManager() {
       {list.length === 0 ? (
         <p className="surface-card p-6 text-sm text-muted-foreground">Belum ada komentar masuk.</p>
       ) : (
-        list.map((item) => (
-          <div key={item.id} className="surface-card space-y-3 p-5">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-sm font-semibold text-foreground">{item.name}</p>
-                <p className="text-xs text-muted-foreground">{formatDateID(item.created_at)}</p>
-              </div>
-              <span className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star
-                    key={i}
-                    className={
-                      i <= item.rating
-                        ? "h-4 w-4 fill-primary text-primary"
-                        : "h-4 w-4 text-muted-foreground/40"
-                    }
-                  />
-                ))}
-              </span>
-            </div>
-            <p className="text-sm leading-relaxed text-foreground">{item.message}</p>
-            <div className="flex flex-wrap items-center gap-2">
-              <span
-                className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                  item.is_approved
-                    ? "bg-primary/10 text-primary"
-                    : "bg-secondary text-muted-foreground"
-                }`}
-              >
-                {item.is_approved ? "Terverifikasi" : "Menunggu verifikasi"}
-              </span>
-              <Button
-                size="sm"
-                variant={item.is_approved ? "outline" : "default"}
-                disabled={busyId === item.id}
-                onClick={() => void setApproved(item.id, !item.is_approved)}
-              >
-                {item.is_approved ? (
-                  <>
-                    <X className="mr-1 h-4 w-4" /> Sembunyikan
-                  </>
-                ) : (
-                  <>
-                    <Check className="mr-1 h-4 w-4" /> Verifikasi
-                  </>
-                )}
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                disabled={busyId === item.id}
-                onClick={() => void remove(item.id)}
-              >
-                <Trash2 className="mr-1 h-4 w-4" /> Hapus
-              </Button>
-            </div>
-          </div>
-        ))
+        <div className="surface-card overflow-x-auto p-0">
+          <table className="w-full min-w-[900px] text-left text-sm">
+            <thead className="bg-secondary/60 text-xs tracking-wide text-muted-foreground uppercase">
+              <tr>
+                <th className="px-4 py-3">No</th>
+                <th className="px-4 py-3">Tanggal</th>
+                <th className="px-4 py-3">Nama</th>
+                <th className="px-4 py-3">Rating</th>
+                <th className="px-4 py-3">Komentar</th>
+                <th className="px-4 py-3">Sumber</th>
+                <th className="px-4 py-3">ID Formulir</th>
+                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {list.map((item, index) => (
+                <tr key={item.id} className="border-t border-border align-top">
+                  <td className="px-4 py-3 text-muted-foreground">{index + 1}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">
+                    {formatDateID(item.created_at)}
+                  </td>
+                  <td className="px-4 py-3 font-medium text-foreground">{item.name}</td>
+                  <td className="px-4 py-3">
+                    <span className="flex items-center gap-0.5">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Star
+                          key={i}
+                          className={
+                            i <= item.rating
+                              ? "h-3.5 w-3.5 fill-primary text-primary"
+                              : "h-3.5 w-3.5 text-muted-foreground/40"
+                          }
+                        />
+                      ))}
+                      <span className="ml-1 text-xs text-muted-foreground">{item.rating}/5</span>
+                    </span>
+                  </td>
+                  <td className="max-w-sm px-4 py-3 leading-relaxed text-foreground">
+                    {item.message}
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">{item.source}</td>
+                  <td className="px-4 py-3 text-xs break-all text-muted-foreground">
+                    {item.external_id ?? "—"}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold whitespace-nowrap ${
+                        item.is_approved
+                          ? "bg-primary/10 text-primary"
+                          : "bg-secondary text-muted-foreground"
+                      }`}
+                    >
+                      {item.is_approved ? "Terverifikasi" : "Menunggu"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-1.5">
+                      <Button
+                        size="sm"
+                        variant={item.is_approved ? "outline" : "default"}
+                        disabled={busyId === item.id}
+                        onClick={() => void setApproved(item.id, !item.is_approved)}
+                      >
+                        {item.is_approved ? (
+                          <>
+                            <X className="mr-1 h-4 w-4" /> Sembunyikan
+                          </>
+                        ) : (
+                          <>
+                            <Check className="mr-1 h-4 w-4" /> Verifikasi
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        disabled={busyId === item.id}
+                        onClick={() => void remove(item.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
@@ -616,6 +659,40 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
     void refresh();
   };
 
+  const [editId, setEditId] = useState<string | null>(null);
+  const [edit, setEdit] = useState({ title: "", description: "", event_date: "", image_url: "" });
+  const [editBusy, setEditBusy] = useState(false);
+
+  const startEdit = (item: (typeof items)[number]) => {
+    setEditId(item.id);
+    setEdit({
+      title: item.title,
+      description: item.description,
+      event_date: item.event_date ?? "",
+      image_url: item.image_url,
+    });
+  };
+
+  const saveEdit = async () => {
+    if (!editId) return;
+    if (!edit.title.trim() || !edit.image_url) return toast.error("Judul dan foto wajib diisi");
+    setEditBusy(true);
+    const { error } = await supabase
+      .from("gallery_items")
+      .update({
+        title: edit.title.trim(),
+        description: edit.description.trim(),
+        event_date: edit.event_date || null,
+        image_url: edit.image_url,
+      })
+      .eq("id", editId);
+    setEditBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Foto kegiatan diperbarui");
+    setEditId(null);
+    void refresh();
+  };
+
   return (
     <div className="space-y-6">
       <section className="surface-card space-y-4 p-6">
@@ -649,16 +726,85 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <div key={item.id} className="surface-card overflow-hidden">
-            <img src={item.image_url} alt={item.title} className="aspect-[4/3] w-full object-cover" />
-            <div className="flex items-start justify-between gap-3 p-4">
-              <div>
-                <p className="font-medium text-foreground">{item.title}</p>
-                <p className="line-clamp-2 text-xs text-muted-foreground">{item.description}</p>
+            {editId === item.id ? (
+              <div className="space-y-3 p-4">
+                <div className="space-y-2">
+                  <Label>Judul Kegiatan</Label>
+                  <Input
+                    value={edit.title}
+                    onChange={(e) => setEdit((p) => ({ ...p, title: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Tanggal Kegiatan</Label>
+                  <Input
+                    type="date"
+                    value={edit.event_date}
+                    onChange={(e) => setEdit((p) => ({ ...p, event_date: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Deskripsi</Label>
+                  <Textarea
+                    rows={3}
+                    value={edit.description}
+                    onChange={(e) => setEdit((p) => ({ ...p, description: e.target.value }))}
+                  />
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <UploadButton
+                    label="Ganti Foto"
+                    folder="galeri"
+                    onDone={(url) => setEdit((p) => ({ ...p, image_url: url }))}
+                  />
+                  {edit.image_url ? (
+                    <img
+                      src={edit.image_url}
+                      alt="Pratinjau"
+                      className="h-16 w-24 rounded-xl object-cover"
+                    />
+                  ) : null}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button size="sm" onClick={saveEdit} disabled={editBusy}>
+                    {editBusy ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Save className="h-4 w-4" />
+                    )}
+                    Simpan
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => setEditId(null)}>
+                    Batal
+                  </Button>
+                </div>
               </div>
-              <Button variant="outline" size="icon" onClick={() => remove(item.id)}>
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
+            ) : (
+              <>
+                <img
+                  src={item.image_url}
+                  alt={item.title}
+                  className="aspect-[4/3] w-full object-cover"
+                />
+                <div className="flex items-start justify-between gap-3 p-4">
+                  <div>
+                    <p className="font-medium text-foreground">{item.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatDateID(item.event_date ?? item.created_at)}
+                    </p>
+                    <p className="line-clamp-2 text-xs text-muted-foreground">{item.description}</p>
+                  </div>
+                  <div className="flex shrink-0 gap-1.5">
+                    <Button variant="outline" size="icon" onClick={() => startEdit(item)}>
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" size="icon" onClick={() => remove(item.id)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         ))}
       </div>
@@ -699,6 +845,40 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
     void refresh();
   };
 
+  const [editId, setEditId] = useState<string | null>(null);
+  const [edit, setEdit] = useState({ title: "", content: "", image_url: "", published_at: "" });
+  const [editBusy, setEditBusy] = useState(false);
+
+  const startEdit = (item: (typeof items)[number]) => {
+    setEditId(item.id);
+    setEdit({
+      title: item.title,
+      content: item.content,
+      image_url: item.image_url ?? "",
+      published_at: item.published_at ?? "",
+    });
+  };
+
+  const saveEdit = async () => {
+    if (!editId) return;
+    if (!edit.title.trim()) return toast.error("Judul wajib diisi");
+    setEditBusy(true);
+    const { error } = await supabase
+      .from("news_items")
+      .update({
+        title: edit.title.trim(),
+        content: edit.content.trim(),
+        image_url: edit.image_url || null,
+        ...(edit.published_at ? { published_at: edit.published_at } : {}),
+      })
+      .eq("id", editId);
+    setEditBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Berita diperbarui");
+    setEditId(null);
+    void refresh();
+  };
+
   return (
     <div className="space-y-6">
       <section className="surface-card space-y-4 p-6">
@@ -725,14 +905,77 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
 
       <div className="space-y-3">
         {items.map((item) => (
-          <div key={item.id} className="surface-card flex items-start justify-between gap-4 p-5">
-            <div>
-              <p className="font-medium text-foreground">{item.title}</p>
-              <p className="line-clamp-2 text-sm text-muted-foreground">{item.content}</p>
-            </div>
-            <Button variant="outline" size="icon" onClick={() => remove(item.id)}>
-              <Trash2 className="h-4 w-4" />
-            </Button>
+          <div key={item.id} className="surface-card p-5">
+            {editId === item.id ? (
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <Label>Judul</Label>
+                  <Input
+                    value={edit.title}
+                    onChange={(e) => setEdit((p) => ({ ...p, title: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Tanggal Publikasi</Label>
+                  <Input
+                    type="date"
+                    value={edit.published_at}
+                    onChange={(e) => setEdit((p) => ({ ...p, published_at: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Isi Berita</Label>
+                  <Textarea
+                    rows={8}
+                    value={edit.content}
+                    onChange={(e) => setEdit((p) => ({ ...p, content: e.target.value }))}
+                  />
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <UploadButton
+                    label="Ganti Foto"
+                    folder="berita"
+                    onDone={(url) => setEdit((p) => ({ ...p, image_url: url }))}
+                  />
+                  {edit.image_url ? (
+                    <img
+                      src={edit.image_url}
+                      alt="Pratinjau"
+                      className="h-16 w-24 rounded-xl object-cover"
+                    />
+                  ) : null}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button size="sm" onClick={saveEdit} disabled={editBusy}>
+                    {editBusy ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Save className="h-4 w-4" />
+                    )}
+                    Simpan
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => setEditId(null)}>
+                    Batal
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-medium text-foreground">{item.title}</p>
+                  <p className="text-xs text-muted-foreground">{formatDateID(item.published_at)}</p>
+                  <p className="line-clamp-2 text-sm text-muted-foreground">{item.content}</p>
+                </div>
+                <div className="flex shrink-0 gap-1.5">
+                  <Button variant="outline" size="icon" onClick={() => startEdit(item)}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="icon" onClick={() => remove(item.id)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>

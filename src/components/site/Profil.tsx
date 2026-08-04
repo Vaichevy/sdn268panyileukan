@@ -1,4 +1,5 @@
-import { BookOpenCheck, Compass, HeartHandshake, Target } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight, BookOpenCheck, Compass, HeartHandshake, Target } from "lucide-react";
 import { Reveal } from "./Reveal";
 import type { SiteSettings } from "@/lib/cms";
 
@@ -54,18 +55,21 @@ export function Profil({ settings }: { settings: SiteSettings | null }) {
 
         <div className="mt-6 grid gap-6 sm:grid-cols-2">
           <Reveal delay={220}>
-            <div className="surface-card flex h-full items-start gap-4 p-7">
+            <Link
+              to="/pembelajaran"
+              className="surface-card flex h-full items-start gap-4 p-7 transition-transform hover:scale-[1.01]"
+            >
               <BookOpenCheck className="h-6 w-6 shrink-0 text-primary" />
               <div>
-                <h3 className="font-display text-lg font-semibold text-foreground">
-                  Pembelajaran Bermakna
+                <h3 className="flex items-center gap-2 font-display text-lg font-semibold text-foreground">
+                  Pembelajaran Bermakna <ArrowRight className="h-4 w-4 text-primary" />
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   Kurikulum Merdeka dengan pembelajaran aktif, projek penguatan Profil Pelajar
                   Pancasila, dan pendampingan belajar yang personal.
                 </p>
               </div>
-            </div>
+            </Link>
           </Reveal>
           <Reveal delay={280}>
             <div className="surface-card flex h-full items-start gap-4 p-7">
