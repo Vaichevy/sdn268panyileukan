@@ -659,6 +659,40 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
     void refresh();
   };
 
+  const [editId, setEditId] = useState<string | null>(null);
+  const [edit, setEdit] = useState({ title: "", description: "", event_date: "", image_url: "" });
+  const [editBusy, setEditBusy] = useState(false);
+
+  const startEdit = (item: (typeof items)[number]) => {
+    setEditId(item.id);
+    setEdit({
+      title: item.title,
+      description: item.description,
+      event_date: item.event_date ?? "",
+      image_url: item.image_url,
+    });
+  };
+
+  const saveEdit = async () => {
+    if (!editId) return;
+    if (!edit.title.trim() || !edit.image_url) return toast.error("Judul dan foto wajib diisi");
+    setEditBusy(true);
+    const { error } = await supabase
+      .from("gallery_items")
+      .update({
+        title: edit.title.trim(),
+        description: edit.description.trim(),
+        event_date: edit.event_date || null,
+        image_url: edit.image_url,
+      })
+      .eq("id", editId);
+    setEditBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Foto kegiatan diperbarui");
+    setEditId(null);
+    void refresh();
+  };
+
   return (
     <div className="space-y-6">
       <section className="surface-card space-y-4 p-6">
@@ -692,16 +726,85 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <div key={item.id} className="surface-card overflow-hidden">
-            <img src={item.image_url} alt={item.title} className="aspect-[4/3] w-full object-cover" />
-            <div className="flex items-start justify-between gap-3 p-4">
-              <div>
-                <p className="font-medium text-foreground">{item.title}</p>
-                <p className="line-clamp-2 text-xs text-muted-foreground">{item.description}</p>
+            {editId === item.id ? (
+              <div className="space-y-3 p-4">
+                <div className="space-y-2">
+                  <Label>Judul Kegiatan</Label>
+                  <Input
+                    value={edit.title}
+                    onChange={(e) => setEdit((p) => ({ ...p, title: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Tanggal Kegiatan</Label>
+                  <Input
+                    type="date"
+                    value={edit.event_date}
+                    onChange={(e) => setEdit((p) => ({ ...p, event_date: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Deskripsi</Label>
+                  <Textarea
+                    rows={3}
+                    value={edit.description}
+                    onChange={(e) => setEdit((p) => ({ ...p, description: e.target.value }))}
+                  />
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <UploadButton
+                    label="Ganti Foto"
+                    folder="galeri"
+                    onDone={(url) => setEdit((p) => ({ ...p, image_url: url }))}
+                  />
+                  {edit.image_url ? (
+                    <img
+                      src={edit.image_url}
+                      alt="Pratinjau"
+                      className="h-16 w-24 rounded-xl object-cover"
+                    />
+                  ) : null}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button size="sm" onClick={saveEdit} disabled={editBusy}>
+                    {editBusy ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Save className="h-4 w-4" />
+                    )}
+                    Simpan
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => setEditId(null)}>
+                    Batal
+                  </Button>
+                </div>
               </div>
-              <Button variant="outline" size="icon" onClick={() => remove(item.id)}>
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
+            ) : (
+              <>
+                <img
+                  src={item.image_url}
+                  alt={item.title}
+                  className="aspect-[4/3] w-full object-cover"
+                />
+                <div className="flex items-start justify-between gap-3 p-4">
+                  <div>
+                    <p className="font-medium text-foreground">{item.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatDateID(item.event_date ?? item.created_at)}
+                    </p>
+                    <p className="line-clamp-2 text-xs text-muted-foreground">{item.description}</p>
+                  </div>
+                  <div className="flex shrink-0 gap-1.5">
+                    <Button variant="outline" size="icon" onClick={() => startEdit(item)}>
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" size="icon" onClick={() => remove(item.id)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         ))}
       </div>
