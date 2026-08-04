@@ -845,6 +845,40 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
     void refresh();
   };
 
+  const [editId, setEditId] = useState<string | null>(null);
+  const [edit, setEdit] = useState({ title: "", content: "", image_url: "", published_at: "" });
+  const [editBusy, setEditBusy] = useState(false);
+
+  const startEdit = (item: (typeof items)[number]) => {
+    setEditId(item.id);
+    setEdit({
+      title: item.title,
+      content: item.content,
+      image_url: item.image_url ?? "",
+      published_at: item.published_at ?? "",
+    });
+  };
+
+  const saveEdit = async () => {
+    if (!editId) return;
+    if (!edit.title.trim()) return toast.error("Judul wajib diisi");
+    setEditBusy(true);
+    const { error } = await supabase
+      .from("news_items")
+      .update({
+        title: edit.title.trim(),
+        content: edit.content.trim(),
+        image_url: edit.image_url || null,
+        ...(edit.published_at ? { published_at: edit.published_at } : {}),
+      })
+      .eq("id", editId);
+    setEditBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Berita diperbarui");
+    setEditId(null);
+    void refresh();
+  };
+
   return (
     <div className="space-y-6">
       <section className="surface-card space-y-4 p-6">
