@@ -905,14 +905,77 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
 
       <div className="space-y-3">
         {items.map((item) => (
-          <div key={item.id} className="surface-card flex items-start justify-between gap-4 p-5">
-            <div>
-              <p className="font-medium text-foreground">{item.title}</p>
-              <p className="line-clamp-2 text-sm text-muted-foreground">{item.content}</p>
-            </div>
-            <Button variant="outline" size="icon" onClick={() => remove(item.id)}>
-              <Trash2 className="h-4 w-4" />
-            </Button>
+          <div key={item.id} className="surface-card p-5">
+            {editId === item.id ? (
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <Label>Judul</Label>
+                  <Input
+                    value={edit.title}
+                    onChange={(e) => setEdit((p) => ({ ...p, title: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Tanggal Publikasi</Label>
+                  <Input
+                    type="date"
+                    value={edit.published_at}
+                    onChange={(e) => setEdit((p) => ({ ...p, published_at: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Isi Berita</Label>
+                  <Textarea
+                    rows={8}
+                    value={edit.content}
+                    onChange={(e) => setEdit((p) => ({ ...p, content: e.target.value }))}
+                  />
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <UploadButton
+                    label="Ganti Foto"
+                    folder="berita"
+                    onDone={(url) => setEdit((p) => ({ ...p, image_url: url }))}
+                  />
+                  {edit.image_url ? (
+                    <img
+                      src={edit.image_url}
+                      alt="Pratinjau"
+                      className="h-16 w-24 rounded-xl object-cover"
+                    />
+                  ) : null}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button size="sm" onClick={saveEdit} disabled={editBusy}>
+                    {editBusy ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Save className="h-4 w-4" />
+                    )}
+                    Simpan
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => setEditId(null)}>
+                    Batal
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-medium text-foreground">{item.title}</p>
+                  <p className="text-xs text-muted-foreground">{formatDateID(item.published_at)}</p>
+                  <p className="line-clamp-2 text-sm text-muted-foreground">{item.content}</p>
+                </div>
+                <div className="flex shrink-0 gap-1.5">
+                  <Button variant="outline" size="icon" onClick={() => startEdit(item)}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="icon" onClick={() => remove(item.id)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>
