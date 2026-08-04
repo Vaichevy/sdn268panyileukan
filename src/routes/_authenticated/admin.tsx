@@ -1,7 +1,19 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Check, ImagePlus, Loader2, LogOut, Plus, Save, Star, Trash2, X } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  ImagePlus,
+  Loader2,
+  LogOut,
+  Pencil,
+  Plus,
+  Save,
+  Star,
+  Trash2,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdmin } from "@/hooks/useAdmin";
