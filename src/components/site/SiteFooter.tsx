@@ -28,12 +28,24 @@ export function SiteFooter({ settings }: { settings: SiteSettings | null }) {
         <div className="text-sm text-muted-foreground">
           <p className="font-semibold text-foreground">Tautan</p>
           <div className="mt-3 flex flex-col gap-2">
-            <a href="#profil" className="hover:text-primary">
+            <Link to="/" className="hover:text-primary">
+              Beranda
+            </Link>
+            <Link to="/" hash="profil" className="hover:text-primary">
               Profil Sekolah
-            </a>
-            <a href="#galeri" className="hover:text-primary">
+            </Link>
+            <Link to="/pembelajaran" className="hover:text-primary">
+              Pembelajaran
+            </Link>
+            <Link to="/galeri" className="hover:text-primary">
               Galeri Kegiatan
-            </a>
+            </Link>
+            <Link to="/berita" className="hover:text-primary">
+              Arsip Berita
+            </Link>
+            <Link to="/" hash="kontak" className="hover:text-primary">
+              Kontak
+            </Link>
             <Link to="/admin" className="hover:text-primary">
               Panel Admin
             </Link>
