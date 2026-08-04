@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, ShieldCheck, ChevronDown, Mail } from "lucide-react";
+import { Menu, X, ShieldCheck, ChevronDown, Mail, BookMarked } from "lucide-react";
 import { cn } from "@/lib/utils";
 import logoAsset from "@/assets/logo-sdn268.png.asset.json";
 
@@ -14,11 +14,18 @@ const LINKS: { href?: string; to?: string; label: string }[] = [
   { href: "#kontak", label: "Kontak" },
 ];
 
-const APPS = [
+const APPS: { href: string; label: string; description: string; icon: typeof Mail }[] = [
   {
     href: "https://surat268panyileukan.lovable.app",
     label: "Aplikasi Surat",
     description: "Pengelolaan surat masuk & keluar",
+    icon: Mail,
+  },
+  {
+    href: "https://perpustakaansdn268.lovable.app/",
+    label: "Aplikasi Perpustakaan",
+    description: "Katalog & peminjaman buku sekolah",
+    icon: BookMarked,
   },
 ];
 
@@ -119,7 +126,7 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
                     onClick={() => setAppsOpen(false)}
                     className="flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-secondary"
                   >
-                    <Mail className="mt-0.5 h-4 w-4 text-primary" />
+                    <app.icon className="mt-0.5 h-4 w-4 text-primary" />
                     <span>
                       <span className="block text-sm font-semibold text-foreground">
                         {app.label}
@@ -188,7 +195,7 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
                   onClick={() => setOpen(false)}
                   className="flex items-center gap-2 rounded-xl px-2 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-card"
                 >
-                  <Mail className="h-4 w-4 text-primary" /> {app.label}
+                  <app.icon className="h-4 w-4 text-primary" /> {app.label}
                 </a>
               ))}
             </div>
