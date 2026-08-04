@@ -528,64 +528,95 @@ function TestimonialManager() {
       {list.length === 0 ? (
         <p className="surface-card p-6 text-sm text-muted-foreground">Belum ada komentar masuk.</p>
       ) : (
-        list.map((item) => (
-          <div key={item.id} className="surface-card space-y-3 p-5">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-sm font-semibold text-foreground">{item.name}</p>
-                <p className="text-xs text-muted-foreground">{formatDateID(item.created_at)}</p>
-              </div>
-              <span className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star
-                    key={i}
-                    className={
-                      i <= item.rating
-                        ? "h-4 w-4 fill-primary text-primary"
-                        : "h-4 w-4 text-muted-foreground/40"
-                    }
-                  />
-                ))}
-              </span>
-            </div>
-            <p className="text-sm leading-relaxed text-foreground">{item.message}</p>
-            <div className="flex flex-wrap items-center gap-2">
-              <span
-                className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                  item.is_approved
-                    ? "bg-primary/10 text-primary"
-                    : "bg-secondary text-muted-foreground"
-                }`}
-              >
-                {item.is_approved ? "Terverifikasi" : "Menunggu verifikasi"}
-              </span>
-              <Button
-                size="sm"
-                variant={item.is_approved ? "outline" : "default"}
-                disabled={busyId === item.id}
-                onClick={() => void setApproved(item.id, !item.is_approved)}
-              >
-                {item.is_approved ? (
-                  <>
-                    <X className="mr-1 h-4 w-4" /> Sembunyikan
-                  </>
-                ) : (
-                  <>
-                    <Check className="mr-1 h-4 w-4" /> Verifikasi
-                  </>
-                )}
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                disabled={busyId === item.id}
-                onClick={() => void remove(item.id)}
-              >
-                <Trash2 className="mr-1 h-4 w-4" /> Hapus
-              </Button>
-            </div>
-          </div>
-        ))
+        <div className="surface-card overflow-x-auto p-0">
+          <table className="w-full min-w-[900px] text-left text-sm">
+            <thead className="bg-secondary/60 text-xs tracking-wide text-muted-foreground uppercase">
+              <tr>
+                <th className="px-4 py-3">No</th>
+                <th className="px-4 py-3">Tanggal</th>
+                <th className="px-4 py-3">Nama</th>
+                <th className="px-4 py-3">Rating</th>
+                <th className="px-4 py-3">Komentar</th>
+                <th className="px-4 py-3">Sumber</th>
+                <th className="px-4 py-3">ID Formulir</th>
+                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {list.map((item, index) => (
+                <tr key={item.id} className="border-t border-border align-top">
+                  <td className="px-4 py-3 text-muted-foreground">{index + 1}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">
+                    {formatDateID(item.created_at)}
+                  </td>
+                  <td className="px-4 py-3 font-medium text-foreground">{item.name}</td>
+                  <td className="px-4 py-3">
+                    <span className="flex items-center gap-0.5">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Star
+                          key={i}
+                          className={
+                            i <= item.rating
+                              ? "h-3.5 w-3.5 fill-primary text-primary"
+                              : "h-3.5 w-3.5 text-muted-foreground/40"
+                          }
+                        />
+                      ))}
+                      <span className="ml-1 text-xs text-muted-foreground">{item.rating}/5</span>
+                    </span>
+                  </td>
+                  <td className="max-w-sm px-4 py-3 leading-relaxed text-foreground">
+                    {item.message}
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground">{item.source}</td>
+                  <td className="px-4 py-3 text-xs break-all text-muted-foreground">
+                    {item.external_id ?? "—"}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold whitespace-nowrap ${
+                        item.is_approved
+                          ? "bg-primary/10 text-primary"
+                          : "bg-secondary text-muted-foreground"
+                      }`}
+                    >
+                      {item.is_approved ? "Terverifikasi" : "Menunggu"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-1.5">
+                      <Button
+                        size="sm"
+                        variant={item.is_approved ? "outline" : "default"}
+                        disabled={busyId === item.id}
+                        onClick={() => void setApproved(item.id, !item.is_approved)}
+                      >
+                        {item.is_approved ? (
+                          <>
+                            <X className="mr-1 h-4 w-4" /> Sembunyikan
+                          </>
+                        ) : (
+                          <>
+                            <Check className="mr-1 h-4 w-4" /> Verifikasi
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        disabled={busyId === item.id}
+                        onClick={() => void remove(item.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
