@@ -116,6 +116,26 @@ export function formatDateID(value?: string | null) {
   });
 }
 
+/** All photos for a card: cover first, then extra uploads, de-duplicated. */
+export function mediaList(item: {
+  image_url?: string | null;
+  images?: string[] | null;
+}): string[] {
+  const list = [item.image_url, ...(item.images ?? [])].filter(
+    (v): v is string => typeof v === "string" && v.length > 0,
+  );
+  return [...new Set(list)];
+}
+
+function unusedFormatDateID(value?: string | null) {
+  if (!value) return "";
+  return new Date(value).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 /** Sorts gallery items newest-first by event date, falling back to created_at. */
 export function sortGallery(items: GalleryItem[]): GalleryItem[] {
   return [...items].sort((a, b) => {
