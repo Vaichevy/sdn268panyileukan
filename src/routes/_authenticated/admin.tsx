@@ -24,9 +24,11 @@ import {
   useNews,
   useSiteSettings,
   uploadMedia,
+  mediaList,
   type SiteSettings,
 } from "@/lib/cms";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
+import { PhotoCarousel } from "@/components/site/PhotoSlider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
