@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, ShieldCheck, ChevronDown, Mail, BookMarked } from "lucide-react";
+import { Menu, X, ShieldCheck, ChevronDown, Mail, BookMarked, BookOpen, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import logoAsset from "@/assets/logo-sdn268.png.asset.json";
 
@@ -8,13 +8,35 @@ const LINKS: { href?: string; to?: string; label: string }[] = [
   { href: "#beranda", label: "Beranda" },
   { href: "#profil", label: "Profil" },
   { href: "#sambutan", label: "Sambutan" },
-  { to: "/pembelajaran", label: "Pembelajaran" },
   { href: "#galeri", label: "Galeri" },
   { href: "#berita", label: "Berita" },
   { href: "#kontak", label: "Kontak" },
 ];
 
-const APPS: { href: string; label: string; description: string; icon: typeof Mail }[] = [
+type MenuItem = {
+  href?: string;
+  to?: string;
+  label: string;
+  description: string;
+  icon: typeof Mail;
+};
+
+const KURIKULUM: MenuItem[] = [
+  {
+    href: "https://heyzine.com/flip-book/f62b91d864.html",
+    label: "Buku Saku Kurikulum",
+    description: "Flipbook buku saku KSP sekolah",
+    icon: BookOpen,
+  },
+  {
+    to: "/pembelajaran",
+    label: "Pembelajaran",
+    description: "Pengorganisasian belajar & fase",
+    icon: GraduationCap,
+  },
+];
+
+const APPS: MenuItem[] = [
   {
     href: "https://surat268panyileukan.lovable.app",
     label: "Aplikasi Surat",
@@ -28,6 +50,77 @@ const APPS: { href: string; label: string; description: string; icon: typeof Mai
     icon: BookMarked,
   },
 ];
+
+function DropdownMenu({
+  label,
+  items,
+}: {
+  label: string;
+  items: MenuItem[];
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const onDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-secondary-foreground"
+      >
+        {label}
+        <ChevronDown className={cn("h-4 w-4 transition-transform", open && "rotate-180")} />
+      </button>
+      {open ? (
+        <div
+          role="menu"
+          className="absolute top-full right-0 mt-2 w-64 rounded-2xl border border-border bg-card/95 p-2 shadow-[var(--shadow-soft)] backdrop-blur-xl"
+        >
+          {items.map((item) => {
+            const body = (
+              <>
+                <item.icon className="mt-0.5 h-4 w-4 text-primary" />
+                <span>
+                  <span className="block text-sm font-semibold text-foreground">{item.label}</span>
+                  <span className="block text-xs text-muted-foreground">{item.description}</span>
+                </span>
+              </>
+            );
+            const cls =
+              "flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-secondary";
+            return item.to ? (
+              <Link key={item.to} role="menuitem" to={item.to} onClick={() => setOpen(false)} className={cls}>
+                {body}
+              </Link>
+            ) : (
+              <a
+                key={item.href}
+                role="menuitem"
+                href={item.href!}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                className={cls}
+              >
+                {body}
+              </a>
+            );
+          })}
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
 export function SiteNav({ schoolName }: { schoolName: string }) {
   const [scrolled, setScrolled] = useState(false);
