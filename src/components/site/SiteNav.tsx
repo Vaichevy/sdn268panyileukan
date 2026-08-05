@@ -191,48 +191,8 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
             </a>
             ),
           )}
-          <div ref={appsRef} className="relative">
-            <button
-              type="button"
-              aria-haspopup="menu"
-              aria-expanded={appsOpen}
-              onClick={() => setAppsOpen((v) => !v)}
-              className="inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-secondary-foreground"
-            >
-              Aplikasi
-              <ChevronDown
-                className={cn("h-4 w-4 transition-transform", appsOpen && "rotate-180")}
-              />
-            </button>
-            {appsOpen ? (
-              <div
-                role="menu"
-                className="absolute right-0 top-full mt-2 w-64 rounded-2xl border border-border bg-card/95 p-2 shadow-[var(--shadow-soft)] backdrop-blur-xl"
-              >
-                {APPS.map((app) => (
-                  <a
-                    key={app.href}
-                    role="menuitem"
-                    href={app.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setAppsOpen(false)}
-                    className="flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-secondary"
-                  >
-                    <app.icon className="mt-0.5 h-4 w-4 text-primary" />
-                    <span>
-                      <span className="block text-sm font-semibold text-foreground">
-                        {app.label}
-                      </span>
-                      <span className="block text-xs text-muted-foreground">
-                        {app.description}
-                      </span>
-                    </span>
-                  </a>
-                ))}
-              </div>
-            ) : null}
-          </div>
+          <DropdownMenu label="Kurikulum" items={KURIKULUM} />
+          <DropdownMenu label="Aplikasi" items={APPS} />
           <Link
             to="/admin"
             className="ml-2 inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.03]"
@@ -277,12 +237,40 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
             )}
             <div className="mt-1 rounded-2xl bg-secondary/50 p-2">
               <p className="px-2 py-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                Kurikulum
+              </p>
+              {KURIKULUM.map((item) =>
+                item.to ? (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2 rounded-xl px-2 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-card"
+                  >
+                    <item.icon className="h-4 w-4 text-primary" /> {item.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={item.href}
+                    href={item.href!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2 rounded-xl px-2 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-card"
+                  >
+                    <item.icon className="h-4 w-4 text-primary" /> {item.label}
+                  </a>
+                ),
+              )}
+            </div>
+            <div className="mt-1 rounded-2xl bg-secondary/50 p-2">
+              <p className="px-2 py-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                 Aplikasi
               </p>
               {APPS.map((app) => (
                 <a
                   key={app.href}
-                  href={app.href}
+                  href={app.href!}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setOpen(false)}
