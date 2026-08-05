@@ -712,18 +712,19 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [eventDate, setEventDate] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["gallery_items"] });
 
   const add = async () => {
-    if (!title.trim() || !imageUrl) return toast.error("Judul dan foto wajib diisi");
+    if (!title.trim() || photos.length === 0) return toast.error("Judul dan foto wajib diisi");
     setBusy(true);
     const { error } = await supabase.from("gallery_items").insert({
       title: title.trim(),
       description: description.trim(),
-      image_url: imageUrl,
+      image_url: photos[0]!,
+      images: photos.slice(1),
       event_date: eventDate || null,
       sort_order: items.length,
     });
@@ -732,7 +733,7 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
     setTitle("");
     setDescription("");
     setEventDate("");
-    setImageUrl("");
+    setPhotos([]);
     toast.success("Momen kegiatan ditambahkan");
     void refresh();
   };
@@ -745,7 +746,12 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
   };
 
   const [editId, setEditId] = useState<string | null>(null);
-  const [edit, setEdit] = useState({ title: "", description: "", event_date: "", image_url: "" });
+  const [edit, setEdit] = useState<{
+    title: string;
+    description: string;
+    event_date: string;
+    photos: string[];
+  }>({ title: "", description: "", event_date: "", photos: [] });
   const [editBusy, setEditBusy] = useState(false);
 
   const startEdit = (item: (typeof items)[number]) => {
@@ -754,13 +760,14 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
       title: item.title,
       description: item.description,
       event_date: item.event_date ?? "",
-      image_url: item.image_url,
+      photos: mediaList(item),
     });
   };
 
   const saveEdit = async () => {
     if (!editId) return;
-    if (!edit.title.trim() || !edit.image_url) return toast.error("Judul dan foto wajib diisi");
+    if (!edit.title.trim() || edit.photos.length === 0)
+      return toast.error("Judul dan foto wajib diisi");
     setEditBusy(true);
     const { error } = await supabase
       .from("gallery_items")
@@ -768,7 +775,8 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
         title: edit.title.trim(),
         description: edit.description.trim(),
         event_date: edit.event_date || null,
-        image_url: edit.image_url,
+        image_url: edit.photos[0]!,
+        images: edit.photos.slice(1),
       })
       .eq("id", editId);
     setEditBusy(false);
@@ -797,11 +805,24 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
           <Textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <UploadButton label="Unggah Foto" folder="galeri" onDone={setImageUrl} />
-          {imageUrl ? (
-            <img src={imageUrl} alt="Pratinjau" className="h-16 w-24 rounded-xl object-cover" />
-          ) : null}
+          <MultiUploadButton
+            label="Unggah Foto (bisa banyak)"
+            folder="galeri"
+            onDone={(urls) => setPhotos((p) => [...p, ...urls])}
+          />
         </div>
+        <PhotoStrip
+          urls={photos}
+          onRemove={(url) => setPhotos((p) => p.filter((u) => u !== url))}
+          onCover={(url) => setPhotos((p) => [url, ...p.filter((u) => u !== url)])}
+        />
+        {photos.length > 1 ? (
+          <PhotoCarousel
+            images={photos}
+            alt="Pratinjau slide"
+            className="aspect-[16/9] w-full max-w-md rounded-2xl"
+          />
+        ) : null}
         <Button onClick={add} disabled={busy}>
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
           Tambahkan
