@@ -861,16 +861,33 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
                   <UploadButton
                     label="Ganti Foto"
                     folder="galeri"
-                    onDone={(url) => setEdit((p) => ({ ...p, image_url: url }))}
+                    onDone={(url) => setEdit((p) => ({ ...p, photos: [url] }))}
                   />
-                  {edit.image_url ? (
-                    <img
-                      src={edit.image_url}
-                      alt="Pratinjau"
-                      className="h-16 w-24 rounded-xl object-cover"
-                    />
-                  ) : null}
+                  <MultiUploadButton
+                    label="Tambah Foto"
+                    folder="galeri"
+                    onDone={(urls) => setEdit((p) => ({ ...p, photos: [...p.photos, ...urls] }))}
+                  />
                 </div>
+                <PhotoStrip
+                  urls={edit.photos}
+                  onRemove={(url) =>
+                    setEdit((p) => ({ ...p, photos: p.photos.filter((u) => u !== url) }))
+                  }
+                  onCover={(url) =>
+                    setEdit((p) => ({
+                      ...p,
+                      photos: [url, ...p.photos.filter((u) => u !== url)],
+                    }))
+                  }
+                />
+                {edit.photos.length > 1 ? (
+                  <PhotoCarousel
+                    images={edit.photos}
+                    alt="Pratinjau slide"
+                    className="aspect-[16/9] w-full rounded-2xl"
+                  />
+                ) : null}
                 <div className="flex items-center gap-2">
                   <Button size="sm" onClick={saveEdit} disabled={editBusy}>
                     {editBusy ? (
@@ -887,11 +904,19 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
               </div>
             ) : (
               <>
-                <img
-                  src={item.image_url}
-                  alt={item.title}
-                  className="aspect-[4/3] w-full object-cover"
-                />
+                {mediaList(item).length > 1 ? (
+                  <PhotoCarousel
+                    images={mediaList(item)}
+                    alt={item.title}
+                    className="aspect-[4/3] w-full"
+                  />
+                ) : (
+                  <img
+                    src={item.image_url}
+                    alt={item.title}
+                    className="aspect-[4/3] w-full object-cover"
+                  />
+                )}
                 <div className="flex items-start justify-between gap-3 p-4">
                   <div>
                     <p className="font-medium text-foreground">{item.title}</p>
