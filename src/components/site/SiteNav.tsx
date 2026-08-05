@@ -125,22 +125,12 @@ function DropdownMenu({
 export function SiteNav({ schoolName }: { schoolName: string }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [appsOpen, setAppsOpen] = useState(false);
-  const appsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    const onDown = (e: MouseEvent) => {
-      if (appsRef.current && !appsRef.current.contains(e.target as Node)) setAppsOpen(false);
-    };
-    document.addEventListener("mousedown", onDown);
-    return () => document.removeEventListener("mousedown", onDown);
   }, []);
 
   return (
