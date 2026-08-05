@@ -88,6 +88,89 @@ function UploadButton({
   );
 }
 
+function MultiUploadButton({
+  label,
+  folder,
+  onDone,
+}: {
+  label: string;
+  folder: string;
+  onDone: (urls: string[]) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+      {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
+      {label}
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        disabled={busy}
+        onChange={async (e) => {
+          const files = Array.from(e.target.files ?? []);
+          if (files.length === 0) return;
+          setBusy(true);
+          try {
+            const urls: string[] = [];
+            for (const file of files) urls.push(await uploadMedia(file, folder));
+            onDone(urls);
+            toast.success(`${urls.length} foto berhasil diunggah`);
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : "Gagal mengunggah foto");
+          } finally {
+            setBusy(false);
+            e.target.value = "";
+          }
+        }}
+      />
+    </label>
+  );
+}
+
+function PhotoStrip({
+  urls,
+  onRemove,
+  onCover,
+}: {
+  urls: string[];
+  onRemove: (url: string) => void;
+  onCover?: (url: string) => void;
+}) {
+  if (urls.length === 0) return null;
+  return (
+    <div className="flex flex-wrap gap-2">
+      {urls.map((url, i) => (
+        <div key={`${url}-${i}`} className="relative">
+          <img src={url} alt={`Foto ${i + 1}`} className="h-16 w-24 rounded-xl object-cover" />
+          {i === 0 ? (
+            <span className="absolute bottom-1 left-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground">
+              Cover
+            </span>
+          ) : onCover ? (
+            <button
+              type="button"
+              onClick={() => onCover(url)}
+              className="absolute bottom-1 left-1 rounded-full bg-card/90 px-1.5 py-0.5 text-[10px] font-semibold text-foreground"
+            >
+              Jadikan cover
+            </button>
+          ) : null}
+          <button
+            type="button"
+            aria-label="Hapus foto"
+            onClick={() => onRemove(url)}
+            className="absolute -top-1.5 -right-1.5 rounded-full bg-destructive p-1 text-destructive-foreground"
+          >
+            <X className="h-3 w-3" />
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function Field({
   label,
   value,
