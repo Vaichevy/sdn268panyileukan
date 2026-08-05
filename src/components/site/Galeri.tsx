@@ -2,12 +2,15 @@ import { useState } from "react";
 import { ArrowRight, CalendarDays, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
-import { formatDateID, sortGallery, type GalleryItem } from "@/lib/cms";
+import { formatDateID, mediaList, sortGallery, type GalleryItem } from "@/lib/cms";
+import { HoverCoverSlider, PhotoCarousel } from "./PhotoSlider";
 import belajar from "@/assets/kegiatan-belajar.jpg";
 import upacara from "@/assets/upacara-bendera.jpg";
 import ekskul from "@/assets/kegiatan-ekstrakurikuler.jpg";
 
-type Card = Pick<GalleryItem, "id" | "title" | "description" | "image_url" | "event_date">;
+type Card = Pick<GalleryItem, "id" | "title" | "description" | "image_url" | "event_date"> & {
+  images?: string[] | null;
+};
 
 const FALLBACK: Card[] = [
   {
@@ -63,11 +66,10 @@ export function Galeri({ items, limit }: { items: GalleryItem[]; limit?: number 
                 className="surface-card group block w-full overflow-hidden p-0 text-left"
               >
                 <div className="overflow-hidden">
-                  <img
-                    src={item.image_url}
+                  <HoverCoverSlider
+                    images={mediaList(item)}
                     alt={item.title}
-                    loading="lazy"
-                    className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="aspect-[4/3] w-full transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
                 <div className="p-5">
@@ -133,10 +135,10 @@ export function Galeri({ items, limit }: { items: GalleryItem[]; limit?: number 
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <img
-              src={selected.image_url}
+            <PhotoCarousel
+              images={mediaList(selected)}
               alt={selected.title}
-              className="mt-4 w-full rounded-2xl object-cover"
+              className="mt-4 aspect-[4/3] w-full rounded-2xl"
             />
             {selected.description ? (
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">

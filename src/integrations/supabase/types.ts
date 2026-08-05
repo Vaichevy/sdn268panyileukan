@@ -21,6 +21,7 @@ export type Database = {
           event_date: string | null
           id: string
           image_url: string
+          images: string[]
           sort_order: number
           title: string
           updated_at: string
@@ -31,6 +32,7 @@ export type Database = {
           event_date?: string | null
           id?: string
           image_url: string
+          images?: string[]
           sort_order?: number
           title: string
           updated_at?: string
@@ -41,6 +43,7 @@ export type Database = {
           event_date?: string | null
           id?: string
           image_url?: string
+          images?: string[]
           sort_order?: number
           title?: string
           updated_at?: string
@@ -53,6 +56,7 @@ export type Database = {
           created_at: string
           id: string
           image_url: string | null
+          images: string[]
           published_at: string
           title: string
           updated_at: string
@@ -62,6 +66,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          images?: string[]
           published_at?: string
           title: string
           updated_at?: string
@@ -71,6 +76,7 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          images?: string[]
           published_at?: string
           title?: string
           updated_at?: string

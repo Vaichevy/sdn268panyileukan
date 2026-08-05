@@ -4,8 +4,15 @@ import { ArrowLeft, Newspaper } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { formatDateID, useSiteSettings, FALLBACK_SETTINGS, type NewsItem } from "@/lib/cms";
+import {
+  formatDateID,
+  mediaList,
+  useSiteSettings,
+  FALLBACK_SETTINGS,
+  type NewsItem,
+} from "@/lib/cms";
 import { Linkify } from "@/components/site/Linkify";
+import { PhotoCarousel } from "@/components/site/PhotoSlider";
 
 export const Route = createFileRoute("/berita/$id")({
   head: () => ({
@@ -73,11 +80,11 @@ function BeritaDetail() {
             </div>
           ) : (
             <article className="surface-card mt-8 overflow-hidden">
-              {item.image_url ? (
-                <img
-                  src={item.image_url}
+              {mediaList(item).length > 0 ? (
+                <PhotoCarousel
+                  images={mediaList(item)}
                   alt={item.title}
-                  className="max-h-[420px] w-full object-cover"
+                  className="h-[300px] w-full sm:h-[420px]"
                 />
               ) : null}
               <div className="p-6 sm:p-8">

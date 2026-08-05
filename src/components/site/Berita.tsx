@@ -1,8 +1,9 @@
 import { ArrowRight, Newspaper } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
-import { formatDateID, type NewsItem } from "@/lib/cms";
+import { formatDateID, mediaList, type NewsItem } from "@/lib/cms";
 import { Linkify } from "./Linkify";
+import { HoverCoverSlider } from "./PhotoSlider";
 
 export function Berita({ items, limit }: { items: NewsItem[]; limit?: number }) {
   if (items.length === 0) return null;
@@ -24,12 +25,11 @@ export function Berita({ items, limit }: { items: NewsItem[]; limit?: number }) 
           {visible.map((item, index) => (
             <Reveal key={item.id} delay={index * 70}>
               <article className="surface-card flex h-full gap-5 p-5">
-                {item.image_url ? (
-                  <img
-                    src={item.image_url}
+                {mediaList(item).length > 0 ? (
+                  <HoverCoverSlider
+                    images={mediaList(item)}
                     alt={item.title}
-                    loading="lazy"
-                    className="hidden h-32 w-32 shrink-0 rounded-2xl object-cover sm:block"
+                    className="hidden h-32 w-32 shrink-0 rounded-2xl sm:block"
                   />
                 ) : (
                   <span className="hidden h-32 w-32 shrink-0 items-center justify-center rounded-2xl bg-secondary text-secondary-foreground sm:flex">

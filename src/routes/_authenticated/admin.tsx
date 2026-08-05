@@ -24,9 +24,11 @@ import {
   useNews,
   useSiteSettings,
   uploadMedia,
+  mediaList,
   type SiteSettings,
 } from "@/lib/cms";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
+import { PhotoCarousel } from "@/components/site/PhotoSlider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -83,6 +85,89 @@ function UploadButton({
         }}
       />
     </label>
+  );
+}
+
+function MultiUploadButton({
+  label,
+  folder,
+  onDone,
+}: {
+  label: string;
+  folder: string;
+  onDone: (urls: string[]) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+      {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
+      {label}
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        disabled={busy}
+        onChange={async (e) => {
+          const files = Array.from(e.target.files ?? []);
+          if (files.length === 0) return;
+          setBusy(true);
+          try {
+            const urls: string[] = [];
+            for (const file of files) urls.push(await uploadMedia(file, folder));
+            onDone(urls);
+            toast.success(`${urls.length} foto berhasil diunggah`);
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : "Gagal mengunggah foto");
+          } finally {
+            setBusy(false);
+            e.target.value = "";
+          }
+        }}
+      />
+    </label>
+  );
+}
+
+function PhotoStrip({
+  urls,
+  onRemove,
+  onCover,
+}: {
+  urls: string[];
+  onRemove: (url: string) => void;
+  onCover?: (url: string) => void;
+}) {
+  if (urls.length === 0) return null;
+  return (
+    <div className="flex flex-wrap gap-2">
+      {urls.map((url, i) => (
+        <div key={`${url}-${i}`} className="relative">
+          <img src={url} alt={`Foto ${i + 1}`} className="h-16 w-24 rounded-xl object-cover" />
+          {i === 0 ? (
+            <span className="absolute bottom-1 left-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground">
+              Cover
+            </span>
+          ) : onCover ? (
+            <button
+              type="button"
+              onClick={() => onCover(url)}
+              className="absolute bottom-1 left-1 rounded-full bg-card/90 px-1.5 py-0.5 text-[10px] font-semibold text-foreground"
+            >
+              Jadikan cover
+            </button>
+          ) : null}
+          <button
+            type="button"
+            aria-label="Hapus foto"
+            onClick={() => onRemove(url)}
+            className="absolute -top-1.5 -right-1.5 rounded-full bg-destructive p-1 text-destructive-foreground"
+          >
+            <X className="h-3 w-3" />
+          </button>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -627,18 +712,19 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [eventDate, setEventDate] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["gallery_items"] });
 
   const add = async () => {
-    if (!title.trim() || !imageUrl) return toast.error("Judul dan foto wajib diisi");
+    if (!title.trim() || photos.length === 0) return toast.error("Judul dan foto wajib diisi");
     setBusy(true);
     const { error } = await supabase.from("gallery_items").insert({
       title: title.trim(),
       description: description.trim(),
-      image_url: imageUrl,
+      image_url: photos[0]!,
+      images: photos.slice(1),
       event_date: eventDate || null,
       sort_order: items.length,
     });
@@ -647,7 +733,7 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
     setTitle("");
     setDescription("");
     setEventDate("");
-    setImageUrl("");
+    setPhotos([]);
     toast.success("Momen kegiatan ditambahkan");
     void refresh();
   };
@@ -660,7 +746,12 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
   };
 
   const [editId, setEditId] = useState<string | null>(null);
-  const [edit, setEdit] = useState({ title: "", description: "", event_date: "", image_url: "" });
+  const [edit, setEdit] = useState<{
+    title: string;
+    description: string;
+    event_date: string;
+    photos: string[];
+  }>({ title: "", description: "", event_date: "", photos: [] });
   const [editBusy, setEditBusy] = useState(false);
 
   const startEdit = (item: (typeof items)[number]) => {
@@ -669,13 +760,14 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
       title: item.title,
       description: item.description,
       event_date: item.event_date ?? "",
-      image_url: item.image_url,
+      photos: mediaList(item),
     });
   };
 
   const saveEdit = async () => {
     if (!editId) return;
-    if (!edit.title.trim() || !edit.image_url) return toast.error("Judul dan foto wajib diisi");
+    if (!edit.title.trim() || edit.photos.length === 0)
+      return toast.error("Judul dan foto wajib diisi");
     setEditBusy(true);
     const { error } = await supabase
       .from("gallery_items")
@@ -683,7 +775,8 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
         title: edit.title.trim(),
         description: edit.description.trim(),
         event_date: edit.event_date || null,
-        image_url: edit.image_url,
+        image_url: edit.photos[0]!,
+        images: edit.photos.slice(1),
       })
       .eq("id", editId);
     setEditBusy(false);
@@ -712,11 +805,24 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
           <Textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <UploadButton label="Unggah Foto" folder="galeri" onDone={setImageUrl} />
-          {imageUrl ? (
-            <img src={imageUrl} alt="Pratinjau" className="h-16 w-24 rounded-xl object-cover" />
-          ) : null}
+          <MultiUploadButton
+            label="Unggah Foto (bisa banyak)"
+            folder="galeri"
+            onDone={(urls) => setPhotos((p) => [...p, ...urls])}
+          />
         </div>
+        <PhotoStrip
+          urls={photos}
+          onRemove={(url) => setPhotos((p) => p.filter((u) => u !== url))}
+          onCover={(url) => setPhotos((p) => [url, ...p.filter((u) => u !== url)])}
+        />
+        {photos.length > 1 ? (
+          <PhotoCarousel
+            images={photos}
+            alt="Pratinjau slide"
+            className="aspect-[16/9] w-full max-w-md rounded-2xl"
+          />
+        ) : null}
         <Button onClick={add} disabled={busy}>
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
           Tambahkan
@@ -755,16 +861,33 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
                   <UploadButton
                     label="Ganti Foto"
                     folder="galeri"
-                    onDone={(url) => setEdit((p) => ({ ...p, image_url: url }))}
+                    onDone={(url) => setEdit((p) => ({ ...p, photos: [url] }))}
                   />
-                  {edit.image_url ? (
-                    <img
-                      src={edit.image_url}
-                      alt="Pratinjau"
-                      className="h-16 w-24 rounded-xl object-cover"
-                    />
-                  ) : null}
+                  <MultiUploadButton
+                    label="Tambah Foto"
+                    folder="galeri"
+                    onDone={(urls) => setEdit((p) => ({ ...p, photos: [...p.photos, ...urls] }))}
+                  />
                 </div>
+                <PhotoStrip
+                  urls={edit.photos}
+                  onRemove={(url) =>
+                    setEdit((p) => ({ ...p, photos: p.photos.filter((u) => u !== url) }))
+                  }
+                  onCover={(url) =>
+                    setEdit((p) => ({
+                      ...p,
+                      photos: [url, ...p.photos.filter((u) => u !== url)],
+                    }))
+                  }
+                />
+                {edit.photos.length > 1 ? (
+                  <PhotoCarousel
+                    images={edit.photos}
+                    alt="Pratinjau slide"
+                    className="aspect-[16/9] w-full rounded-2xl"
+                  />
+                ) : null}
                 <div className="flex items-center gap-2">
                   <Button size="sm" onClick={saveEdit} disabled={editBusy}>
                     {editBusy ? (
@@ -781,11 +904,19 @@ function GalleryManager({ items }: { items: NonNullable<ReturnType<typeof useGal
               </div>
             ) : (
               <>
-                <img
-                  src={item.image_url}
-                  alt={item.title}
-                  className="aspect-[4/3] w-full object-cover"
-                />
+                {mediaList(item).length > 1 ? (
+                  <PhotoCarousel
+                    images={mediaList(item)}
+                    alt={item.title}
+                    className="aspect-[4/3] w-full"
+                  />
+                ) : (
+                  <img
+                    src={item.image_url}
+                    alt={item.title}
+                    className="aspect-[4/3] w-full object-cover"
+                  />
+                )}
                 <div className="flex items-start justify-between gap-3 p-4">
                   <div>
                     <p className="font-medium text-foreground">{item.title}</p>
@@ -816,7 +947,7 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
   const qc = useQueryClient();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["news_items"] });
@@ -827,13 +958,14 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
     const { error } = await supabase.from("news_items").insert({
       title: title.trim(),
       content: content.trim(),
-      image_url: imageUrl || null,
+      image_url: photos[0] ?? null,
+      images: photos.slice(1),
     });
     setBusy(false);
     if (error) return toast.error(error.message);
     setTitle("");
     setContent("");
-    setImageUrl("");
+    setPhotos([]);
     toast.success("Berita dipublikasikan");
     void refresh();
   };
@@ -846,7 +978,12 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
   };
 
   const [editId, setEditId] = useState<string | null>(null);
-  const [edit, setEdit] = useState({ title: "", content: "", image_url: "", published_at: "" });
+  const [edit, setEdit] = useState<{
+    title: string;
+    content: string;
+    photos: string[];
+    published_at: string;
+  }>({ title: "", content: "", photos: [], published_at: "" });
   const [editBusy, setEditBusy] = useState(false);
 
   const startEdit = (item: (typeof items)[number]) => {
@@ -854,7 +991,7 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
     setEdit({
       title: item.title,
       content: item.content,
-      image_url: item.image_url ?? "",
+      photos: mediaList(item),
       published_at: item.published_at ?? "",
     });
   };
@@ -868,7 +1005,8 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
       .update({
         title: edit.title.trim(),
         content: edit.content.trim(),
-        image_url: edit.image_url || null,
+        image_url: edit.photos[0] ?? null,
+        images: edit.photos.slice(1),
         ...(edit.published_at ? { published_at: edit.published_at } : {}),
       })
       .eq("id", editId);
@@ -892,11 +1030,24 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
           <Textarea rows={6} value={content} onChange={(e) => setContent(e.target.value)} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <UploadButton label="Unggah Foto" folder="berita" onDone={setImageUrl} />
-          {imageUrl ? (
-            <img src={imageUrl} alt="Pratinjau" className="h-16 w-24 rounded-xl object-cover" />
-          ) : null}
+          <MultiUploadButton
+            label="Unggah Foto (bisa banyak)"
+            folder="berita"
+            onDone={(urls) => setPhotos((p) => [...p, ...urls])}
+          />
         </div>
+        <PhotoStrip
+          urls={photos}
+          onRemove={(url) => setPhotos((p) => p.filter((u) => u !== url))}
+          onCover={(url) => setPhotos((p) => [url, ...p.filter((u) => u !== url)])}
+        />
+        {photos.length > 1 ? (
+          <PhotoCarousel
+            images={photos}
+            alt="Pratinjau slide"
+            className="aspect-[16/9] w-full max-w-md rounded-2xl"
+          />
+        ) : null}
         <Button onClick={add} disabled={busy}>
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
           Publikasikan
@@ -935,16 +1086,33 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
                   <UploadButton
                     label="Ganti Foto"
                     folder="berita"
-                    onDone={(url) => setEdit((p) => ({ ...p, image_url: url }))}
+                    onDone={(url) => setEdit((p) => ({ ...p, photos: [url] }))}
                   />
-                  {edit.image_url ? (
-                    <img
-                      src={edit.image_url}
-                      alt="Pratinjau"
-                      className="h-16 w-24 rounded-xl object-cover"
-                    />
-                  ) : null}
+                  <MultiUploadButton
+                    label="Tambah Foto"
+                    folder="berita"
+                    onDone={(urls) => setEdit((p) => ({ ...p, photos: [...p.photos, ...urls] }))}
+                  />
                 </div>
+                <PhotoStrip
+                  urls={edit.photos}
+                  onRemove={(url) =>
+                    setEdit((p) => ({ ...p, photos: p.photos.filter((u) => u !== url) }))
+                  }
+                  onCover={(url) =>
+                    setEdit((p) => ({
+                      ...p,
+                      photos: [url, ...p.photos.filter((u) => u !== url)],
+                    }))
+                  }
+                />
+                {edit.photos.length > 1 ? (
+                  <PhotoCarousel
+                    images={edit.photos}
+                    alt="Pratinjau slide"
+                    className="aspect-[16/9] w-full max-w-xl rounded-2xl"
+                  />
+                ) : null}
                 <div className="flex items-center gap-2">
                   <Button size="sm" onClick={saveEdit} disabled={editBusy}>
                     {editBusy ? (
