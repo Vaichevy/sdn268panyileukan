@@ -127,15 +127,6 @@ export function mediaList(item: {
   return [...new Set(list)];
 }
 
-function unusedFormatDateID(value?: string | null) {
-  if (!value) return "";
-  return new Date(value).toLocaleDateString("id-ID", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
 /** Sorts gallery items newest-first by event date, falling back to created_at. */
 export function sortGallery(items: GalleryItem[]): GalleryItem[] {
   return [...items].sort((a, b) => {
