@@ -1,4 +1,4 @@
-import { Hash, Mail, MapPin, Phone } from "lucide-react";
+import { Hash, Instagram, Mail, MapPin, Phone } from "lucide-react";
 import { Reveal } from "./Reveal";
 import type { SiteSettings } from "@/lib/cms";
 
@@ -40,6 +40,24 @@ export function Kontak({ settings }: { settings: SiteSettings | null }) {
                   </li>
                 ))}
               </ul>
+              <a
+                href="https://www.instagram.com/bdg.sdn268panyileukan/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 flex gap-4 rounded-2xl p-2 transition-colors hover:bg-secondary"
+              >
+                <span className="gradient-hero flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-primary-foreground">
+                  <Instagram className="h-4.5 w-4.5" />
+                </span>
+                <div>
+                  <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                    Instagram
+                  </p>
+                  <p className="mt-0.5 text-sm leading-relaxed text-foreground">
+                    @bdg.sdn268panyileukan
+                  </p>
+                </div>
+              </a>
             </div>
           </Reveal>
 

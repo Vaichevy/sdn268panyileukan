@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, Instagram } from "lucide-react";
 import type { SiteSettings } from "@/lib/cms";
 
 export function SiteFooter({ settings }: { settings: SiteSettings | null }) {
@@ -23,6 +23,17 @@ export function SiteFooter({ settings }: { settings: SiteSettings | null }) {
           <p className="mt-3">NPSN {settings?.npsn}</p>
           <p>{settings?.phone}</p>
           <p>{settings?.email}</p>
+          <a
+            href="https://www.instagram.com/bdg.sdn268panyileukan/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-primary"
+          >
+            <span className="gradient-hero flex h-8 w-8 items-center justify-center rounded-xl text-primary-foreground">
+              <Instagram className="h-4 w-4" />
+            </span>
+            @bdg.sdn268panyileukan
+          </a>
         </div>
 
         <div className="text-sm text-muted-foreground">
@@ -53,7 +64,8 @@ export function SiteFooter({ settings }: { settings: SiteSettings | null }) {
         </div>
       </div>
       <div className="section-shell mt-10 border-t border-border pt-6 text-xs text-muted-foreground">
-        © {new Date().getFullYear()} {settings?.school_name}. Seluruh hak cipta dilindungi.
+        © Cepi Kunaefi - {new Date().getFullYear()} {settings?.school_name}. Seluruh hak cipta
+        dilindungi.
       </div>
     </footer>
   );
