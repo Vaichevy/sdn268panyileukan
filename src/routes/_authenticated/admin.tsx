@@ -947,7 +947,7 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
   const qc = useQueryClient();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["news_items"] });
@@ -958,13 +958,14 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
     const { error } = await supabase.from("news_items").insert({
       title: title.trim(),
       content: content.trim(),
-      image_url: imageUrl || null,
+      image_url: photos[0] ?? null,
+      images: photos.slice(1),
     });
     setBusy(false);
     if (error) return toast.error(error.message);
     setTitle("");
     setContent("");
-    setImageUrl("");
+    setPhotos([]);
     toast.success("Berita dipublikasikan");
     void refresh();
   };
@@ -977,7 +978,12 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
   };
 
   const [editId, setEditId] = useState<string | null>(null);
-  const [edit, setEdit] = useState({ title: "", content: "", image_url: "", published_at: "" });
+  const [edit, setEdit] = useState<{
+    title: string;
+    content: string;
+    photos: string[];
+    published_at: string;
+  }>({ title: "", content: "", photos: [], published_at: "" });
   const [editBusy, setEditBusy] = useState(false);
 
   const startEdit = (item: (typeof items)[number]) => {
@@ -985,7 +991,7 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
     setEdit({
       title: item.title,
       content: item.content,
-      image_url: item.image_url ?? "",
+      photos: mediaList(item),
       published_at: item.published_at ?? "",
     });
   };
@@ -999,7 +1005,8 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
       .update({
         title: edit.title.trim(),
         content: edit.content.trim(),
-        image_url: edit.image_url || null,
+        image_url: edit.photos[0] ?? null,
+        images: edit.photos.slice(1),
         ...(edit.published_at ? { published_at: edit.published_at } : {}),
       })
       .eq("id", editId);
@@ -1023,11 +1030,24 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
           <Textarea rows={6} value={content} onChange={(e) => setContent(e.target.value)} />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <UploadButton label="Unggah Foto" folder="berita" onDone={setImageUrl} />
-          {imageUrl ? (
-            <img src={imageUrl} alt="Pratinjau" className="h-16 w-24 rounded-xl object-cover" />
-          ) : null}
+          <MultiUploadButton
+            label="Unggah Foto (bisa banyak)"
+            folder="berita"
+            onDone={(urls) => setPhotos((p) => [...p, ...urls])}
+          />
         </div>
+        <PhotoStrip
+          urls={photos}
+          onRemove={(url) => setPhotos((p) => p.filter((u) => u !== url))}
+          onCover={(url) => setPhotos((p) => [url, ...p.filter((u) => u !== url)])}
+        />
+        {photos.length > 1 ? (
+          <PhotoCarousel
+            images={photos}
+            alt="Pratinjau slide"
+            className="aspect-[16/9] w-full max-w-md rounded-2xl"
+          />
+        ) : null}
         <Button onClick={add} disabled={busy}>
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
           Publikasikan
@@ -1066,16 +1086,33 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
                   <UploadButton
                     label="Ganti Foto"
                     folder="berita"
-                    onDone={(url) => setEdit((p) => ({ ...p, image_url: url }))}
+                    onDone={(url) => setEdit((p) => ({ ...p, photos: [url] }))}
                   />
-                  {edit.image_url ? (
-                    <img
-                      src={edit.image_url}
-                      alt="Pratinjau"
-                      className="h-16 w-24 rounded-xl object-cover"
-                    />
-                  ) : null}
+                  <MultiUploadButton
+                    label="Tambah Foto"
+                    folder="berita"
+                    onDone={(urls) => setEdit((p) => ({ ...p, photos: [...p.photos, ...urls] }))}
+                  />
                 </div>
+                <PhotoStrip
+                  urls={edit.photos}
+                  onRemove={(url) =>
+                    setEdit((p) => ({ ...p, photos: p.photos.filter((u) => u !== url) }))
+                  }
+                  onCover={(url) =>
+                    setEdit((p) => ({
+                      ...p,
+                      photos: [url, ...p.photos.filter((u) => u !== url)],
+                    }))
+                  }
+                />
+                {edit.photos.length > 1 ? (
+                  <PhotoCarousel
+                    images={edit.photos}
+                    alt="Pratinjau slide"
+                    className="aspect-[16/9] w-full max-w-xl rounded-2xl"
+                  />
+                ) : null}
                 <div className="flex items-center gap-2">
                   <Button size="sm" onClick={saveEdit} disabled={editBusy}>
                     {editBusy ? (
