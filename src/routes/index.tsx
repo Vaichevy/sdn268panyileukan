@@ -16,7 +16,7 @@ import { useGallery, useNews, useSiteSettings, FALLBACK_SETTINGS } from "@/lib/c
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SDN 268 Panyileukan — Sekolah Dasar Negeri Kota Bandung" },
+      { title: "SDN 268 Panyileukan Kota Bandung" },
       {
         name: "description",
         content:
