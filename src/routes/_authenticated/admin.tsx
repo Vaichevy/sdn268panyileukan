@@ -544,6 +544,97 @@ function AdminPage() {
                   />
                 </section>
 
+                <section className="surface-card space-y-4 p-6">
+                  <h2 className="font-display text-xl font-semibold">
+                    Koding, AI & Kokurikuler
+                  </h2>
+                  <Field
+                    label="Judul KKA"
+                    value={form.kka_heading}
+                    onChange={(v) => set("kka_heading", v)}
+                  />
+                  <Field
+                    label="Penjelasan KKA"
+                    textarea
+                    rows={4}
+                    value={form.kka_intro}
+                    onChange={(v) => set("kka_intro", v)}
+                  />
+                  <Field
+                    label="Materi KKA per Fase"
+                    textarea
+                    rows={4}
+                    value={form.kka_fase}
+                    onChange={(v) => set("kka_fase", v)}
+                    hint="Satu baris = satu fase, format: Fase | Yang Dipelajari"
+                  />
+                  <Field
+                    label="Judul Kokurikuler"
+                    value={form.kokurikuler_heading}
+                    onChange={(v) => set("kokurikuler_heading", v)}
+                  />
+                  <Field
+                    label="Penjelasan Kokurikuler"
+                    textarea
+                    rows={3}
+                    value={form.kokurikuler_intro}
+                    onChange={(v) => set("kokurikuler_intro", v)}
+                  />
+                  <Field
+                    label="Gerakan 7 KAIH"
+                    textarea
+                    rows={7}
+                    value={form.kokurikuler_items}
+                    onChange={(v) => set("kokurikuler_items", v)}
+                    hint="Satu baris = satu kebiasaan."
+                  />
+                </section>
+
+                <section className="surface-card space-y-4 p-6">
+                  <h2 className="font-display text-xl font-semibold">
+                    Ekstrakurikuler & Pembiasaan
+                  </h2>
+                  <Field
+                    label="Judul Ekstrakurikuler"
+                    value={form.ekskul_heading}
+                    onChange={(v) => set("ekskul_heading", v)}
+                  />
+                  <Field
+                    label="Daftar Ekstrakurikuler"
+                    textarea
+                    rows={8}
+                    value={form.ekskul_items}
+                    onChange={(v) => set("ekskul_items", v)}
+                    hint="Satu baris = satu kegiatan."
+                  />
+                  <Field
+                    label="Judul Pembiasaan Harian"
+                    value={form.pembiasaan_harian_heading}
+                    onChange={(v) => set("pembiasaan_harian_heading", v)}
+                  />
+                  <Field
+                    label="Isi Pembiasaan Harian"
+                    textarea
+                    rows={4}
+                    value={form.pembiasaan_harian_items}
+                    onChange={(v) => set("pembiasaan_harian_items", v)}
+                    hint="Satu baris = satu pembiasaan."
+                  />
+                  <Field
+                    label="Judul Pembiasaan Mingguan"
+                    value={form.pembiasaan_mingguan_heading}
+                    onChange={(v) => set("pembiasaan_mingguan_heading", v)}
+                  />
+                  <Field
+                    label="Isi Pembiasaan Mingguan"
+                    textarea
+                    rows={6}
+                    value={form.pembiasaan_mingguan_items}
+                    onChange={(v) => set("pembiasaan_mingguan_items", v)}
+                    hint="Satu baris = satu hari, format: Hari | Kegiatan"
+                  />
+                </section>
+
                 <Button onClick={saveSettings} disabled={saving} size="lg">
                   {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                   Simpan Perubahan
