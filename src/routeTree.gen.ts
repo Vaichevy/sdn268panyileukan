@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as EvaluasiKalenderRouteImport } from './routes/evaluasi-kalender'
 import { Route as GaleriRouteImport } from './routes/galeri'
 import { Route as PembelajaranRouteImport } from './routes/pembelajaran'
 import { Route as PembelajaranPenilaianRouteImport } from './routes/pembelajaran-penilaian'
@@ -33,6 +34,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EvaluasiKalenderRoute = EvaluasiKalenderRouteImport.update({
+  id: '/evaluasi-kalender',
+  path: '/evaluasi-kalender',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GaleriRoute = GaleriRouteImport.update({
@@ -79,6 +85,7 @@ const ApiPublicWebhooksTallyRoute = ApiPublicWebhooksTallyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/evaluasi-kalender': typeof EvaluasiKalenderRoute
   '/galeri': typeof GaleriRoute
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
@@ -91,6 +98,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/evaluasi-kalender': typeof EvaluasiKalenderRoute
   '/galeri': typeof GaleriRoute
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/evaluasi-kalender': typeof EvaluasiKalenderRoute
   '/galeri': typeof GaleriRoute
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/evaluasi-kalender'
     | '/galeri'
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/evaluasi-kalender'
     | '/galeri'
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/evaluasi-kalender'
     | '/galeri'
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
@@ -158,6 +170,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  EvaluasiKalenderRoute: typeof EvaluasiKalenderRoute
   GaleriRoute: typeof GaleriRoute
   PembelajaranRoute: typeof PembelajaranRoute
   PembelajaranPenilaianRoute: typeof PembelajaranPenilaianRoute
@@ -188,6 +201,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/evaluasi-kalender': {
+      id: '/evaluasi-kalender'
+      path: '/evaluasi-kalender'
+      fullPath: '/evaluasi-kalender'
+      preLoaderRoute: typeof EvaluasiKalenderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/galeri': {
@@ -264,6 +284,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  EvaluasiKalenderRoute: EvaluasiKalenderRoute,
   GaleriRoute: GaleriRoute,
   PembelajaranRoute: PembelajaranRoute,
   PembelajaranPenilaianRoute: PembelajaranPenilaianRoute,
