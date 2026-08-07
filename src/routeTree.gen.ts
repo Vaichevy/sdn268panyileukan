@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as GaleriRouteImport } from './routes/galeri'
 import { Route as PembelajaranRouteImport } from './routes/pembelajaran'
+import { Route as PembelajaranPenilaianRouteImport } from './routes/pembelajaran-penilaian'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as BeritaIndexRouteImport } from './routes/berita.index'
@@ -42,6 +43,11 @@ const GaleriRoute = GaleriRouteImport.update({
 const PembelajaranRoute = PembelajaranRouteImport.update({
   id: '/pembelajaran',
   path: '/pembelajaran',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PembelajaranPenilaianRoute = PembelajaranPenilaianRouteImport.update({
+  id: '/pembelajaran-penilaian',
+  path: '/pembelajaran-penilaian',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/galeri': typeof GaleriRoute
   '/pembelajaran': typeof PembelajaranRoute
+  '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/berita/$id': typeof BeritaIdRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/galeri': typeof GaleriRoute
   '/pembelajaran': typeof PembelajaranRoute
+  '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/berita/$id': typeof BeritaIdRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/galeri': typeof GaleriRoute
   '/pembelajaran': typeof PembelajaranRoute
+  '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/berita/$id': typeof BeritaIdRoute
@@ -112,6 +121,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/galeri'
     | '/pembelajaran'
+    | '/pembelajaran-penilaian'
     | '/sitemap.xml'
     | '/admin'
     | '/berita/$id'
@@ -123,6 +133,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/galeri'
     | '/pembelajaran'
+    | '/pembelajaran-penilaian'
     | '/sitemap.xml'
     | '/admin'
     | '/berita/$id'
@@ -135,6 +146,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/galeri'
     | '/pembelajaran'
+    | '/pembelajaran-penilaian'
     | '/sitemap.xml'
     | '/_authenticated/admin'
     | '/berita/$id'
@@ -148,6 +160,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   GaleriRoute: typeof GaleriRoute
   PembelajaranRoute: typeof PembelajaranRoute
+  PembelajaranPenilaianRoute: typeof PembelajaranPenilaianRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   BeritaIdRoute: typeof BeritaIdRoute
   BeritaIndexRoute: typeof BeritaIndexRoute
@@ -189,6 +202,13 @@ declare module '@tanstack/react-router' {
       path: '/pembelajaran'
       fullPath: '/pembelajaran'
       preLoaderRoute: typeof PembelajaranRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pembelajaran-penilaian': {
+      id: '/pembelajaran-penilaian'
+      path: '/pembelajaran-penilaian'
+      fullPath: '/pembelajaran-penilaian'
+      preLoaderRoute: typeof PembelajaranPenilaianRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -246,6 +266,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   GaleriRoute: GaleriRoute,
   PembelajaranRoute: PembelajaranRoute,
+  PembelajaranPenilaianRoute: PembelajaranPenilaianRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   BeritaIdRoute: BeritaIdRoute,
   BeritaIndexRoute: BeritaIndexRoute,
