@@ -1,6 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, ShieldCheck, ChevronDown, Mail, BookMarked, BookOpen, GraduationCap } from "lucide-react";
+import {
+  Menu,
+  X,
+  ShieldCheck,
+  ChevronDown,
+  Mail,
+  BookMarked,
+  BookOpen,
+  GraduationCap,
+  ClipboardCheck,
+  CalendarDays,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import logoAsset from "@/assets/logo-sdn268.png.asset.json";
 
@@ -33,6 +44,18 @@ const KURIKULUM: MenuItem[] = [
     label: "Pembelajaran",
     description: "Pengorganisasian belajar & fase",
     icon: GraduationCap,
+  },
+  {
+    to: "/pembelajaran-penilaian",
+    label: "Pembelajaran & Penilaian",
+    description: "Alur rencana, asesmen & syarat lulus",
+    icon: ClipboardCheck,
+  },
+  {
+    to: "/evaluasi-kalender",
+    label: "Evaluasi & Kalender",
+    description: "Siklus evaluasi & kalender pendidikan",
+    icon: CalendarDays,
   },
 ];
 

@@ -91,6 +91,15 @@ export type Database = {
           ekskul_heading: string
           ekskul_items: string
           email: string
+          evaluasi_heading: string
+          evaluasi_intro: string
+          evaluasi_kalender: string
+          evaluasi_kalender_heading: string
+          evaluasi_kalender_note: string
+          evaluasi_pendampingan: string
+          evaluasi_pendampingan_heading: string
+          evaluasi_siklus: string
+          evaluasi_siklus_heading: string
           headmaster_name: string
           headmaster_photo_url: string | null
           headmaster_speech: string
@@ -119,6 +128,15 @@ export type Database = {
           pembiasaan_harian_items: string
           pembiasaan_mingguan_heading: string
           pembiasaan_mingguan_items: string
+          penilaian_alur: string
+          penilaian_alur_heading: string
+          penilaian_alur_note: string
+          penilaian_asesmen: string
+          penilaian_asesmen_heading: string
+          penilaian_heading: string
+          penilaian_intro: string
+          penilaian_syarat: string
+          penilaian_syarat_heading: string
           phone: string
           school_name: string
           sekilas_eyebrow: string
@@ -142,6 +160,15 @@ export type Database = {
           ekskul_heading?: string
           ekskul_items?: string
           email?: string
+          evaluasi_heading?: string
+          evaluasi_intro?: string
+          evaluasi_kalender?: string
+          evaluasi_kalender_heading?: string
+          evaluasi_kalender_note?: string
+          evaluasi_pendampingan?: string
+          evaluasi_pendampingan_heading?: string
+          evaluasi_siklus?: string
+          evaluasi_siklus_heading?: string
           headmaster_name?: string
           headmaster_photo_url?: string | null
           headmaster_speech?: string
@@ -170,6 +197,15 @@ export type Database = {
           pembiasaan_harian_items?: string
           pembiasaan_mingguan_heading?: string
           pembiasaan_mingguan_items?: string
+          penilaian_alur?: string
+          penilaian_alur_heading?: string
+          penilaian_alur_note?: string
+          penilaian_asesmen?: string
+          penilaian_asesmen_heading?: string
+          penilaian_heading?: string
+          penilaian_intro?: string
+          penilaian_syarat?: string
+          penilaian_syarat_heading?: string
           phone?: string
           school_name?: string
           sekilas_eyebrow?: string
@@ -193,6 +229,15 @@ export type Database = {
           ekskul_heading?: string
           ekskul_items?: string
           email?: string
+          evaluasi_heading?: string
+          evaluasi_intro?: string
+          evaluasi_kalender?: string
+          evaluasi_kalender_heading?: string
+          evaluasi_kalender_note?: string
+          evaluasi_pendampingan?: string
+          evaluasi_pendampingan_heading?: string
+          evaluasi_siklus?: string
+          evaluasi_siklus_heading?: string
           headmaster_name?: string
           headmaster_photo_url?: string | null
           headmaster_speech?: string
@@ -221,6 +266,15 @@ export type Database = {
           pembiasaan_harian_items?: string
           pembiasaan_mingguan_heading?: string
           pembiasaan_mingguan_items?: string
+          penilaian_alur?: string
+          penilaian_alur_heading?: string
+          penilaian_alur_note?: string
+          penilaian_asesmen?: string
+          penilaian_asesmen_heading?: string
+          penilaian_heading?: string
+          penilaian_intro?: string
+          penilaian_syarat?: string
+          penilaian_syarat_heading?: string
           phone?: string
           school_name?: string
           sekilas_eyebrow?: string

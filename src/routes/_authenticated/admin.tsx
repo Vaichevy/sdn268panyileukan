@@ -635,6 +635,133 @@ function AdminPage() {
                   />
                 </section>
 
+                <section className="surface-card space-y-4 p-6">
+                  <h2 className="font-display text-xl font-semibold">
+                    Halaman Pembelajaran &amp; Penilaian
+                  </h2>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field
+                      label="Judul Halaman"
+                      value={form.penilaian_heading}
+                      onChange={(v) => set("penilaian_heading", v)}
+                    />
+                    <Field
+                      label="Keterangan / Sumber"
+                      value={form.penilaian_intro}
+                      onChange={(v) => set("penilaian_intro", v)}
+                    />
+                  </div>
+                  <Field
+                    label="Judul Alur Rencana Pembelajaran"
+                    value={form.penilaian_alur_heading}
+                    onChange={(v) => set("penilaian_alur_heading", v)}
+                  />
+                  <Field
+                    label="Tahapan Alur"
+                    textarea
+                    rows={4}
+                    value={form.penilaian_alur}
+                    onChange={(v) => set("penilaian_alur", v)}
+                    hint="Satu baris = satu tahap (ditampilkan berurutan dengan tanda →)."
+                  />
+                  <Field
+                    label="Catatan Alur"
+                    textarea
+                    rows={2}
+                    value={form.penilaian_alur_note}
+                    onChange={(v) => set("penilaian_alur_note", v)}
+                  />
+                  <Field
+                    label="Judul Jenis Asesmen"
+                    value={form.penilaian_asesmen_heading}
+                    onChange={(v) => set("penilaian_asesmen_heading", v)}
+                  />
+                  <Field
+                    label="Jenis Asesmen"
+                    textarea
+                    rows={4}
+                    value={form.penilaian_asesmen}
+                    onChange={(v) => set("penilaian_asesmen", v)}
+                    hint="Satu baris = satu jenis, format: Nama | Penjelasan"
+                  />
+                  <Field
+                    label="Judul Syarat Naik Kelas & Lulus"
+                    value={form.penilaian_syarat_heading}
+                    onChange={(v) => set("penilaian_syarat_heading", v)}
+                  />
+                  <Field
+                    label="Daftar Syarat"
+                    textarea
+                    rows={5}
+                    value={form.penilaian_syarat}
+                    onChange={(v) => set("penilaian_syarat", v)}
+                    hint="Satu baris = satu syarat."
+                  />
+                </section>
+
+                <section className="surface-card space-y-4 p-6">
+                  <h2 className="font-display text-xl font-semibold">
+                    Halaman Evaluasi &amp; Kalender
+                  </h2>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field
+                      label="Judul Halaman"
+                      value={form.evaluasi_heading}
+                      onChange={(v) => set("evaluasi_heading", v)}
+                    />
+                    <Field
+                      label="Keterangan / Sumber"
+                      value={form.evaluasi_intro}
+                      onChange={(v) => set("evaluasi_intro", v)}
+                    />
+                  </div>
+                  <Field
+                    label="Judul Siklus Evaluasi"
+                    value={form.evaluasi_siklus_heading}
+                    onChange={(v) => set("evaluasi_siklus_heading", v)}
+                  />
+                  <Field
+                    label="Daftar Siklus Evaluasi"
+                    textarea
+                    rows={4}
+                    value={form.evaluasi_siklus}
+                    onChange={(v) => set("evaluasi_siklus", v)}
+                    hint="Satu baris = satu siklus."
+                  />
+                  <Field
+                    label="Judul Pendampingan Guru"
+                    value={form.evaluasi_pendampingan_heading}
+                    onChange={(v) => set("evaluasi_pendampingan_heading", v)}
+                  />
+                  <Field
+                    label="Isi Pendampingan Guru"
+                    textarea
+                    rows={4}
+                    value={form.evaluasi_pendampingan}
+                    onChange={(v) => set("evaluasi_pendampingan", v)}
+                  />
+                  <Field
+                    label="Judul Kalender Pendidikan"
+                    value={form.evaluasi_kalender_heading}
+                    onChange={(v) => set("evaluasi_kalender_heading", v)}
+                  />
+                  <Field
+                    label="Isi Kalender Pendidikan"
+                    textarea
+                    rows={6}
+                    value={form.evaluasi_kalender}
+                    onChange={(v) => set("evaluasi_kalender", v)}
+                    hint="Satu baris = satu kegiatan, format: Kegiatan | Waktu"
+                  />
+                  <Field
+                    label="Catatan Hari Efektif"
+                    textarea
+                    rows={2}
+                    value={form.evaluasi_kalender_note}
+                    onChange={(v) => set("evaluasi_kalender_note", v)}
+                  />
+                </section>
+
                 <Button onClick={saveSettings} disabled={saving} size="lg">
                   {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                   Simpan Perubahan
