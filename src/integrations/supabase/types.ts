@@ -88,6 +88,8 @@ export type Database = {
           about_text: string
           address: string
           created_at: string
+          ekskul_heading: string
+          ekskul_items: string
           email: string
           headmaster_name: string
           headmaster_photo_url: string | null
@@ -95,6 +97,12 @@ export type Database = {
           headmaster_title: string
           hero_image_url: string | null
           id: string
+          kka_fase: string
+          kka_heading: string
+          kka_intro: string
+          kokurikuler_heading: string
+          kokurikuler_intro: string
+          kokurikuler_items: string
           logo_url: string | null
           maps_embed_url: string
           mission: string
@@ -107,6 +115,10 @@ export type Database = {
           pembelajaran_intro: string
           pembelajaran_sesi: string
           pembelajaran_siklus: string
+          pembiasaan_harian_heading: string
+          pembiasaan_harian_items: string
+          pembiasaan_mingguan_heading: string
+          pembiasaan_mingguan_items: string
           phone: string
           school_name: string
           sekilas_eyebrow: string
@@ -127,6 +139,8 @@ export type Database = {
           about_text?: string
           address?: string
           created_at?: string
+          ekskul_heading?: string
+          ekskul_items?: string
           email?: string
           headmaster_name?: string
           headmaster_photo_url?: string | null
@@ -134,6 +148,12 @@ export type Database = {
           headmaster_title?: string
           hero_image_url?: string | null
           id?: string
+          kka_fase?: string
+          kka_heading?: string
+          kka_intro?: string
+          kokurikuler_heading?: string
+          kokurikuler_intro?: string
+          kokurikuler_items?: string
           logo_url?: string | null
           maps_embed_url?: string
           mission?: string
@@ -146,6 +166,10 @@ export type Database = {
           pembelajaran_intro?: string
           pembelajaran_sesi?: string
           pembelajaran_siklus?: string
+          pembiasaan_harian_heading?: string
+          pembiasaan_harian_items?: string
+          pembiasaan_mingguan_heading?: string
+          pembiasaan_mingguan_items?: string
           phone?: string
           school_name?: string
           sekilas_eyebrow?: string
@@ -166,6 +190,8 @@ export type Database = {
           about_text?: string
           address?: string
           created_at?: string
+          ekskul_heading?: string
+          ekskul_items?: string
           email?: string
           headmaster_name?: string
           headmaster_photo_url?: string | null
@@ -173,6 +199,12 @@ export type Database = {
           headmaster_title?: string
           hero_image_url?: string | null
           id?: string
+          kka_fase?: string
+          kka_heading?: string
+          kka_intro?: string
+          kokurikuler_heading?: string
+          kokurikuler_intro?: string
+          kokurikuler_items?: string
           logo_url?: string | null
           maps_embed_url?: string
           mission?: string
@@ -185,6 +217,10 @@ export type Database = {
           pembelajaran_intro?: string
           pembelajaran_sesi?: string
           pembelajaran_siklus?: string
+          pembiasaan_harian_heading?: string
+          pembiasaan_harian_items?: string
+          pembiasaan_mingguan_heading?: string
+          pembiasaan_mingguan_items?: string
           phone?: string
           school_name?: string
           sekilas_eyebrow?: string
