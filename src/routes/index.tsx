@@ -7,6 +7,7 @@ import { Profil } from "@/components/site/Profil";
 import { Sekilas } from "@/components/site/Sekilas";
 import { Sambutan } from "@/components/site/Sambutan";
 import { Galeri } from "@/components/site/Galeri";
+import { GaleriVideo } from "@/components/site/GaleriVideo";
 import { Berita } from "@/components/site/Berita";
 import { Kontak } from "@/components/site/Kontak";
 import { Komentar } from "@/components/site/Komentar";
