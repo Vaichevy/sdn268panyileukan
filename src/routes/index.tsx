@@ -74,6 +74,7 @@ function Beranda() {
       <SiteNav schoolName={value?.school_name ?? FALLBACK_SETTINGS.school_name} />
       <main>
         <Hero settings={value} />
+        <GaleriVideo items={videos ?? []} limit={6} />
         <Profil settings={value} />
         <Sekilas />
         <Sambutan settings={value} />
