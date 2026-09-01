@@ -286,6 +286,7 @@ function AdminPage() {
             <TabsTrigger value="identitas">Identitas & Profil</TabsTrigger>
             <TabsTrigger value="pembelajaran">Pembelajaran</TabsTrigger>
             <TabsTrigger value="galeri">Galeri Kegiatan</TabsTrigger>
+            <TabsTrigger value="video">Galeri Video</TabsTrigger>
             <TabsTrigger value="berita">Berita</TabsTrigger>
             <TabsTrigger value="komentar">Komentar</TabsTrigger>
           </TabsList>
