@@ -777,6 +777,10 @@ function AdminPage() {
             <GalleryManager items={gallery ?? []} />
           </TabsContent>
 
+          <TabsContent value="video" className="mt-6">
+            <VideoManager />
+          </TabsContent>
+
           <TabsContent value="berita" className="mt-6">
             <NewsManager items={news ?? []} />
           </TabsContent>
