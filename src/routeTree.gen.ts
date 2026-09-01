@@ -17,6 +17,7 @@ import { Route as GaleriRouteImport } from './routes/galeri'
 import { Route as PembelajaranRouteImport } from './routes/pembelajaran'
 import { Route as PembelajaranPenilaianRouteImport } from './routes/pembelajaran-penilaian'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as VideoRouteImport } from './routes/video'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as BeritaIndexRouteImport } from './routes/berita.index'
 import { Route as BeritaIdRouteImport } from './routes/berita.$id'
@@ -61,6 +62,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VideoRoute = VideoRouteImport.update({
+  id: '/video',
+  path: '/video',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/video': typeof VideoRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/berita/$id': typeof BeritaIdRoute
   '/berita/': typeof BeritaIndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/video': typeof VideoRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/berita/$id': typeof BeritaIdRoute
   '/berita': typeof BeritaIndexRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/video': typeof VideoRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/berita/$id': typeof BeritaIdRoute
   '/berita/': typeof BeritaIndexRoute
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
     | '/sitemap.xml'
+    | '/video'
     | '/admin'
     | '/berita/$id'
     | '/berita/'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
     | '/sitemap.xml'
+    | '/video'
     | '/admin'
     | '/berita/$id'
     | '/berita'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
     | '/sitemap.xml'
+    | '/video'
     | '/_authenticated/admin'
     | '/berita/$id'
     | '/berita/'
@@ -175,6 +187,7 @@ export interface RootRouteChildren {
   PembelajaranRoute: typeof PembelajaranRoute
   PembelajaranPenilaianRoute: typeof PembelajaranPenilaianRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  VideoRoute: typeof VideoRoute
   BeritaIdRoute: typeof BeritaIdRoute
   BeritaIndexRoute: typeof BeritaIndexRoute
   ApiPublicWebhooksTallyRoute: typeof ApiPublicWebhooksTallyRoute
@@ -238,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/video': {
+      id: '/video'
+      path: '/video'
+      fullPath: '/video'
+      preLoaderRoute: typeof VideoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -289,6 +309,7 @@ const rootRouteChildren: RootRouteChildren = {
   PembelajaranRoute: PembelajaranRoute,
   PembelajaranPenilaianRoute: PembelajaranPenilaianRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  VideoRoute: VideoRoute,
   BeritaIdRoute: BeritaIdRoute,
   BeritaIndexRoute: BeritaIndexRoute,
   ApiPublicWebhooksTallyRoute: ApiPublicWebhooksTallyRoute,
@@ -296,3 +317,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

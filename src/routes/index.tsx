@@ -7,11 +7,12 @@ import { Profil } from "@/components/site/Profil";
 import { Sekilas } from "@/components/site/Sekilas";
 import { Sambutan } from "@/components/site/Sambutan";
 import { Galeri } from "@/components/site/Galeri";
+import { GaleriVideo } from "@/components/site/GaleriVideo";
 import { Berita } from "@/components/site/Berita";
 import { Kontak } from "@/components/site/Kontak";
 import { Komentar } from "@/components/site/Komentar";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { useGallery, useNews, useSiteSettings, FALLBACK_SETTINGS } from "@/lib/cms";
+import { useGallery, useNews, useVideos, useSiteSettings, FALLBACK_SETTINGS } from "@/lib/cms";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -62,6 +63,7 @@ function Beranda() {
   const { data: settings } = useSiteSettings();
   const { data: gallery } = useGallery();
   const { data: news } = useNews();
+  const { data: videos } = useVideos();
 
   const value = settings ?? (FALLBACK_SETTINGS as never);
 
@@ -72,6 +74,7 @@ function Beranda() {
       <SiteNav schoolName={value?.school_name ?? FALLBACK_SETTINGS.school_name} />
       <main>
         <Hero settings={value} />
+        <GaleriVideo items={videos ?? []} limit={6} />
         <Profil settings={value} />
         <Sekilas />
         <Sambutan settings={value} />

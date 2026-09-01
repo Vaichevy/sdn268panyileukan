@@ -286,6 +286,7 @@ function AdminPage() {
             <TabsTrigger value="identitas">Identitas & Profil</TabsTrigger>
             <TabsTrigger value="pembelajaran">Pembelajaran</TabsTrigger>
             <TabsTrigger value="galeri">Galeri Kegiatan</TabsTrigger>
+            <TabsTrigger value="video">Galeri Video</TabsTrigger>
             <TabsTrigger value="berita">Berita</TabsTrigger>
             <TabsTrigger value="komentar">Komentar</TabsTrigger>
           </TabsList>
@@ -774,6 +775,10 @@ function AdminPage() {
 
           <TabsContent value="galeri" className="mt-6">
             <GalleryManager items={gallery ?? []} />
+          </TabsContent>
+
+          <TabsContent value="video" className="mt-6">
+            <VideoManager />
           </TabsContent>
 
           <TabsContent value="berita" className="mt-6">
@@ -1364,6 +1369,289 @@ function NewsManager({ items }: { items: NonNullable<ReturnType<typeof useNews>[
             )}
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function VideoUploadButton({
+  label,
+  onDone,
+}: {
+  label: string;
+  onDone: (url: string) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+      {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Video className="h-4 w-4" />}
+      {label}
+      <input
+        type="file"
+        accept="video/*"
+        className="hidden"
+        disabled={busy}
+        onChange={async (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          setBusy(true);
+          try {
+            onDone(await uploadMedia(file, "video"));
+            toast.success("Video berhasil diunggah");
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : "Gagal mengunggah video");
+          } finally {
+            setBusy(false);
+            e.target.value = "";
+          }
+        }}
+      />
+    </label>
+  );
+}
+
+type VideoForm = {
+  title: string;
+  description: string;
+  event_date: string;
+  youtube_url: string;
+  video_url: string;
+  thumbnail_url: string;
+};
+
+const EMPTY_VIDEO: VideoForm = {
+  title: "",
+  description: "",
+  event_date: "",
+  youtube_url: "",
+  video_url: "",
+  thumbnail_url: "",
+};
+
+function VideoFields({
+  value,
+  onChange,
+}: {
+  value: VideoForm;
+  onChange: (next: VideoForm) => void;
+}) {
+  const set = (patch: Partial<VideoForm>) => onChange({ ...value, ...patch });
+  const yid = youtubeId(value.youtube_url);
+  return (
+    <div className="space-y-4">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label>Judul Video</Label>
+          <Input value={value.title} onChange={(e) => set({ title: e.target.value })} />
+        </div>
+        <div className="space-y-2">
+          <Label>Tanggal Kegiatan</Label>
+          <Input
+            type="date"
+            value={value.event_date}
+            onChange={(e) => set({ event_date: e.target.value })}
+          />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <Label>Deskripsi</Label>
+        <Textarea
+          rows={3}
+          value={value.description}
+          onChange={(e) => set({ description: e.target.value })}
+        />
+      </div>
+      <div className="space-y-2">
+        <Label>Tautan YouTube</Label>
+        <Input
+          placeholder="https://www.youtube.com/watch?v=..."
+          value={value.youtube_url}
+          onChange={(e) => set({ youtube_url: e.target.value })}
+        />
+        <p className="text-xs text-muted-foreground">
+          Boleh tautan watch, youtu.be, shorts, atau embed. Kosongkan jika mengunggah file video.
+        </p>
+      </div>
+      <div className="flex flex-wrap items-center gap-3">
+        <VideoUploadButton
+          label={value.video_url ? "Ganti File Video" : "Unggah File Video"}
+          onDone={(url) => set({ video_url: url })}
+        />
+        <UploadButton
+          label="Unggah Sampul (opsional)"
+          folder="video"
+          onDone={(url) => set({ thumbnail_url: url })}
+        />
+        {value.video_url ? (
+          <Button size="sm" variant="ghost" onClick={() => set({ video_url: "" })}>
+            <X className="h-4 w-4" /> Hapus file video
+          </Button>
+        ) : null}
+      </div>
+      {value.video_url ? (
+        <video
+          src={value.video_url}
+          controls
+          className="aspect-video w-full max-w-md rounded-2xl bg-black"
+        />
+      ) : yid ? (
+        <img
+          src={youtubeThumb(yid)}
+          alt="Pratinjau video"
+          className="aspect-video w-full max-w-md rounded-2xl object-cover"
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function VideoManager() {
+  const qc = useQueryClient();
+  const { data: items } = useVideos();
+  const list = items ?? [];
+  const [draft, setDraft] = useState<VideoForm>(EMPTY_VIDEO);
+  const [busy, setBusy] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [edit, setEdit] = useState<VideoForm>(EMPTY_VIDEO);
+  const [editBusy, setEditBusy] = useState(false);
+
+  const refresh = () => qc.invalidateQueries({ queryKey: ["video_items"] });
+
+  const valid = (v: VideoForm) =>
+    Boolean(v.title.trim()) && (Boolean(v.video_url) || Boolean(youtubeId(v.youtube_url)));
+
+  const add = async () => {
+    if (!valid(draft))
+      return toast.error("Judul wajib diisi, serta tautan YouTube valid atau file video");
+    setBusy(true);
+    const { error } = await supabase.from("video_items").insert({
+      title: draft.title.trim(),
+      description: draft.description.trim(),
+      youtube_url: draft.youtube_url.trim(),
+      video_url: draft.video_url,
+      thumbnail_url: draft.thumbnail_url,
+      event_date: draft.event_date || null,
+      sort_order: list.length,
+    });
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    setDraft(EMPTY_VIDEO);
+    toast.success("Video ditambahkan");
+    void refresh();
+  };
+
+  const startEdit = (item: (typeof list)[number]) => {
+    setEditId(item.id);
+    setEdit({
+      title: item.title,
+      description: item.description,
+      event_date: item.event_date ?? "",
+      youtube_url: item.youtube_url,
+      video_url: item.video_url,
+      thumbnail_url: item.thumbnail_url,
+    });
+  };
+
+  const saveEdit = async () => {
+    if (!editId) return;
+    if (!valid(edit))
+      return toast.error("Judul wajib diisi, serta tautan YouTube valid atau file video");
+    setEditBusy(true);
+    const { error } = await supabase
+      .from("video_items")
+      .update({
+        title: edit.title.trim(),
+        description: edit.description.trim(),
+        youtube_url: edit.youtube_url.trim(),
+        video_url: edit.video_url,
+        thumbnail_url: edit.thumbnail_url,
+        event_date: edit.event_date || null,
+      })
+      .eq("id", editId);
+    setEditBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Video diperbarui");
+    setEditId(null);
+    void refresh();
+  };
+
+  const remove = async (id: string) => {
+    const { error } = await supabase.from("video_items").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Video dihapus");
+    void refresh();
+  };
+
+  return (
+    <div className="space-y-6">
+      <section className="surface-card space-y-4 p-6">
+        <h2 className="font-display text-xl font-semibold">Tambah Video</h2>
+        <VideoFields value={draft} onChange={setDraft} />
+        <Button onClick={add} disabled={busy}>
+          {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+          Tambahkan
+        </Button>
+      </section>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {sortVideos(list).map((item) => {
+          const yid = youtubeId(item.youtube_url);
+          const poster = item.thumbnail_url || (yid ? youtubeThumb(yid) : null);
+          return (
+            <div key={item.id} className="surface-card overflow-hidden">
+              {editId === item.id ? (
+                <div className="space-y-3 p-4">
+                  <VideoFields value={edit} onChange={setEdit} />
+                  <div className="flex items-center gap-2">
+                    <Button size="sm" onClick={saveEdit} disabled={editBusy}>
+                      {editBusy ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Save className="h-4 w-4" />
+                      )}
+                      Simpan
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={() => setEditId(null)}>
+                      Batal
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {item.video_url ? (
+                    <video
+                      src={item.video_url}
+                      poster={poster ?? undefined}
+                      controls
+                      className="aspect-video w-full bg-black"
+                    />
+                  ) : poster ? (
+                    <img src={poster} alt={item.title} className="aspect-video w-full object-cover" />
+                  ) : null}
+                  <div className="flex items-start justify-between gap-3 p-4">
+                    <div>
+                      <p className="font-medium text-foreground">{item.title}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {formatDateID(item.event_date ?? item.created_at)}
+                      </p>
+                      <p className="line-clamp-2 text-xs text-muted-foreground">
+                        {item.description}
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 gap-1.5">
+                      <Button variant="outline" size="icon" onClick={() => startEdit(item)}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button variant="outline" size="icon" onClick={() => void remove(item.id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
