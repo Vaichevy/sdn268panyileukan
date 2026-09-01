@@ -6,6 +6,50 @@ export type SiteSettings = Tables<"site_settings">;
 export type GalleryItem = Tables<"gallery_items">;
 export type NewsItem = Tables<"news_items">;
 export type Testimonial = Tables<"testimonials">;
+export type VideoItem = Tables<"video_items">;
+
+/** Extracts the YouTube video id from watch, youtu.be, shorts, or embed URLs. */
+export function youtubeId(url?: string | null): string | null {
+  if (!url) return null;
+  const patterns = [
+    /(?:youtube\.com\/watch\?(?:.*&)?v=)([A-Za-z0-9_-]{11})/,
+    /youtu\.be\/([A-Za-z0-9_-]{11})/,
+    /youtube\.com\/(?:embed|shorts|live)\/([A-Za-z0-9_-]{11})/,
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m?.[1]) return m[1];
+  }
+  return /^[A-Za-z0-9_-]{11}$/.test(url.trim()) ? url.trim() : null;
+}
+
+export function youtubeThumb(id: string) {
+  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+}
+
+export function useVideos() {
+  return useQuery({
+    queryKey: ["video_items"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("video_items")
+        .select("*")
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as VideoItem[];
+    },
+  });
+}
+
+/** Sorts videos newest-first by event date, falling back to created_at. */
+export function sortVideos(items: VideoItem[]): VideoItem[] {
+  return [...items].sort((a, b) => {
+    const ta = new Date(a.event_date ?? a.created_at).getTime();
+    const tb = new Date(b.event_date ?? b.created_at).getTime();
+    return tb - ta;
+  });
+}
 
 export const FALLBACK_SETTINGS = {
   school_name: "SDN 268 Panyileukan",
