@@ -63,6 +63,7 @@ function Beranda() {
   const { data: settings } = useSiteSettings();
   const { data: gallery } = useGallery();
   const { data: news } = useNews();
+  const { data: videos } = useVideos();
 
   const value = settings ?? (FALLBACK_SETTINGS as never);
 
