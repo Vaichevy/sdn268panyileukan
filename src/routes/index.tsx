@@ -12,7 +12,7 @@ import { Berita } from "@/components/site/Berita";
 import { Kontak } from "@/components/site/Kontak";
 import { Komentar } from "@/components/site/Komentar";
 import { SiteFooter } from "@/components/site/SiteFooter";
-import { useGallery, useNews, useSiteSettings, FALLBACK_SETTINGS } from "@/lib/cms";
+import { useGallery, useNews, useVideos, useSiteSettings, FALLBACK_SETTINGS } from "@/lib/cms";
 
 export const Route = createFileRoute("/")({
   head: () => ({
