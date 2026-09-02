@@ -145,9 +145,16 @@ function DropdownMenu({
   );
 }
 
-export function SiteNav({ schoolName }: { schoolName: string }) {
+export function SiteNav({
+  schoolName,
+  belowNav,
+}: {
+  schoolName: string;
+  belowNav?: React.ReactNode;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
