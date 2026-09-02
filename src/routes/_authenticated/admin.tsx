@@ -309,6 +309,44 @@ function AdminPage() {
                     />
                     <Field label="Tagline" value={form.tagline} onChange={(v) => set("tagline", v)} />
                   </div>
+                  <div className="rounded-xl border border-border/60 bg-muted/30 p-4 space-y-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <Label>Teks Berjalan (di bawah header)</Label>
+                        <p className="text-xs text-muted-foreground">
+                          Pisahkan beberapa pengumuman dengan tanda | (pipa).
+                        </p>
+                      </div>
+                      <Switch
+                        checked={form.running_text_enabled ?? true}
+                        onCheckedChange={(v) =>
+                          setForm((prev) => (prev ? { ...prev, running_text_enabled: v } : prev))
+                        }
+                      />
+                    </div>
+                    <Textarea
+                      rows={2}
+                      value={form.running_text ?? ""}
+                      onChange={(e) =>
+                        setForm((prev) => (prev ? { ...prev, running_text: e.target.value } : prev))
+                      }
+                      placeholder="Selamat datang di SDN 268 Panyileukan | PPDB dibuka | Info kegiatan terbaru"
+                    />
+                    <div className="max-w-xs">
+                      <Label>Durasi Animasi (detik, makin kecil makin cepat)</Label>
+                      <Input
+                        type="number"
+                        min={8}
+                        max={120}
+                        value={form.running_text_speed ?? 30}
+                        onChange={(e) =>
+                          setForm((prev) =>
+                            prev ? { ...prev, running_text_speed: Number(e.target.value) || 30 } : prev,
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
                   <Field
                     label="Alamat"
                     textarea
