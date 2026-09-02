@@ -145,9 +145,16 @@ function DropdownMenu({
   );
 }
 
-export function SiteNav({ schoolName }: { schoolName: string }) {
+export function SiteNav({
+  schoolName,
+  belowNav,
+}: {
+  schoolName: string;
+  belowNav?: React.ReactNode;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -165,13 +172,13 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
     >
       <div
         className={cn(
-          "section-shell mt-3 flex items-center justify-between rounded-full border px-4 py-2.5 transition-all duration-500",
+          "section-shell mt-3 flex items-center justify-between gap-3 rounded-full border px-4 py-2.5 transition-all duration-500",
           scrolled
             ? "border-border bg-card/85 shadow-[var(--shadow-soft)]"
             : "border-transparent bg-transparent",
         )}
       >
-        <a href="#beranda" className="flex items-center gap-3">
+        <a href="#beranda" className="flex min-w-0 flex-1 items-center gap-3 lg:flex-none">
           <img
             src={logoAsset.url}
             alt="Logo SDN 268 Panyileukan"
@@ -179,10 +186,11 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
             height={40}
             className="h-10 w-10 shrink-0 object-contain"
           />
-          <span className="font-display text-base leading-tight font-semibold text-foreground sm:text-lg">
+          <span className="truncate font-display text-sm leading-tight font-semibold text-foreground sm:text-lg">
             {schoolName}
           </span>
         </a>
+
 
         <nav className="hidden items-center gap-1 lg:flex">
           {LINKS.map((link) =>
@@ -218,15 +226,18 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
           type="button"
           aria-label="Buka menu"
           onClick={() => setOpen((v) => !v)}
-          className="rounded-full border border-border bg-card p-2 text-foreground lg:hidden"
+          className="shrink-0 rounded-full border border-border bg-card p-2 text-foreground lg:hidden"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
+      {belowNav ? <div className="mt-2">{belowNav}</div> : null}
+
       {open ? (
         <div className="section-shell lg:hidden">
-          <div className="mt-2 rounded-3xl border border-border bg-card/95 p-3 shadow-[var(--shadow-soft)] backdrop-blur-xl">
+          <div className="mt-2 max-h-[calc(100dvh-6.5rem)] w-full overflow-y-auto overscroll-contain rounded-3xl border border-border bg-card/95 p-3 shadow-[var(--shadow-soft)] backdrop-blur-xl">
+
             {LINKS.map((link) =>
               link.to ? (
                 <Link
