@@ -13,6 +13,7 @@ import {
   Star,
   Trash2,
   X,
+  Video,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,6 +26,10 @@ import {
   useSiteSettings,
   uploadMedia,
   mediaList,
+  useVideos,
+  sortVideos,
+  youtubeId,
+  youtubeThumb,
   type SiteSettings,
 } from "@/lib/cms";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
