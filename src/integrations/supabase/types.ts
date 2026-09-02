@@ -138,6 +138,9 @@ export type Database = {
           penilaian_syarat: string
           penilaian_syarat_heading: string
           phone: string
+          running_text: string | null
+          running_text_enabled: boolean
+          running_text_speed: number
           school_name: string
           sekilas_eyebrow: string
           sekilas_heading: string
@@ -207,6 +210,9 @@ export type Database = {
           penilaian_syarat?: string
           penilaian_syarat_heading?: string
           phone?: string
+          running_text?: string | null
+          running_text_enabled?: boolean
+          running_text_speed?: number
           school_name?: string
           sekilas_eyebrow?: string
           sekilas_heading?: string
@@ -276,6 +282,9 @@ export type Database = {
           penilaian_syarat?: string
           penilaian_syarat_heading?: string
           phone?: string
+          running_text?: string | null
+          running_text_enabled?: boolean
+          running_text_speed?: number
           school_name?: string
           sekilas_eyebrow?: string
           sekilas_heading?: string

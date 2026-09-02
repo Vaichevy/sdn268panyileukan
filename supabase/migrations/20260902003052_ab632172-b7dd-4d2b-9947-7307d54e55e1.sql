@@ -1,0 +1,4 @@
+ALTER TABLE public.site_settings
+  ADD COLUMN IF NOT EXISTS running_text TEXT,
+  ADD COLUMN IF NOT EXISTS running_text_enabled BOOLEAN NOT NULL DEFAULT true,
+  ADD COLUMN IF NOT EXISTS running_text_speed INTEGER NOT NULL DEFAULT 30;
