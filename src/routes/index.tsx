@@ -72,12 +72,17 @@ function Beranda() {
     <div className="relative min-h-screen">
       <AnimatedBackground />
       <CursorParticles />
-      <SiteNav schoolName={value?.school_name ?? FALLBACK_SETTINGS.school_name} />
-      <RunningText
-        text={(value as { running_text?: string | null })?.running_text}
-        enabled={(value as { running_text_enabled?: boolean | null })?.running_text_enabled}
-        speed={(value as { running_text_speed?: number | null })?.running_text_speed}
+      <SiteNav
+        schoolName={value?.school_name ?? FALLBACK_SETTINGS.school_name}
+        belowNav={
+          <RunningText
+            text={(value as { running_text?: string | null })?.running_text}
+            enabled={(value as { running_text_enabled?: boolean | null })?.running_text_enabled}
+            speed={(value as { running_text_speed?: number | null })?.running_text_speed}
+          />
+        }
       />
+
       <main>
         <Hero settings={value} />
         <GaleriVideo items={videos ?? []} limit={6} />
