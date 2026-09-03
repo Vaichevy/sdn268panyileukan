@@ -35,6 +35,13 @@ function VideoPage() {
   return (
     <div className="relative min-h-screen">
       <AnimatedBackground />
+      <div className="sticky top-0 z-40">
+        <RunningText
+          text={(value as { running_text?: string | null })?.running_text}
+          enabled={(value as { running_text_enabled?: boolean | null })?.running_text_enabled}
+          speed={(value as { running_text_speed?: number | null })?.running_text_speed}
+        />
+      </div>
       <main className="pt-12">
         <div className="section-shell">
           <Link
