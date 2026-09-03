@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Newspaper } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
+import { RunningText } from "@/components/site/RunningText";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import {
   formatDateID,
@@ -56,6 +57,13 @@ function BeritaDetail() {
   return (
     <div className="relative min-h-screen">
       <AnimatedBackground />
+      <div className="sticky top-0 z-40">
+        <RunningText
+          text={(value as { running_text?: string | null })?.running_text}
+          enabled={(value as { running_text_enabled?: boolean | null })?.running_text_enabled}
+          speed={(value as { running_text_speed?: number | null })?.running_text_speed}
+        />
+      </div>
       <main className="py-16">
         <div className="section-shell">
           <Link
