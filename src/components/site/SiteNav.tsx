@@ -165,24 +165,25 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
     >
       <div
         className={cn(
-          "section-shell mt-3 flex items-center justify-between rounded-full border px-4 py-2.5 transition-all duration-500",
+          "section-shell mt-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-full border px-4 py-2.5 transition-all duration-500 lg:flex lg:justify-between",
           scrolled
             ? "border-border bg-card/85 shadow-[var(--shadow-soft)]"
             : "border-transparent bg-transparent",
         )}
       >
-        <a href="#beranda" className="flex items-center gap-3">
+        <a href="#beranda" className="flex min-w-0 items-center gap-3">
           <img
             src={logoAsset.url}
             alt="Logo SDN 268 Panyileukan"
             width={40}
             height={40}
-            className="h-10 w-10 shrink-0 object-contain"
+            className="h-9 w-9 shrink-0 object-contain sm:h-10 sm:w-10"
           />
-          <span className="font-display text-base leading-tight font-semibold text-foreground sm:text-lg">
+          <span className="min-w-0 truncate font-display text-sm leading-tight font-semibold text-foreground sm:text-base lg:text-lg">
             {schoolName}
           </span>
         </a>
+
 
         <nav className="hidden items-center gap-1 lg:flex">
           {LINKS.map((link) =>
