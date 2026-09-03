@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
+import { RunningText } from "@/components/site/RunningText";
 import { GaleriVideo } from "@/components/site/GaleriVideo";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { useVideos, useSiteSettings, FALLBACK_SETTINGS } from "@/lib/cms";
