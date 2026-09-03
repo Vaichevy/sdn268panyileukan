@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
+import { RunningText } from "@/components/site/RunningText";
 import { GaleriVideo } from "@/components/site/GaleriVideo";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { useVideos, useSiteSettings, FALLBACK_SETTINGS } from "@/lib/cms";
@@ -34,6 +35,13 @@ function VideoPage() {
   return (
     <div className="relative min-h-screen">
       <AnimatedBackground />
+      <div className="sticky top-0 z-40">
+        <RunningText
+          text={(value as { running_text?: string | null })?.running_text}
+          enabled={(value as { running_text_enabled?: boolean | null })?.running_text_enabled}
+          speed={(value as { running_text_speed?: number | null })?.running_text_speed}
+        />
+      </div>
       <main className="pt-12">
         <div className="section-shell">
           <Link
