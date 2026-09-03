@@ -219,7 +219,7 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
           type="button"
           aria-label="Buka menu"
           onClick={() => setOpen((v) => !v)}
-          className="rounded-full border border-border bg-card p-2 text-foreground lg:hidden"
+          className="shrink-0 rounded-full border border-border bg-card p-2 text-foreground lg:hidden"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -227,7 +227,8 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
 
       {open ? (
         <div className="section-shell lg:hidden">
-          <div className="mt-2 rounded-3xl border border-border bg-card/95 p-3 shadow-[var(--shadow-soft)] backdrop-blur-xl">
+          <div className="mt-2 max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain rounded-3xl border border-border bg-card/95 p-3 shadow-[var(--shadow-soft)] backdrop-blur-xl">
+
             {LINKS.map((link) =>
               link.to ? (
                 <Link
