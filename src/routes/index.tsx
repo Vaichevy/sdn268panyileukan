@@ -89,6 +89,7 @@ function Beranda() {
       />
       <main>
         <Hero settings={value} />
+        <ReelsInstagram items={reels ?? []} limit={4} />
         <GaleriVideo items={videos ?? []} limit={6} />
         <Profil settings={value} />
         <Sekilas />
