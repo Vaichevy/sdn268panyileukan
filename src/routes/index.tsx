@@ -73,6 +73,7 @@ function Beranda() {
   const { data: gallery } = useGallery();
   const { data: news } = useNews();
   const { data: videos } = useVideos();
+  const { data: reels } = useReels();
 
   const value = settings ?? (FALLBACK_SETTINGS as never);
 
