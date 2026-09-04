@@ -825,6 +825,10 @@ function AdminPage() {
             <GalleryManager items={gallery ?? []} />
           </TabsContent>
 
+          <TabsContent value="reels" className="mt-6">
+            <ReelsManager />
+          </TabsContent>
+
           <TabsContent value="video" className="mt-6">
             <VideoManager />
           </TabsContent>
