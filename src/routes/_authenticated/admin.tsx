@@ -30,6 +30,9 @@ import {
   sortVideos,
   youtubeId,
   youtubeThumb,
+  useReels,
+  sortReels,
+  instagramCode,
   type SiteSettings,
 } from "@/lib/cms";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
