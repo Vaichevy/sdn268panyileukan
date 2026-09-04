@@ -16,6 +16,7 @@ import { Route as EvaluasiKalenderRouteImport } from './routes/evaluasi-kalender
 import { Route as GaleriRouteImport } from './routes/galeri'
 import { Route as PembelajaranRouteImport } from './routes/pembelajaran'
 import { Route as PembelajaranPenilaianRouteImport } from './routes/pembelajaran-penilaian'
+import { Route as ReelsRouteImport } from './routes/reels'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as VideoRouteImport } from './routes/video'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -57,6 +58,11 @@ const PembelajaranPenilaianRoute = PembelajaranPenilaianRouteImport.update({
   path: '/pembelajaran-penilaian',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReelsRoute = ReelsRouteImport.update({
+  id: '/reels',
+  path: '/reels',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/galeri': typeof GaleriRoute
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
+  '/reels': typeof ReelsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/video': typeof VideoRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/galeri': typeof GaleriRoute
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
+  '/reels': typeof ReelsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/video': typeof VideoRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/galeri': typeof GaleriRoute
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
+  '/reels': typeof ReelsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/video': typeof VideoRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/galeri'
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
+    | '/reels'
     | '/sitemap.xml'
     | '/video'
     | '/admin'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/galeri'
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
+    | '/reels'
     | '/sitemap.xml'
     | '/video'
     | '/admin'
@@ -170,6 +181,7 @@ export interface FileRouteTypes {
     | '/galeri'
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
+    | '/reels'
     | '/sitemap.xml'
     | '/video'
     | '/_authenticated/admin'
@@ -186,6 +198,7 @@ export interface RootRouteChildren {
   GaleriRoute: typeof GaleriRoute
   PembelajaranRoute: typeof PembelajaranRoute
   PembelajaranPenilaianRoute: typeof PembelajaranPenilaianRoute
+  ReelsRoute: typeof ReelsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VideoRoute: typeof VideoRoute
   BeritaIdRoute: typeof BeritaIdRoute
@@ -242,6 +255,13 @@ declare module '@tanstack/react-router' {
       path: '/pembelajaran-penilaian'
       fullPath: '/pembelajaran-penilaian'
       preLoaderRoute: typeof PembelajaranPenilaianRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reels': {
+      id: '/reels'
+      path: '/reels'
+      fullPath: '/reels'
+      preLoaderRoute: typeof ReelsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -308,6 +328,7 @@ const rootRouteChildren: RootRouteChildren = {
   GaleriRoute: GaleriRoute,
   PembelajaranRoute: PembelajaranRoute,
   PembelajaranPenilaianRoute: PembelajaranPenilaianRoute,
+  ReelsRoute: ReelsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   VideoRoute: VideoRoute,
   BeritaIdRoute: BeritaIdRoute,
