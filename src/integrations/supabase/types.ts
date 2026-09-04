@@ -83,6 +83,39 @@ export type Database = {
         }
         Relationships: []
       }
+      reel_items: {
+        Row: {
+          caption: string | null
+          created_at: string
+          event_date: string | null
+          id: string
+          instagram_url: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          event_date?: string | null
+          id?: string
+          instagram_url: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          event_date?: string | null
+          id?: string
+          instagram_url?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           about_text: string

@@ -30,6 +30,9 @@ import {
   sortVideos,
   youtubeId,
   youtubeThumb,
+  useReels,
+  sortReels,
+  instagramCode,
   type SiteSettings,
 } from "@/lib/cms";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
@@ -292,6 +295,7 @@ function AdminPage() {
             <TabsTrigger value="identitas">Identitas & Profil</TabsTrigger>
             <TabsTrigger value="pembelajaran">Pembelajaran</TabsTrigger>
             <TabsTrigger value="galeri">Galeri Kegiatan</TabsTrigger>
+            <TabsTrigger value="reels">Reels Instagram</TabsTrigger>
             <TabsTrigger value="video">Galeri Video</TabsTrigger>
             <TabsTrigger value="berita">Berita</TabsTrigger>
             <TabsTrigger value="komentar">Komentar</TabsTrigger>
@@ -819,6 +823,10 @@ function AdminPage() {
 
           <TabsContent value="galeri" className="mt-6">
             <GalleryManager items={gallery ?? []} />
+          </TabsContent>
+
+          <TabsContent value="reels" className="mt-6">
+            <ReelsManager />
           </TabsContent>
 
           <TabsContent value="video" className="mt-6">
@@ -1696,6 +1704,199 @@ function VideoManager() {
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+type ReelForm = {
+  title: string;
+  instagram_url: string;
+  caption: string;
+  event_date: string;
+};
+
+const EMPTY_REEL: ReelForm = { title: "", instagram_url: "", caption: "", event_date: "" };
+
+function ReelFields({
+  value,
+  onChange,
+}: {
+  value: ReelForm;
+  onChange: (next: ReelForm) => void;
+}) {
+  const set = (patch: Partial<ReelForm>) => onChange({ ...value, ...patch });
+  const code = instagramCode(value.instagram_url);
+  return (
+    <div className="space-y-4">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label>Judul Postingan</Label>
+          <Input value={value.title} onChange={(e) => set({ title: e.target.value })} />
+        </div>
+        <div className="space-y-2">
+          <Label>Tanggal Kegiatan</Label>
+          <Input
+            type="date"
+            value={value.event_date}
+            onChange={(e) => set({ event_date: e.target.value })}
+          />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <Label>Tautan Instagram (postingan / reels)</Label>
+        <Input
+          placeholder="https://www.instagram.com/reel/XXXXXXXXXXX/"
+          value={value.instagram_url}
+          onChange={(e) => set({ instagram_url: e.target.value })}
+        />
+        <p className="text-xs text-muted-foreground">
+          Salin tautan dari tombol Bagikan &gt; Salin tautan di Instagram. Mendukung /p/, /reel/,
+          dan /tv/.
+        </p>
+      </div>
+      <div className="space-y-2">
+        <Label>Keterangan Singkat</Label>
+        <Textarea
+          rows={3}
+          value={value.caption}
+          onChange={(e) => set({ caption: e.target.value })}
+        />
+      </div>
+      {code ? (
+        <iframe
+          src={`https://www.instagram.com/p/${code}/embed/captioned/`}
+          title="Pratinjau Instagram"
+          scrolling="no"
+          className="h-[460px] w-full max-w-sm rounded-2xl border border-border"
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function ReelsManager() {
+  const qc = useQueryClient();
+  const { data: items } = useReels();
+  const list = items ?? [];
+  const [draft, setDraft] = useState<ReelForm>(EMPTY_REEL);
+  const [busy, setBusy] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [edit, setEdit] = useState<ReelForm>(EMPTY_REEL);
+  const [editBusy, setEditBusy] = useState(false);
+
+  const refresh = () => qc.invalidateQueries({ queryKey: ["reel_items"] });
+  const valid = (v: ReelForm) => Boolean(v.title.trim()) && Boolean(instagramCode(v.instagram_url));
+
+  const add = async () => {
+    if (!valid(draft)) return toast.error("Judul dan tautan Instagram yang valid wajib diisi");
+    setBusy(true);
+    const { error } = await supabase.from("reel_items").insert({
+      title: draft.title.trim(),
+      instagram_url: draft.instagram_url.trim(),
+      caption: draft.caption.trim(),
+      event_date: draft.event_date || null,
+      sort_order: list.length,
+    });
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    setDraft(EMPTY_REEL);
+    toast.success("Postingan ditambahkan");
+    void refresh();
+  };
+
+  const startEdit = (item: (typeof list)[number]) => {
+    setEditId(item.id);
+    setEdit({
+      title: item.title,
+      instagram_url: item.instagram_url,
+      caption: item.caption ?? "",
+      event_date: item.event_date ?? "",
+    });
+  };
+
+  const saveEdit = async () => {
+    if (!editId) return;
+    if (!valid(edit)) return toast.error("Judul dan tautan Instagram yang valid wajib diisi");
+    setEditBusy(true);
+    const { error } = await supabase
+      .from("reel_items")
+      .update({
+        title: edit.title.trim(),
+        instagram_url: edit.instagram_url.trim(),
+        caption: edit.caption.trim(),
+        event_date: edit.event_date || null,
+      })
+      .eq("id", editId);
+    setEditBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Postingan diperbarui");
+    setEditId(null);
+    void refresh();
+  };
+
+  const remove = async (id: string) => {
+    const { error } = await supabase.from("reel_items").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Postingan dihapus");
+    void refresh();
+  };
+
+  return (
+    <div className="space-y-6">
+      <section className="surface-card space-y-4 p-6">
+        <h2 className="font-display text-xl font-semibold">Tambah Reels / Stories Instagram</h2>
+        <ReelFields value={draft} onChange={setDraft} />
+        <Button onClick={add} disabled={busy}>
+          {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+          Tambahkan
+        </Button>
+      </section>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {sortReels(list).map((item) => (
+          <div key={item.id} className="surface-card p-4">
+            {editId === item.id ? (
+              <div className="space-y-3">
+                <ReelFields value={edit} onChange={setEdit} />
+                <div className="flex items-center gap-2">
+                  <Button size="sm" onClick={saveEdit} disabled={editBusy}>
+                    {editBusy ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Save className="h-4 w-4" />
+                    )}
+                    Simpan
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => setEditId(null)}>
+                    Batal
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="font-medium text-foreground">{item.title}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {formatDateID(item.event_date ?? item.created_at)}
+                  </p>
+                  <p className="truncate text-xs text-muted-foreground">{item.instagram_url}</p>
+                  {item.caption ? (
+                    <p className="line-clamp-2 text-xs text-muted-foreground">{item.caption}</p>
+                  ) : null}
+                </div>
+                <div className="flex shrink-0 gap-1.5">
+                  <Button variant="outline" size="icon" onClick={() => startEdit(item)}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="icon" onClick={() => void remove(item.id)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );

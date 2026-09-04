@@ -7,6 +7,39 @@ export type GalleryItem = Tables<"gallery_items">;
 export type NewsItem = Tables<"news_items">;
 export type Testimonial = Tables<"testimonials">;
 export type VideoItem = Tables<"video_items">;
+export type ReelItem = Tables<"reel_items">;
+
+/** Extracts the Instagram shortcode from post, reel, or tv URLs. */
+export function instagramCode(url?: string | null): string | null {
+  if (!url) return null;
+  const m = url.match(/instagram\.com\/(?:p|reel|reels|tv)\/([A-Za-z0-9_-]+)/);
+  if (m?.[1]) return m[1];
+  return /^[A-Za-z0-9_-]{5,}$/.test(url.trim()) ? url.trim() : null;
+}
+
+export function useReels() {
+  return useQuery({
+    queryKey: ["reel_items"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("reel_items")
+        .select("*")
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as ReelItem[];
+    },
+  });
+}
+
+/** Sorts reels newest-first by event date, falling back to created_at. */
+export function sortReels(items: ReelItem[]): ReelItem[] {
+  return [...items].sort((a, b) => {
+    const ta = new Date(a.event_date ?? a.created_at).getTime();
+    const tb = new Date(b.event_date ?? b.created_at).getTime();
+    return tb - ta;
+  });
+}
 
 /** Extracts the YouTube video id from watch, youtu.be, shorts, or embed URLs. */
 export function youtubeId(url?: string | null): string | null {
