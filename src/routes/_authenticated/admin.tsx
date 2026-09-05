@@ -1714,9 +1714,19 @@ type ReelForm = {
   instagram_url: string;
   caption: string;
   event_date: string;
+  video_url: string;
+  thumbnail_url: string;
 };
 
-const EMPTY_REEL: ReelForm = { title: "", instagram_url: "", caption: "", event_date: "" };
+const EMPTY_REEL: ReelForm = {
+  title: "",
+  instagram_url: "",
+  caption: "",
+  event_date: "",
+  video_url: "",
+  thumbnail_url: "",
+};
+
 
 function ReelFields({
   value,
