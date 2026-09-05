@@ -1714,9 +1714,19 @@ type ReelForm = {
   instagram_url: string;
   caption: string;
   event_date: string;
+  video_url: string;
+  thumbnail_url: string;
 };
 
-const EMPTY_REEL: ReelForm = { title: "", instagram_url: "", caption: "", event_date: "" };
+const EMPTY_REEL: ReelForm = {
+  title: "",
+  instagram_url: "",
+  caption: "",
+  event_date: "",
+  video_url: "",
+  thumbnail_url: "",
+};
+
 
 function ReelFields({
   value,
@@ -1763,6 +1773,41 @@ function ReelFields({
           onChange={(e) => set({ caption: e.target.value })}
         />
       </div>
+      <div className="space-y-2 rounded-2xl border border-border p-4">
+        <Label>Klip Video (agar bisa diputar otomatis saat kursor diarahkan)</Label>
+        <p className="text-xs text-muted-foreground">
+          Instagram tidak mengizinkan pemutaran otomatis dari tautan. Unggah klip video dan foto
+          sampul agar kartu memutar cuplikan saat kursor diarahkan dan diputar penuh saat diklik.
+        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <VideoUploadButton label="Unggah Klip Video" onDone={(url) => set({ video_url: url })} />
+          <UploadButton
+            label="Unggah Foto Sampul"
+            folder="reels"
+            onDone={(url) => set({ thumbnail_url: url })}
+          />
+          {value.video_url || value.thumbnail_url ? (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => set({ video_url: "", thumbnail_url: "" })}
+            >
+              Hapus Media
+            </Button>
+          ) : null}
+        </div>
+        {value.thumbnail_url ? (
+          <img
+            src={value.thumbnail_url}
+            alt="Sampul reels"
+            className="h-40 w-28 rounded-xl object-cover"
+          />
+        ) : null}
+        {value.video_url ? (
+          <video src={value.video_url} controls muted className="h-48 rounded-xl bg-black" />
+        ) : null}
+      </div>
+
       {code ? (
         <iframe
           src={`https://www.instagram.com/p/${code}/embed/captioned/`}
@@ -1796,6 +1841,8 @@ function ReelsManager() {
       instagram_url: draft.instagram_url.trim(),
       caption: draft.caption.trim(),
       event_date: draft.event_date || null,
+      video_url: draft.video_url,
+      thumbnail_url: draft.thumbnail_url,
       sort_order: list.length,
     });
     setBusy(false);
@@ -1812,6 +1859,8 @@ function ReelsManager() {
       instagram_url: item.instagram_url,
       caption: item.caption ?? "",
       event_date: item.event_date ?? "",
+      video_url: item.video_url ?? "",
+      thumbnail_url: item.thumbnail_url ?? "",
     });
   };
 
@@ -1826,8 +1875,11 @@ function ReelsManager() {
         instagram_url: edit.instagram_url.trim(),
         caption: edit.caption.trim(),
         event_date: edit.event_date || null,
+        video_url: edit.video_url,
+        thumbnail_url: edit.thumbnail_url,
       })
       .eq("id", editId);
+
     setEditBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Postingan diperbarui");
