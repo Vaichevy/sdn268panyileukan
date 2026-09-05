@@ -151,6 +151,54 @@ export function ReelsInstagram({ items, limit }: { items: ReelItem[]; limit?: nu
           </div>
         ) : null}
       </div>
+
+      {selected?.video_url ? (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-foreground/70 p-4 backdrop-blur-sm"
+          onClick={() => setActive(null)}
+        >
+          <div
+            className="max-h-[92vh] w-full max-w-sm overflow-auto rounded-3xl bg-card p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="font-display text-lg font-semibold text-foreground">
+                  {selected.title}
+                </h3>
+                {selected.event_date ? (
+                  <p className="text-sm text-muted-foreground">
+                    {formatDateID(selected.event_date)}
+                  </p>
+                ) : null}
+              </div>
+              <button
+                type="button"
+                aria-label="Tutup"
+                onClick={() => setActive(null)}
+                className="rounded-full border border-border p-2 text-foreground"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <video
+              src={selected.video_url}
+              poster={selected.thumbnail_url || undefined}
+              controls
+              autoPlay
+              playsInline
+              className="mt-4 w-full rounded-2xl bg-black"
+              style={{ aspectRatio: "9 / 16" }}
+            />
+            {selected.caption ? (
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                {selected.caption}
+              </p>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
     </section>
+
   );
 }
