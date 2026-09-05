@@ -126,6 +126,7 @@ export type Database = {
         Row: {
           about_text: string
           address: string
+          apps_items: string
           created_at: string
           ekskul_heading: string
           ekskul_items: string
@@ -198,6 +199,7 @@ export type Database = {
         Insert: {
           about_text?: string
           address?: string
+          apps_items?: string
           created_at?: string
           ekskul_heading?: string
           ekskul_items?: string
@@ -270,6 +272,7 @@ export type Database = {
         Update: {
           about_text?: string
           address?: string
+          apps_items?: string
           created_at?: string
           ekskul_heading?: string
           ekskul_items?: string

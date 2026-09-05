@@ -352,6 +352,20 @@ function AdminPage() {
                       />
                     </div>
                   </div>
+                  <div className="rounded-xl border border-border/60 bg-muted/30 p-4 space-y-2">
+                    <Label>Menu Tab Aplikasi</Label>
+                    <p className="text-xs text-muted-foreground">
+                      Satu aplikasi per baris dengan format: Nama|Tautan|Keterangan
+                    </p>
+                    <Textarea
+                      rows={4}
+                      value={form.apps_items ?? ""}
+                      onChange={(e) =>
+                        setForm((prev) => (prev ? { ...prev, apps_items: e.target.value } : prev))
+                      }
+                      placeholder="Aplikasi Surat|https://contoh.com|Pengelolaan surat"
+                    />
+                  </div>
                   <Field
                     label="Alamat"
                     textarea
