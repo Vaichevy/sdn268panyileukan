@@ -1,29 +1,86 @@
-import { ArrowRight, CalendarDays, Instagram } from "lucide-react";
+import { useRef, useState } from "react";
+import { ArrowRight, CalendarDays, Instagram, Play, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
 import { formatDateID, instagramCode, sortReels, type ReelItem } from "@/lib/cms";
 
-function ReelCard({ item }: { item: ReelItem }) {
+type ReelMedia = ReelItem & { video_url?: string | null; thumbnail_url?: string | null };
+
+/** Card media: plays the uploaded clip muted on hover, falls back to the Instagram embed. */
+function ReelMediaBox({ item, onOpen }: { item: ReelMedia; onOpen: () => void }) {
+  const [hover, setHover] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const code = instagramCode(item.instagram_url);
+  const video = item.video_url || "";
+  const poster = item.thumbnail_url || "";
+
+  if (video) {
+    return (
+      <button
+        type="button"
+        onClick={onOpen}
+        onMouseEnter={() => {
+          setHover(true);
+          void videoRef.current?.play().catch(() => undefined);
+        }}
+        onMouseLeave={() => {
+          setHover(false);
+          const v = videoRef.current;
+          if (v) {
+            v.pause();
+            v.currentTime = 0;
+          }
+        }}
+        className="relative block w-full overflow-hidden bg-secondary"
+        style={{ aspectRatio: "9 / 14" }}
+        aria-label={`Putar ${item.title}`}
+      >
+        <video
+          ref={videoRef}
+          src={video}
+          poster={poster || undefined}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="h-full w-full object-cover"
+        />
+        {!hover ? (
+          <span className="absolute inset-0 flex items-center justify-center">
+            <span className="gradient-hero inline-flex h-14 w-14 items-center justify-center rounded-full text-primary-foreground shadow-lg">
+              <Play className="h-6 w-6 translate-x-[1px]" />
+            </span>
+          </span>
+        ) : null}
+      </button>
+    );
+  }
+
+  return (
+    <div className="relative w-full overflow-hidden bg-secondary" style={{ aspectRatio: "9 / 14" }}>
+      {code ? (
+        <iframe
+          src={`https://www.instagram.com/p/${code}/embed/captioned/`}
+          title={item.title}
+          loading="lazy"
+          scrolling="no"
+          allow="encrypted-media; picture-in-picture; clipboard-write"
+          allowFullScreen
+          className="absolute inset-0 h-full w-full border-0"
+        />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center p-6 text-center text-sm text-muted-foreground">
+          Tautan Instagram belum valid.
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ReelCard({ item, onOpen }: { item: ReelMedia; onOpen: () => void }) {
   return (
     <article className="surface-card group overflow-hidden p-0">
-      <div className="relative w-full overflow-hidden bg-secondary" style={{ aspectRatio: "9 / 14" }}>
-        {code ? (
-          <iframe
-            src={`https://www.instagram.com/p/${code}/embed/captioned/`}
-            title={item.title}
-            loading="lazy"
-            scrolling="no"
-            allow="encrypted-media; picture-in-picture; clipboard-write"
-            allowFullScreen
-            className="absolute inset-0 h-full w-full border-0"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center p-6 text-center text-sm text-muted-foreground">
-            Tautan Instagram belum valid.
-          </div>
-        )}
-      </div>
+      <ReelMediaBox item={item} onOpen={onOpen} />
       <div className="space-y-1.5 p-5">
         {item.event_date ? (
           <p className="flex items-center gap-1.5 text-xs font-medium text-primary">
@@ -47,6 +104,7 @@ function ReelCard({ item }: { item: ReelItem }) {
     </article>
   );
 }
+
 
 export function ReelsInstagram({ items, limit }: { items: ReelItem[]; limit?: number }) {
   const all = sortReels(items);
