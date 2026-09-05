@@ -1841,6 +1841,8 @@ function ReelsManager() {
       instagram_url: draft.instagram_url.trim(),
       caption: draft.caption.trim(),
       event_date: draft.event_date || null,
+      video_url: draft.video_url,
+      thumbnail_url: draft.thumbnail_url,
       sort_order: list.length,
     });
     setBusy(false);
@@ -1857,6 +1859,8 @@ function ReelsManager() {
       instagram_url: item.instagram_url,
       caption: item.caption ?? "",
       event_date: item.event_date ?? "",
+      video_url: item.video_url ?? "",
+      thumbnail_url: item.thumbnail_url ?? "",
     });
   };
 
@@ -1871,8 +1875,11 @@ function ReelsManager() {
         instagram_url: edit.instagram_url.trim(),
         caption: edit.caption.trim(),
         event_date: edit.event_date || null,
+        video_url: edit.video_url,
+        thumbnail_url: edit.thumbnail_url,
       })
       .eq("id", editId);
+
     setEditBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Postingan diperbarui");
