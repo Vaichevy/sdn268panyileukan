@@ -91,8 +91,10 @@ export type Database = {
           id: string
           instagram_url: string
           sort_order: number
+          thumbnail_url: string
           title: string
           updated_at: string
+          video_url: string
         }
         Insert: {
           caption?: string | null
@@ -101,8 +103,10 @@ export type Database = {
           id?: string
           instagram_url: string
           sort_order?: number
+          thumbnail_url?: string
           title: string
           updated_at?: string
+          video_url?: string
         }
         Update: {
           caption?: string | null
@@ -111,8 +115,10 @@ export type Database = {
           id?: string
           instagram_url?: string
           sort_order?: number
+          thumbnail_url?: string
           title?: string
           updated_at?: string
+          video_url?: string
         }
         Relationships: []
       }
