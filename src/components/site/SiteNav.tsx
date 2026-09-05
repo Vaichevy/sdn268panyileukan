@@ -5,14 +5,14 @@ import {
   X,
   ShieldCheck,
   ChevronDown,
-  Mail,
-  BookMarked,
+  AppWindow,
   BookOpen,
   GraduationCap,
   ClipboardCheck,
   CalendarDays,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { parseApps, useSiteSettings } from "@/lib/cms";
 import logoAsset from "@/assets/logo-sdn268.png.asset.json";
 
 const LINKS: { href?: string; to?: string; label: string }[] = [
@@ -59,20 +59,6 @@ const KURIKULUM: MenuItem[] = [
   },
 ];
 
-const APPS: MenuItem[] = [
-  {
-    href: "https://surat268panyileukan.lovable.app",
-    label: "Aplikasi Surat",
-    description: "Pengelolaan surat masuk & keluar",
-    icon: Mail,
-  },
-  {
-    href: "https://perpustakaansdn268.lovable.app/",
-    label: "Aplikasi Perpustakaan",
-    description: "Katalog & peminjaman buku sekolah",
-    icon: BookMarked,
-  },
-];
 
 function DropdownMenu({
   label,
@@ -146,6 +132,10 @@ function DropdownMenu({
 }
 
 export function SiteNav({ schoolName }: { schoolName: string }) {
+  const { data: settings } = useSiteSettings();
+  const APPS: MenuItem[] = parseApps((settings as { apps_items?: string } | null)?.apps_items).map(
+    (app) => ({ href: app.href, label: app.label, description: app.description, icon: AppWindow }),
+  );
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
