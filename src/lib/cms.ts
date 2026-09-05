@@ -227,3 +227,21 @@ export function groupNewsByMonth(items: NewsItem[]) {
   }
   return [...map.values()];
 }
+
+export type AppLink = { label: string; href: string; description: string };
+
+export const FALLBACK_APPS = `Aplikasi Surat|https://surat268panyileukan.lovable.app|Pengelolaan surat masuk & keluar
+Aplikasi Perpustakaan|https://perpustakaansdn268.lovable.app/|Katalog & peminjaman buku sekolah`;
+
+export function parseApps(value?: string | null): AppLink[] {
+  const source = value && value.trim() ? value : FALLBACK_APPS;
+  return source
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [label, href, description] = line.split("|").map((part) => (part ?? "").trim());
+      return { label: label || "Aplikasi", href: href || "#", description: description || "" };
+    })
+    .filter((item) => item.href !== "#");
+}
