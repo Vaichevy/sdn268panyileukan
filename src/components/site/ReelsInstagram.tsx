@@ -107,8 +107,10 @@ function ReelCard({ item, onOpen }: { item: ReelMedia; onOpen: () => void }) {
 
 
 export function ReelsInstagram({ items, limit }: { items: ReelItem[]; limit?: number }) {
-  const all = sortReels(items);
+  const [active, setActive] = useState<string | null>(null);
+  const all = sortReels(items) as ReelMedia[];
   const data = typeof limit === "number" ? all.slice(0, limit) : all;
+  const selected = data.find((d) => d.id === active);
 
   if (all.length === 0) return null;
 
@@ -123,17 +125,19 @@ export function ReelsInstagram({ items, limit }: { items: ReelItem[]; limit?: nu
             Cerita terkini dari Instagram sekolah
           </h2>
           <p className="mt-4 leading-relaxed text-muted-foreground">
-            Postingan pilihan dari akun Instagram resmi SDN 268 Panyileukan Kota Bandung.
+            Postingan pilihan dari akun Instagram resmi SDN 268 Panyileukan Kota Bandung. Arahkan
+            kursor untuk melihat cuplikan, klik untuk memutar penuh.
           </p>
         </Reveal>
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {data.map((item, index) => (
             <Reveal key={item.id} delay={index * 70}>
-              <ReelCard item={item} />
+              <ReelCard item={item} onOpen={() => setActive(item.id)} />
             </Reveal>
           ))}
         </div>
+
 
         {typeof limit === "number" && all.length > limit ? (
           <div className="mt-10 flex justify-center">
