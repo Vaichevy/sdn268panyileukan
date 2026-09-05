@@ -1773,6 +1773,41 @@ function ReelFields({
           onChange={(e) => set({ caption: e.target.value })}
         />
       </div>
+      <div className="space-y-2 rounded-2xl border border-border p-4">
+        <Label>Klip Video (agar bisa diputar otomatis saat kursor diarahkan)</Label>
+        <p className="text-xs text-muted-foreground">
+          Instagram tidak mengizinkan pemutaran otomatis dari tautan. Unggah klip video dan foto
+          sampul agar kartu memutar cuplikan saat kursor diarahkan dan diputar penuh saat diklik.
+        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <VideoUploadButton label="Unggah Klip Video" onDone={(url) => set({ video_url: url })} />
+          <UploadButton
+            label="Unggah Foto Sampul"
+            folder="reels"
+            onDone={(url) => set({ thumbnail_url: url })}
+          />
+          {value.video_url || value.thumbnail_url ? (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => set({ video_url: "", thumbnail_url: "" })}
+            >
+              Hapus Media
+            </Button>
+          ) : null}
+        </div>
+        {value.thumbnail_url ? (
+          <img
+            src={value.thumbnail_url}
+            alt="Sampul reels"
+            className="h-40 w-28 rounded-xl object-cover"
+          />
+        ) : null}
+        {value.video_url ? (
+          <video src={value.video_url} controls muted className="h-48 rounded-xl bg-black" />
+        ) : null}
+      </div>
+
       {code ? (
         <iframe
           src={`https://www.instagram.com/p/${code}/embed/captioned/`}
