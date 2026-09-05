@@ -29,7 +29,7 @@ type MenuItem = {
   to?: string;
   label: string;
   description: string;
-  icon: typeof Mail;
+  icon: typeof AppWindow;
 };
 
 const KURIKULUM: MenuItem[] = [
