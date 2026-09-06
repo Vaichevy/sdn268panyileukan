@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { GraduationCap, Instagram } from "lucide-react";
+import { Instagram } from "lucide-react";
 import type { SiteSettings } from "@/lib/cms";
+import logoAsset from "@/assets/logo-sdn268.png.asset.json";
 
 export function SiteFooter({ settings }: { settings: SiteSettings | null }) {
   return (
@@ -8,9 +9,13 @@ export function SiteFooter({ settings }: { settings: SiteSettings | null }) {
       <div className="section-shell grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <div className="flex items-center gap-3">
-            <span className="gradient-hero flex h-10 w-10 items-center justify-center rounded-xl text-primary-foreground">
-              <GraduationCap className="h-5 w-5" />
-            </span>
+            <img
+              src={logoAsset.url}
+              alt="Logo SDN 268 Panyileukan"
+              width={40}
+              height={40}
+              className="h-10 w-10 shrink-0 rounded-xl object-contain"
+            />
             <span className="font-display text-lg font-semibold text-foreground">
               {settings?.school_name}
             </span>
