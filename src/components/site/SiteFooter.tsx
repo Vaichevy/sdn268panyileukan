@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Instagram } from "lucide-react";
+import { InstagramIcon } from "./InstagramIcon";
 import type { SiteSettings } from "@/lib/cms";
 import logoAsset from "@/assets/logo-sdn268.png.asset.json";
 
