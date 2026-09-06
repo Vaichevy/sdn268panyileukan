@@ -47,9 +47,9 @@ export function Kontak({ settings }: { settings: SiteSettings | null }) {
                 rel="noopener noreferrer"
                 className="mt-5 flex gap-4 rounded-2xl p-2 transition-colors hover:bg-secondary"
               >
-                <span className="gradient-hero flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-primary-foreground">
-                  <Instagram className="h-4.5 w-4.5" />
-                </span>
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm">
+                <InstagramIcon className="h-4.5 w-4.5" />
+              </span>
                 <div>
                   <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                     Instagram
