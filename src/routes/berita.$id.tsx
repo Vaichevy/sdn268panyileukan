@@ -15,26 +15,81 @@ import {
 import { Linkify } from "@/components/site/Linkify";
 import { PhotoCarousel } from "@/components/site/PhotoSlider";
 
+const SITE_URL = "https://sdn268panyileukan.lovable.app";
+
+function summarize(text: string | null | undefined, fallback: string): string {
+  const clean = (text ?? "").replace(/\s+/g, " ").trim();
+  if (!clean) return fallback;
+  return clean.length > 155 ? `${clean.slice(0, 152)}…` : clean;
+}
+
 export const Route = createFileRoute("/berita/$id")({
-  head: () => ({
-    meta: [
-      { title: "Berita Sekolah — SDN 268 Panyileukan" },
-      {
-        name: "description",
-        content:
-          "Baca berita dan pengumuman lengkap dari SDN 268 Panyileukan, Kota Bandung.",
-      },
-      { property: "og:title", content: "Berita Sekolah — SDN 268 Panyileukan" },
-      {
-        property: "og:description",
-        content: "Informasi dan pengumuman terbaru dari SDN 268 Panyileukan.",
-      },
-      { property: "og:type", content: "article" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  loader: async ({ params }) => {
+    const { data } = await supabase
+      .from("news_items")
+      .select("id,title,content,image_url,images,published_at,created_at")
+      .eq("id", params.id)
+      .maybeSingle();
+    return { item: (data as NewsItem | null) ?? null };
+  },
+  head: ({ params, loaderData }) => {
+    const item = loaderData?.item ?? null;
+    const url = `${SITE_URL}/berita/${params.id}`;
+    const title = item
+      ? `${item.title} — SDN 268 Panyileukan`
+      : "Berita Sekolah — SDN 268 Panyileukan";
+    const description = item
+      ? summarize(
+          item.content,
+          `Berita ${item.title} dari SDN 268 Panyileukan, Kota Bandung.`,
+        )
+      : "Baca berita dan pengumuman lengkap dari SDN 268 Panyileukan, Kota Bandung.";
+    const image = item ? mediaList(item)[0] : undefined;
+    const absoluteImage =
+      image && image.startsWith("https://") ? image : undefined;
+
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
+        ...(absoluteImage
+          ? [
+              { property: "og:image", content: absoluteImage },
+              { name: "twitter:image", content: absoluteImage },
+            ]
+          : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: item
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "NewsArticle",
+                headline: item.title,
+                description,
+                datePublished: item.published_at ?? item.created_at,
+                mainEntityOfPage: url,
+                ...(absoluteImage ? { image: [absoluteImage] } : {}),
+                publisher: {
+                  "@type": "Organization",
+                  name: "SDN 268 Panyileukan",
+                },
+              }),
+            },
+          ]
+        : undefined,
+    };
+  },
   component: BeritaDetail,
 });
+
 
 function BeritaDetail() {
   const { id } = Route.useParams();
