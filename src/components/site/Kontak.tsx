@@ -1,5 +1,6 @@
-import { Hash, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { Hash, Mail, MapPin, Phone } from "lucide-react";
 import { Reveal } from "./Reveal";
+import { InstagramIcon } from "./InstagramIcon";
 import type { SiteSettings } from "@/lib/cms";
 
 export function Kontak({ settings }: { settings: SiteSettings | null }) {
