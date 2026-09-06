@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
-import { ArrowRight, CalendarDays, Instagram, Play, X } from "lucide-react";
+import { ArrowRight, CalendarDays, Play, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
+import { InstagramIcon } from "./InstagramIcon";
 import { formatDateID, instagramCode, sortReels, type ReelItem } from "@/lib/cms";
 
 type ReelMedia = ReelItem & { video_url?: string | null; thumbnail_url?: string | null };
