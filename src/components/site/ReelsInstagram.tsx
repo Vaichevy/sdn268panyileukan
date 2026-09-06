@@ -99,7 +99,7 @@ function ReelCard({ item, onOpen }: { item: ReelMedia; onOpen: () => void }) {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 pt-1 text-sm font-semibold text-primary hover:underline"
         >
-          <Instagram className="h-4 w-4" /> Lihat di Instagram
+          <InstagramIcon className="h-4 w-4" /> Lihat di Instagram
         </a>
       </div>
     </article>
