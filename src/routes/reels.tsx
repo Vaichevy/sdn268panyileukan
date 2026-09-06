@@ -44,6 +44,8 @@ function ReelsPage() {
       </div>
       <main className="pt-12">
         <div className="section-shell">
+          <h1 className="sr-only">Reels & Stories Instagram SDN 268 Panyileukan</h1>
+
           <Link
             to="/"
             hash="reels"
