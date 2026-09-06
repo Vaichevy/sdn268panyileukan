@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Instagram } from "lucide-react";
+import { InstagramIcon } from "./InstagramIcon";
 import type { SiteSettings } from "@/lib/cms";
 import logoAsset from "@/assets/logo-sdn268.png.asset.json";
 
@@ -34,8 +34,8 @@ export function SiteFooter({ settings }: { settings: SiteSettings | null }) {
             rel="noopener noreferrer"
             className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-primary"
           >
-            <span className="gradient-hero flex h-8 w-8 items-center justify-center rounded-xl text-primary-foreground">
-              <Instagram className="h-4 w-4" />
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-white shadow-sm">
+              <InstagramIcon className="h-4 w-4" />
             </span>
             @bdg.sdn268panyileukan
           </a>

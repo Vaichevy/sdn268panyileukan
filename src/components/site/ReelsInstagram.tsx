@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
-import { ArrowRight, CalendarDays, Instagram, Play, X } from "lucide-react";
+import { ArrowRight, CalendarDays, Play, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
+import { InstagramIcon } from "./InstagramIcon";
 import { formatDateID, instagramCode, sortReels, type ReelItem } from "@/lib/cms";
 
 type ReelMedia = ReelItem & { video_url?: string | null; thumbnail_url?: string | null };
@@ -98,7 +99,7 @@ function ReelCard({ item, onOpen }: { item: ReelMedia; onOpen: () => void }) {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 pt-1 text-sm font-semibold text-primary hover:underline"
         >
-          <Instagram className="h-4 w-4" /> Lihat di Instagram
+          <InstagramIcon className="h-4 w-4" /> Lihat di Instagram
         </a>
       </div>
     </article>
