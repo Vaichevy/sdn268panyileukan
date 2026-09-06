@@ -44,6 +44,8 @@ function VideoPage() {
       </div>
       <main className="pt-12">
         <div className="section-shell">
+          <h1 className="sr-only">Galeri Video Kegiatan SDN 268 Panyileukan</h1>
+
           <Link
             to="/"
             hash="video"
