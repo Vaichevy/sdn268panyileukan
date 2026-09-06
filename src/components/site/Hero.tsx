@@ -21,7 +21,11 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
 
           <h1 className="mt-6 font-display text-4xl leading-[1.05] font-semibold text-foreground sm:text-6xl">
             {settings?.school_name || "SDN 268 Panyileukan"}
+            <span className="mt-2 block text-xl font-semibold text-muted-foreground sm:text-2xl">
+              Website Resmi Sekolah Dasar Negeri di Kota Bandung
+            </span>
           </h1>
+
 
           <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             {settings?.tagline}

@@ -44,6 +44,8 @@ function GaleriPage() {
       </div>
       <main className="pt-12">
         <div className="section-shell">
+          <h1 className="sr-only">Galeri Kegiatan SDN 268 Panyileukan Kota Bandung</h1>
+
           <Link
             to="/"
             hash="galeri"
