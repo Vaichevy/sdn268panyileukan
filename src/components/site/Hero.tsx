@@ -32,11 +32,17 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="#profil"
+            <Link
+              to="/ppdb"
               className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition-transform hover:scale-[1.03]"
             >
-              Profil Sekolah <ArrowRight className="h-4 w-4" />
+              Info PPDB <ArrowRight className="h-4 w-4" />
+            </Link>
+            <a
+              href="#profil"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
+            >
+              Profil Sekolah
             </a>
             <a
               href="#galeri"

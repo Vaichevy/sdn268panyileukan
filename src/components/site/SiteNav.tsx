@@ -195,6 +195,12 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
             </a>
             ),
           )}
+          <Link
+            to="/ppdb"
+            className="rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-secondary-foreground"
+          >
+            PPDB
+          </Link>
           <DropdownMenu label="Kurikulum" items={KURIKULUM} />
           <DropdownMenu label="Aplikasi" items={APPS} />
           <Link
