@@ -195,6 +195,12 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
             </a>
             ),
           )}
+          <Link
+            to="/ppdb"
+            className="rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-secondary-foreground"
+          >
+            PPDB
+          </Link>
           <DropdownMenu label="Kurikulum" items={KURIKULUM} />
           <DropdownMenu label="Aplikasi" items={APPS} />
           <Link
@@ -241,6 +247,13 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
               ),
             )}
             </div>
+            <Link
+              to="/ppdb"
+              onClick={() => setOpen(false)}
+              className="mt-1 block rounded-2xl bg-secondary/50 px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
+            >
+              PPDB
+            </Link>
             <div className="mt-1 rounded-2xl bg-secondary/50 p-2">
               <p className="px-2 py-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                 Kurikulum

@@ -16,6 +16,7 @@ import { Route as EvaluasiKalenderRouteImport } from './routes/evaluasi-kalender
 import { Route as GaleriRouteImport } from './routes/galeri'
 import { Route as PembelajaranRouteImport } from './routes/pembelajaran'
 import { Route as PembelajaranPenilaianRouteImport } from './routes/pembelajaran-penilaian'
+import { Route as PpdbRouteImport } from './routes/ppdb'
 import { Route as ReelsRouteImport } from './routes/reels'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as VideoRouteImport } from './routes/video'
@@ -56,6 +57,11 @@ const PembelajaranRoute = PembelajaranRouteImport.update({
 const PembelajaranPenilaianRoute = PembelajaranPenilaianRouteImport.update({
   id: '/pembelajaran-penilaian',
   path: '/pembelajaran-penilaian',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PpdbRoute = PpdbRouteImport.update({
+  id: '/ppdb',
+  path: '/ppdb',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReelsRoute = ReelsRouteImport.update({
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/galeri': typeof GaleriRoute
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
+  '/ppdb': typeof PpdbRoute
   '/reels': typeof ReelsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/video': typeof VideoRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/galeri': typeof GaleriRoute
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
+  '/ppdb': typeof PpdbRoute
   '/reels': typeof ReelsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/video': typeof VideoRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/galeri': typeof GaleriRoute
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
+  '/ppdb': typeof PpdbRoute
   '/reels': typeof ReelsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/video': typeof VideoRoute
@@ -150,6 +159,7 @@ export interface FileRouteTypes {
     | '/galeri'
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
+    | '/ppdb'
     | '/reels'
     | '/sitemap.xml'
     | '/video'
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
     | '/galeri'
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
+    | '/ppdb'
     | '/reels'
     | '/sitemap.xml'
     | '/video'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/galeri'
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
+    | '/ppdb'
     | '/reels'
     | '/sitemap.xml'
     | '/video'
@@ -198,6 +210,7 @@ export interface RootRouteChildren {
   GaleriRoute: typeof GaleriRoute
   PembelajaranRoute: typeof PembelajaranRoute
   PembelajaranPenilaianRoute: typeof PembelajaranPenilaianRoute
+  PpdbRoute: typeof PpdbRoute
   ReelsRoute: typeof ReelsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VideoRoute: typeof VideoRoute
@@ -255,6 +268,13 @@ declare module '@tanstack/react-router' {
       path: '/pembelajaran-penilaian'
       fullPath: '/pembelajaran-penilaian'
       preLoaderRoute: typeof PembelajaranPenilaianRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ppdb': {
+      id: '/ppdb'
+      path: '/ppdb'
+      fullPath: '/ppdb'
+      preLoaderRoute: typeof PpdbRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reels': {
@@ -328,6 +348,7 @@ const rootRouteChildren: RootRouteChildren = {
   GaleriRoute: GaleriRoute,
   PembelajaranRoute: PembelajaranRoute,
   PembelajaranPenilaianRoute: PembelajaranPenilaianRoute,
+  PpdbRoute: PpdbRoute,
   ReelsRoute: ReelsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   VideoRoute: VideoRoute,
