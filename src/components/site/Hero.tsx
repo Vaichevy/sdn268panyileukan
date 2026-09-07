@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { ArrowRight, MapPin, Phone, Sparkles } from "lucide-react";
 import heroImage from "@/assets/hero-sekolah.jpg";
 import type { SiteSettings } from "@/lib/cms";
