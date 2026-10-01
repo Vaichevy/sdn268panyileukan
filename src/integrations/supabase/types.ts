@@ -22,6 +22,7 @@ export type Database = {
           id: string
           image_url: string
           images: string[]
+          is_public: boolean
           sort_order: number
           title: string
           updated_at: string
@@ -33,6 +34,7 @@ export type Database = {
           id?: string
           image_url: string
           images?: string[]
+          is_public?: boolean
           sort_order?: number
           title: string
           updated_at?: string
@@ -44,6 +46,7 @@ export type Database = {
           id?: string
           image_url?: string
           images?: string[]
+          is_public?: boolean
           sort_order?: number
           title?: string
           updated_at?: string
@@ -57,6 +60,7 @@ export type Database = {
           id: string
           image_url: string | null
           images: string[]
+          is_public: boolean
           published_at: string
           title: string
           updated_at: string
@@ -67,6 +71,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           images?: string[]
+          is_public?: boolean
           published_at?: string
           title: string
           updated_at?: string
@@ -77,6 +82,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           images?: string[]
+          is_public?: boolean
           published_at?: string
           title?: string
           updated_at?: string
@@ -90,6 +96,7 @@ export type Database = {
           event_date: string | null
           id: string
           instagram_url: string
+          is_public: boolean
           sort_order: number
           thumbnail_url: string
           title: string
@@ -102,6 +109,7 @@ export type Database = {
           event_date?: string | null
           id?: string
           instagram_url: string
+          is_public?: boolean
           sort_order?: number
           thumbnail_url?: string
           title: string
@@ -114,6 +122,7 @@ export type Database = {
           event_date?: string | null
           id?: string
           instagram_url?: string
+          is_public?: boolean
           sort_order?: number
           thumbnail_url?: string
           title?: string
@@ -146,6 +155,7 @@ export type Database = {
           headmaster_title: string
           hero_image_url: string | null
           id: string
+          is_public: boolean
           kka_fase: string
           kka_heading: string
           kka_intro: string
@@ -219,6 +229,7 @@ export type Database = {
           headmaster_title?: string
           hero_image_url?: string | null
           id?: string
+          is_public?: boolean
           kka_fase?: string
           kka_heading?: string
           kka_intro?: string
@@ -292,6 +303,7 @@ export type Database = {
           headmaster_title?: string
           hero_image_url?: string | null
           id?: string
+          is_public?: boolean
           kka_fase?: string
           kka_heading?: string
           kka_intro?: string
@@ -407,6 +419,7 @@ export type Database = {
           description: string
           event_date: string | null
           id: string
+          is_public: boolean
           sort_order: number
           thumbnail_url: string
           title: string
@@ -419,6 +432,7 @@ export type Database = {
           description?: string
           event_date?: string | null
           id?: string
+          is_public?: boolean
           sort_order?: number
           thumbnail_url?: string
           title: string
@@ -431,6 +445,7 @@ export type Database = {
           description?: string
           event_date?: string | null
           id?: string
+          is_public?: boolean
           sort_order?: number
           thumbnail_url?: string
           title?: string

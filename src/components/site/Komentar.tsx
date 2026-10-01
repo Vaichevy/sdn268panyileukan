@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Star } from "lucide-react";
 import { toast } from "sonner";
@@ -25,9 +25,12 @@ function Stars({ value }: { value: number }) {
 export function Komentar() {
   const qc = useQueryClient();
   const { data: items } = useTestimonials();
+  const tallyFrameRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
+      if (event.origin !== "https://tally.so") return;
+      if (event.source !== tallyFrameRef.current?.contentWindow) return;
       if (typeof event.data !== "string") return;
       if (!event.data.includes("Tally.FormSubmitted")) return;
       toast.success("Terima kasih! Komentar Anda akan tampil setelah diverifikasi admin.");
@@ -61,6 +64,7 @@ export function Komentar() {
           <Reveal>
             <div className="surface-card overflow-hidden p-2">
               <iframe
+                ref={tallyFrameRef}
                 title="Formulir komentar dan rating SDN 268 Panyileukan"
                 src={`https://tally.so/embed/${TALLY_FORM_ID}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`}
                 loading="lazy"

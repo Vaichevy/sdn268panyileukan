@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Public CMS content uses an `is_public` publication flag enforced by row-level access rules, so drafts remain admin-only.
