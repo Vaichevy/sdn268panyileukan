@@ -299,13 +299,6 @@
   .marquee-track { animation: none; }
 }
 
-/* Keep centered media dialogs stable despite the global 3D hover treatment. */
-.media-dialog,
-.media-dialog:hover,
-.media-dialog:active {
-  transform: translate(-50%, -50%) !important;
-}
-
 /* ============================================================
    Modern interactive 3D motion layer
    ============================================================ */
@@ -390,7 +383,7 @@ a:focus-visible,
 }
 
 /* Card-like surfaces get a subtle 3D tilt */
-[class*="rounded-2xl"][class*="border"],
+[class*="rounded-2xl"][class*="border"]:not(.media-dialog),
 [class*="rounded-3xl"][class*="border"],
 [class*="rounded-xl"][class*="border"][class*="shadow"] {
   transition:
@@ -400,7 +393,7 @@ a:focus-visible,
   transform-style: preserve-3d;
 }
 
-[class*="rounded-2xl"][class*="border"]:hover,
+[class*="rounded-2xl"][class*="border"]:not(.media-dialog):hover,
 [class*="rounded-3xl"][class*="border"]:hover,
 [class*="rounded-xl"][class*="border"][class*="shadow"]:hover {
   transform: translate3d(0, -5px, 0) rotateX(3.5deg) scale(1.012);
@@ -410,14 +403,14 @@ a:focus-visible,
   border-color: color-mix(in oklab, var(--primary) 40%, var(--border));
 }
 
-[class*="rounded-2xl"][class*="border"]:active,
+[class*="rounded-2xl"][class*="border"]:not(.media-dialog):active,
 [class*="rounded-3xl"][class*="border"]:active {
   transform: translate3d(0, -1px, 0) scale(0.99);
   transition-duration: 120ms;
 }
 
 @media (hover: none) {
-  [class*="rounded-2xl"][class*="border"]:hover,
+  [class*="rounded-2xl"][class*="border"]:not(.media-dialog):hover,
   [class*="rounded-3xl"][class*="border"]:hover,
   [class*="rounded-xl"][class*="border"][class*="shadow"]:hover {
     transform: none;
@@ -428,7 +421,7 @@ a:focus-visible,
   button,
   a[role="button"],
   [data-slot="button"],
-  [class*="rounded-2xl"][class*="border"],
+  [class*="rounded-2xl"][class*="border"]:not(.media-dialog),
   [class*="rounded-3xl"][class*="border"],
   .card-3d,
   .press-3d {
