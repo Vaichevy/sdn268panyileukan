@@ -1,6 +1,12 @@
 import { useRef, useState } from "react";
-import { ArrowRight, CalendarDays, Play, X } from "lucide-react";
+import { ArrowRight, CalendarDays, Play } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Reveal } from "./Reveal";
 import { formatDateID, sortVideos, youtubeId, youtubeThumb, type VideoItem } from "@/lib/cms";
 
@@ -165,46 +171,32 @@ export function GaleriVideo({ items, limit }: { items: VideoItem[]; limit?: numb
         ) : null}
       </div>
 
-      {selected ? (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-foreground/70 p-4 backdrop-blur-sm"
-          onClick={() => setActive(null)}
-        >
-          <div
-            className="max-h-[90vh] w-full max-w-3xl overflow-auto rounded-3xl bg-card p-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h3 className="font-display text-xl font-semibold text-foreground">
-                  {selected.title}
-                </h3>
-                {selected.event_date ? (
-                  <p className="text-sm text-muted-foreground">
-                    {formatDateID(selected.event_date)}
-                  </p>
-                ) : null}
-              </div>
-              <button
-                type="button"
-                aria-label="Tutup"
-                onClick={() => setActive(null)}
-                className="rounded-full border border-border p-2 text-foreground"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            <div className="mt-4">
+      <Dialog open={Boolean(selected)} onOpenChange={(open) => !open && setActive(null)}>
+        {selected ? (
+          <DialogContent className="media-dialog max-h-[94dvh] w-[calc(100%-1.5rem)] max-w-4xl gap-0 overflow-y-auto rounded-2xl border-border/70 bg-card p-0 shadow-2xl sm:w-[calc(100%-2rem)]">
+            <div className="bg-foreground p-2 sm:p-3">
               <VideoPlayer item={selected} />
             </div>
-            {selected.description ? (
-              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                {selected.description}
-              </p>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
+            <div className="p-4 pr-16 sm:p-6 sm:pr-16">
+              <p className="text-xs font-semibold uppercase text-primary">Galeri Video</p>
+              <DialogTitle className="mt-2 font-display text-xl leading-snug text-foreground sm:text-2xl">
+                {selected.title}
+              </DialogTitle>
+              <DialogDescription asChild>
+                <div className="mt-2 space-y-3 text-sm leading-relaxed text-muted-foreground">
+                  {selected.event_date ? (
+                    <p className="flex items-center gap-1.5">
+                      <CalendarDays className="h-4 w-4 text-primary" />
+                      {formatDateID(selected.event_date)}
+                    </p>
+                  ) : null}
+                  {selected.description ? <p>{selected.description}</p> : null}
+                </div>
+              </DialogDescription>
+            </div>
+          </DialogContent>
+        ) : null}
+      </Dialog>
     </section>
   );
 }
