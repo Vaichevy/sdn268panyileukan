@@ -1,6 +1,12 @@
 import { useRef, useState } from "react";
-import { ArrowRight, CalendarDays, Play, X } from "lucide-react";
+import { ArrowRight, CalendarDays, Play } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Reveal } from "./Reveal";
 import { InstagramIcon } from "./InstagramIcon";
 import { formatDateID, instagramCode, sortReels, type ReelItem } from "@/lib/cms";
@@ -153,52 +159,47 @@ export function ReelsInstagram({ items, limit }: { items: ReelItem[]; limit?: nu
         ) : null}
       </div>
 
-      {selected?.video_url ? (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-foreground/70 p-4 backdrop-blur-sm"
-          onClick={() => setActive(null)}
-        >
-          <div
-            className="max-h-[92vh] w-full max-w-sm overflow-auto rounded-3xl bg-card p-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h3 className="font-display text-lg font-semibold text-foreground">
-                  {selected.title}
-                </h3>
-                {selected.event_date ? (
-                  <p className="text-sm text-muted-foreground">
-                    {formatDateID(selected.event_date)}
-                  </p>
-                ) : null}
+      <Dialog open={Boolean(selected?.video_url)} onOpenChange={(open) => !open && setActive(null)}>
+        {selected?.video_url ? (
+          <DialogContent className="media-dialog max-h-[94dvh] w-[calc(100%-1.5rem)] max-w-3xl gap-0 overflow-hidden rounded-2xl border-border/70 bg-card p-0 shadow-2xl sm:w-[calc(100%-2rem)]">
+            <div className="grid max-h-[94dvh] min-h-0 md:grid-cols-[minmax(0,1fr)_18rem]">
+              <div className="flex min-h-0 items-center justify-center bg-foreground p-2 sm:p-3">
+                <video
+                  src={selected.video_url}
+                  poster={selected.thumbnail_url || undefined}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="max-h-[72dvh] w-auto max-w-full object-contain md:max-h-[90dvh]"
+                  style={{ aspectRatio: "9 / 16" }}
+                />
               </div>
-              <button
-                type="button"
-                aria-label="Tutup"
-                onClick={() => setActive(null)}
-                className="rounded-full border border-border p-2 text-foreground"
-              >
-                <X className="h-4 w-4" />
-              </button>
+              <div className="max-h-[22dvh] overflow-y-auto p-4 pr-16 md:max-h-[94dvh] md:p-6 md:pr-16">
+                <div className="flex items-center gap-2 text-sm font-semibold text-primary">
+                  <InstagramIcon className="h-5 w-5" /> Reels &amp; Stories
+                </div>
+                <DialogTitle className="mt-3 font-display text-xl leading-snug text-foreground">
+                  {selected.title}
+                </DialogTitle>
+                <DialogDescription asChild>
+                  <div className="mt-2 space-y-3 text-sm leading-relaxed text-muted-foreground">
+                    {selected.event_date ? <p>{formatDateID(selected.event_date)}</p> : null}
+                    {selected.caption ? <p>{selected.caption}</p> : null}
+                    <a
+                      href={selected.instagram_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"
+                    >
+                      <InstagramIcon className="h-4 w-4" /> Lihat di Instagram
+                    </a>
+                  </div>
+                </DialogDescription>
+              </div>
             </div>
-            <video
-              src={selected.video_url}
-              poster={selected.thumbnail_url || undefined}
-              controls
-              autoPlay
-              playsInline
-              className="mt-4 w-full rounded-2xl bg-black"
-              style={{ aspectRatio: "9 / 16" }}
-            />
-            {selected.caption ? (
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {selected.caption}
-              </p>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
+          </DialogContent>
+        ) : null}
+      </Dialog>
     </section>
 
   );

@@ -299,6 +299,13 @@
   .marquee-track { animation: none; }
 }
 
+/* Keep centered media dialogs stable despite the global 3D hover treatment. */
+.media-dialog,
+.media-dialog:hover,
+.media-dialog:active {
+  transform: translate(-50%, -50%) !important;
+}
+
 /* ============================================================
    Modern interactive 3D motion layer
    ============================================================ */
