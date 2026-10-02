@@ -1,6 +1,31 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
+import { refreshMediaUrls } from "./media.functions";
+
+const MARK = "/object/sign/site-media/";
+const keyOf = (u: string) => decodeURIComponent(u.split(MARK)[1].split("?")[0]);
+
+/** Replaces stored (possibly expired) signed media links with fresh ones. */
+async function freshen<T extends object>(rows: T[]): Promise<T[]> {
+  const urls: string[] = [];
+  for (const r of rows)
+    for (const v of Object.values(r)) {
+      if (typeof v === "string" && v.includes(MARK)) urls.push(v);
+      if (Array.isArray(v)) for (const x of v) if (typeof x === "string" && x.includes(MARK)) urls.push(x);
+    }
+  if (urls.length === 0) return rows;
+  let map: Record<string, string> = {};
+  try {
+    map = await refreshMediaUrls({ data: { urls } });
+  } catch {
+    return rows;
+  }
+  const fix = (v: unknown): unknown =>
+    typeof v === "string" && v.includes(MARK) ? (map[keyOf(v)] ?? v)
+    : Array.isArray(v) ? v.map(fix) : v;
+  return rows.map((r) => Object.fromEntries(Object.entries(r).map(([k, v]) => [k, fix(v)])) as T);
+}
 
 export type SiteSettings = Tables<"site_settings">;
 export type GalleryItem = Tables<"gallery_items">;
@@ -27,7 +52,7 @@ export function useReels() {
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as ReelItem[];
+      return freshen((data ?? []) as ReelItem[]);
     },
   });
 }
@@ -70,7 +95,7 @@ export function useVideos() {
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as VideoItem[];
+      return freshen((data ?? []) as VideoItem[]);
     },
   });
 }
@@ -120,7 +145,7 @@ export function useGallery() {
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as GalleryItem[];
+      return freshen((data ?? []) as GalleryItem[]);
     },
   });
 }
@@ -134,7 +159,7 @@ export function useNews() {
         .select("*")
         .order("published_at", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as NewsItem[];
+      return freshen((data ?? []) as NewsItem[]);
     },
   });
 }
