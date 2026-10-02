@@ -347,7 +347,8 @@
 }
 
 /* Global interactive polish -------------------------------- */
-body { perspective: 1200px; }
+/* Keep perspective off the page root: a transformed/perspective ancestor
+   makes fixed dialog portals move with the document while scrolling. */
 
 button,
 a[role="button"],
