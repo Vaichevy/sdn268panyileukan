@@ -192,6 +192,7 @@ export type Database = {
           penilaian_syarat: string
           penilaian_syarat_heading: string
           phone: string
+          profile_image_url: string | null
           running_text: string | null
           running_text_enabled: boolean
           running_text_speed: number
@@ -270,6 +271,7 @@ export type Database = {
           penilaian_syarat?: string
           penilaian_syarat_heading?: string
           phone?: string
+          profile_image_url?: string | null
           running_text?: string | null
           running_text_enabled?: boolean
           running_text_speed?: number
@@ -348,6 +350,7 @@ export type Database = {
           penilaian_syarat?: string
           penilaian_syarat_heading?: string
           phone?: string
+          profile_image_url?: string | null
           running_text?: string | null
           running_text_enabled?: boolean
           running_text_speed?: number
