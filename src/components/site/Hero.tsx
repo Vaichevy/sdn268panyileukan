@@ -88,7 +88,7 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
         <div className="animate-rise relative" style={{ animationDelay: "150ms" }}>
           <div className="gradient-hero absolute -inset-4 rounded-[2.5rem] opacity-20 blur-2xl" />
           <img
-            src={settings?.hero_image_url || heroImage}
+            src={heroImage}
             alt={`Gedung ${settings?.school_name || "SDN 268 Panyileukan"}`}
             width={1600}
             height={1008}
