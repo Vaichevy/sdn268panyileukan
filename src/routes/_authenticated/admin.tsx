@@ -1,6 +1,7 @@
 import bannerAsset from "@/assets/banner-sekolah.jpeg.asset.json";
 const bannerFallback = bannerAsset.url;
 type BannerCfg = { banner_height: number; banner_zoom: number; banner_pos_x: number; banner_pos_y: number };
+import { ImageEffectEditor, ImageEffectOverlay, type ImageEffect } from "@/components/site/ImageEffect";
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
@@ -436,7 +437,12 @@ function AdminPage() {
                           transformOrigin: `${(form as BannerCfg).banner_pos_x ?? 50}% ${(form as BannerCfg).banner_pos_y ?? 50}%`,
                         }}
                       />
+                      <ImageEffectOverlay effect={(form as { banner_effect?: ImageEffect }).banner_effect} />
                     </div>
+                    <ImageEffectEditor
+                      value={(form as { banner_effect?: ImageEffect }).banner_effect}
+                      onChange={(v) => setForm((prev) => (prev ? ({ ...prev, banner_effect: v } as typeof prev) : prev))}
+                    />
                     {([
                       ["banner_height", "Tinggi banner (px)", 200, 800],
                       ["banner_zoom", "Perbesaran (%)", 100, 250],
@@ -477,12 +483,19 @@ function AdminPage() {
                         folder="profil-sekolah"
                         onDone={(url) => set("profile_image_url", url)}
                       />
-                      <img
-                        src={form.profile_image_url || undefined}
-                        alt="Pratinjau foto profil sekolah"
-                        className={`h-24 w-36 rounded-xl border border-border object-cover ${form.profile_image_url ? "" : "hidden"}`}
-                      />
+                      <div className={`relative h-24 w-36 overflow-hidden rounded-xl border border-border ${form.profile_image_url ? "" : "hidden"}`}>
+                        <img
+                          src={form.profile_image_url || undefined}
+                          alt="Pratinjau foto profil sekolah"
+                          className="h-full w-full object-cover"
+                        />
+                        <ImageEffectOverlay effect={(form as { profile_effect?: ImageEffect }).profile_effect} />
+                      </div>
                     </div>
+                    <ImageEffectEditor
+                      value={(form as { profile_effect?: ImageEffect }).profile_effect}
+                      onChange={(v) => setForm((prev) => (prev ? ({ ...prev, profile_effect: v } as typeof prev) : prev))}
+                    />
                   </div>
                   <Field
                     label="Tentang Sekolah"

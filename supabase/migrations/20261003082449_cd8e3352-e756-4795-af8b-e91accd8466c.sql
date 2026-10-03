@@ -1,0 +1,1 @@
+ALTER TABLE public.site_settings ADD COLUMN IF NOT EXISTS banner_effect jsonb NOT NULL DEFAULT '{}'::jsonb, ADD COLUMN IF NOT EXISTS profile_effect jsonb NOT NULL DEFAULT '{}'::jsonb;
