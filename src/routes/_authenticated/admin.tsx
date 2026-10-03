@@ -1,3 +1,6 @@
+import bannerAsset from "@/assets/banner-sekolah.jpeg.asset.json";
+const bannerFallback = bannerAsset.url;
+type BannerCfg = { banner_height: number; banner_zoom: number; banner_pos_x: number; banner_pos_y: number };
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
