@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, MapPin, Phone, Sparkles } from "lucide-react";
 import heroImage from "@/assets/hero-sekolah.jpg";
 import bannerAsset from "@/assets/banner-sekolah.jpeg.asset.json";
+import { RunningText } from "@/components/site/RunningText";
 import type { SiteSettings } from "@/lib/cms";
 
 export function Hero({ settings }: { settings: SiteSettings | null }) {
@@ -16,8 +17,22 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
   const h = b.banner_height ?? 420;
   const pos = `${b.banner_pos_x ?? 50}% ${b.banner_pos_y ?? 50}%`;
 
+  const ticker = (settings?.running_text ?? "").trim();
+  const tickerOn = settings?.running_text_enabled !== false && ticker.length > 0;
+
   return (
     <section id="beranda" className="relative pt-28 pb-16 sm:pt-32 sm:pb-24">
+      {tickerOn ? (
+        <div className="section-shell mb-4">
+          <div className="overflow-hidden rounded-2xl border border-border/60">
+            <RunningText
+              text={settings?.running_text}
+              enabled={settings?.running_text_enabled}
+              speed={settings?.running_text_speed}
+            />
+          </div>
+        </div>
+      ) : null}
       <div className="section-shell mb-12">
         <div
           className="relative w-full overflow-hidden rounded-[2rem] border border-border shadow-[var(--shadow-lift)]"
