@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, MapPin, Phone, Sparkles } from "lucide-react";
+import { ArrowRight, Award, BadgeCheck, MapPin, Phone, Sparkles } from "lucide-react";
 import heroImage from "@/assets/hero-sekolah.jpg";
 import bannerAsset from "@/assets/banner-sekolah.jpeg.asset.json";
 import { RunningText } from "@/components/site/RunningText";
@@ -13,6 +13,8 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
     { label: "Ruang Kelas", value: settings?.stat_classrooms },
     { label: "Akreditasi", value: settings?.stat_accreditation },
   ].filter((s) => s.value);
+
+  const accreditation = (settings?.stat_accreditation ?? "").trim();
 
   const b = (settings ?? {}) as Partial<{ banner_height: number; banner_zoom: number; banner_pos_x: number; banner_pos_y: number }>;
   const h = b.banner_height ?? 420;
@@ -52,10 +54,18 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
       </div>
       <div className="section-shell grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="animate-rise">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-1.5 text-xs font-semibold tracking-wide text-primary uppercase backdrop-blur">
-            <Sparkles className="h-3.5 w-3.5" />
-            NPSN {settings?.npsn || "20245726"} · Kota Bandung
-          </span>
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-1.5 text-xs font-semibold tracking-wide text-primary uppercase backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5" />
+              NPSN {settings?.npsn || "20245726"} · Kota Bandung
+            </span>
+            {accreditation ? (
+              <span className="gradient-hero inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold tracking-wide text-primary-foreground uppercase shadow-[var(--shadow-soft)]">
+                <BadgeCheck className="h-3.5 w-3.5" />
+                Terakreditasi {accreditation}
+              </span>
+            ) : null}
+          </div>
 
           <h1 className="mt-6 font-display text-4xl leading-[1.05] font-semibold text-foreground sm:text-6xl">
             {settings?.school_name || "SDN 268 Panyileukan"}
@@ -116,6 +126,12 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
               className="aspect-[4/3] w-full object-cover"
             />
             <ImageEffectOverlay effect={(settings as { profile_effect?: ImageEffect } | null)?.profile_effect} />
+            {accreditation ? (
+              <div className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/90 px-3.5 py-2 text-xs font-bold tracking-wide text-primary uppercase shadow-[var(--shadow-soft)] backdrop-blur">
+                <Award className="h-4 w-4" />
+                Akreditasi {accreditation}
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

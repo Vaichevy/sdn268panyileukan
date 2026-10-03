@@ -25,17 +25,17 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SDN 268 Panyileukan Kota Bandung" },
+      { title: "SDN 268 Panyileukan Kota Bandung — Terakreditasi A" },
       {
         name: "description",
         content:
-          "Website resmi SDN 268 Panyileukan, Cipadung Kidul, Panyileukan, Kota Bandung. Profil sekolah, sambutan kepala sekolah, galeri kegiatan, dan informasi kontak.",
+          "Website resmi SDN 268 Panyileukan Kota Bandung, Cipadung Kidul, terakreditasi A. Profil sekolah, sambutan kepala sekolah, galeri kegiatan, dan kontak.",
       },
-      { property: "og:title", content: "SDN 268 Panyileukan — Website Resmi Sekolah" },
+      { property: "og:title", content: "SDN 268 Panyileukan Kota Bandung — Terakreditasi A" },
       {
         property: "og:description",
         content:
-          "Profil sekolah, sambutan kepala sekolah Maria Rosa, S.Pd., M.M., galeri momen kegiatan, dan lokasi SDN 268 Panyileukan Kota Bandung.",
+          "Sekolah dasar negeri terakreditasi A di Komplek Bumi Panyileukan, Kota Bandung. Profil, sambutan kepala sekolah Maria Rosa, S.Pd., M.M., galeri momen kegiatan, dan lokasi.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -53,6 +53,7 @@ export const Route = createFileRoute("/")({
           telephone: "(022) 87882549",
           email: "sdn268panyileukan@gmail.com",
           identifier: "NPSN 20245726",
+          award: "Akreditasi A",
           address: {
             "@type": "PostalAddress",
             streetAddress: "Komplek Bumi Panyileukan G.15 No. 23, RT 01 / RW 07, Kelurahan Cipadung Kidul",
