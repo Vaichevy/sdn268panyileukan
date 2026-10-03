@@ -1,0 +1,1 @@
+ALTER TABLE public.site_settings ADD COLUMN IF NOT EXISTS banner_height integer NOT NULL DEFAULT 420, ADD COLUMN IF NOT EXISTS banner_zoom integer NOT NULL DEFAULT 100, ADD COLUMN IF NOT EXISTS banner_pos_x integer NOT NULL DEFAULT 50, ADD COLUMN IF NOT EXISTS banner_pos_y integer NOT NULL DEFAULT 50;
