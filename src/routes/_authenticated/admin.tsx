@@ -464,6 +464,26 @@ function AdminPage() {
 
                 <section className="surface-card space-y-4 p-6">
                   <h2 className="font-display text-xl font-semibold">Profil Sekolah</h2>
+                  <div className="space-y-3 rounded-xl border border-border/60 bg-muted/30 p-4">
+                    <div>
+                      <Label>Foto Profil Sekolah</Label>
+                      <p className="text-xs text-muted-foreground">
+                        Foto ini tampil di samping identitas sekolah pada Beranda.
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-4">
+                      <UploadButton
+                        label="Ganti Foto Profil"
+                        folder="profil-sekolah"
+                        onDone={(url) => set("profile_image_url", url)}
+                      />
+                      <img
+                        src={form.profile_image_url || undefined}
+                        alt="Pratinjau foto profil sekolah"
+                        className={`h-24 w-36 rounded-xl border border-border object-cover ${form.profile_image_url ? "" : "hidden"}`}
+                      />
+                    </div>
+                  </div>
                   <Field
                     label="Tentang Sekolah"
                     textarea
