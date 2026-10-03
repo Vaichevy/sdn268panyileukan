@@ -136,6 +136,10 @@ export type Database = {
           about_text: string
           address: string
           apps_items: string
+          banner_height: number
+          banner_pos_x: number
+          banner_pos_y: number
+          banner_zoom: number
           created_at: string
           ekskul_heading: string
           ekskul_items: string
@@ -210,6 +214,10 @@ export type Database = {
           about_text?: string
           address?: string
           apps_items?: string
+          banner_height?: number
+          banner_pos_x?: number
+          banner_pos_y?: number
+          banner_zoom?: number
           created_at?: string
           ekskul_heading?: string
           ekskul_items?: string
@@ -284,6 +292,10 @@ export type Database = {
           about_text?: string
           address?: string
           apps_items?: string
+          banner_height?: number
+          banner_pos_x?: number
+          banner_pos_y?: number
+          banner_zoom?: number
           created_at?: string
           ekskul_heading?: string
           ekskul_items?: string

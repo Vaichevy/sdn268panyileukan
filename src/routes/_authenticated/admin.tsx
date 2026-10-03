@@ -1,3 +1,6 @@
+import bannerAsset from "@/assets/banner-sekolah.jpeg.asset.json";
+const bannerFallback = bannerAsset.url;
+type BannerCfg = { banner_height: number; banner_zoom: number; banner_pos_x: number; banner_pos_y: number };
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
@@ -419,6 +422,43 @@ function AdminPage() {
                         className="h-16 w-24 rounded-xl object-cover"
                       />
                     ) : null}
+                  </div>
+                  <div className="space-y-3 rounded-2xl border border-border p-4">
+                    <p className="text-sm font-semibold">Pengaturan Banner (ukuran & crop)</p>
+                    <div className="relative w-full overflow-hidden rounded-xl border border-border" style={{ height: Math.round(((form as BannerCfg).banner_height ?? 420) / 2) }}>
+                      <img
+                        src={form.hero_image_url || bannerFallback}
+                        alt="Pratinjau banner"
+                        className="h-full w-full object-cover"
+                        style={{
+                          objectPosition: `${(form as BannerCfg).banner_pos_x ?? 50}% ${(form as BannerCfg).banner_pos_y ?? 50}%`,
+                          transform: `scale(${((form as BannerCfg).banner_zoom ?? 100) / 100})`,
+                          transformOrigin: `${(form as BannerCfg).banner_pos_x ?? 50}% ${(form as BannerCfg).banner_pos_y ?? 50}%`,
+                        }}
+                      />
+                    </div>
+                    {([
+                      ["banner_height", "Tinggi banner (px)", 200, 800],
+                      ["banner_zoom", "Perbesaran (%)", 100, 250],
+                      ["banner_pos_x", "Posisi horizontal (%)", 0, 100],
+                      ["banner_pos_y", "Posisi vertikal (%)", 0, 100],
+                    ] as const).map(([key, label, min, max]) => (
+                      <label key={key} className="block text-sm">
+                        <span className="flex justify-between text-muted-foreground">
+                          {label} <b className="text-foreground">{(form as BannerCfg)[key]}</b>
+                        </span>
+                        <input
+                          type="range"
+                          min={min}
+                          max={max}
+                          value={(form as BannerCfg)[key] ?? 0}
+                          onChange={(e) =>
+                            setForm((prev) => (prev ? { ...prev, [key]: Number(e.target.value) } : prev))
+                          }
+                          className="w-full accent-[var(--primary)]"
+                        />
+                      </label>
+                    ))}
                   </div>
                 </section>
 

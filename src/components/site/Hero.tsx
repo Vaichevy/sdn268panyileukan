@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, MapPin, Phone, Sparkles } from "lucide-react";
 import heroImage from "@/assets/hero-sekolah.jpg";
+import bannerAsset from "@/assets/banner-sekolah.jpeg.asset.json";
 import type { SiteSettings } from "@/lib/cms";
 
 export function Hero({ settings }: { settings: SiteSettings | null }) {
@@ -11,8 +12,27 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
     { label: "Akreditasi", value: settings?.stat_accreditation },
   ].filter((s) => s.value);
 
+  const b = (settings ?? {}) as Partial<{ banner_height: number; banner_zoom: number; banner_pos_x: number; banner_pos_y: number }>;
+  const h = b.banner_height ?? 420;
+  const pos = `${b.banner_pos_x ?? 50}% ${b.banner_pos_y ?? 50}%`;
+
   return (
-    <section id="beranda" className="relative pt-32 pb-16 sm:pt-40 sm:pb-24">
+    <section id="beranda" className="relative pt-28 pb-16 sm:pt-32 sm:pb-24">
+      <div className="section-shell mb-12">
+        <div
+          className="relative w-full overflow-hidden rounded-[2rem] border border-border shadow-[var(--shadow-lift)]"
+          style={{ height: `clamp(160px, 45vw, ${h}px)` }}
+        >
+          <img
+            src={settings?.hero_image_url || bannerAsset.url}
+            alt={`Banner ${settings?.school_name || "SDN 268 Panyileukan"}`}
+            loading="eager"
+            fetchPriority="high"
+            className="h-full w-full object-cover"
+            style={{ objectPosition: pos, transform: `scale(${(b.banner_zoom ?? 100) / 100})`, transformOrigin: pos }}
+          />
+        </div>
+      </div>
       <div className="section-shell grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="animate-rise">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-1.5 text-xs font-semibold tracking-wide text-primary uppercase backdrop-blur">
@@ -68,7 +88,7 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
         <div className="animate-rise relative" style={{ animationDelay: "150ms" }}>
           <div className="gradient-hero absolute -inset-4 rounded-[2.5rem] opacity-20 blur-2xl" />
           <img
-            src={settings?.hero_image_url || heroImage}
+            src={heroImage}
             alt={`Gedung ${settings?.school_name || "SDN 268 Panyileukan"}`}
             width={1600}
             height={1008}
