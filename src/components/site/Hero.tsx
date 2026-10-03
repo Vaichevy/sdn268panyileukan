@@ -4,6 +4,7 @@ import heroImage from "@/assets/hero-sekolah.jpg";
 import bannerAsset from "@/assets/banner-sekolah.jpeg.asset.json";
 import { RunningText } from "@/components/site/RunningText";
 import type { SiteSettings } from "@/lib/cms";
+import { ImageEffectOverlay, type ImageEffect } from "@/components/site/ImageEffect";
 
 export function Hero({ settings }: { settings: SiteSettings | null }) {
   const stats = [
@@ -46,6 +47,7 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
             className="h-full w-full object-cover"
             style={{ objectPosition: pos, transform: `scale(${(b.banner_zoom ?? 100) / 100})`, transformOrigin: pos }}
           />
+          <ImageEffectOverlay effect={(settings as { banner_effect?: ImageEffect } | null)?.banner_effect} />
         </div>
       </div>
       <div className="section-shell grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -102,16 +104,19 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
 
         <div className="animate-rise relative" style={{ animationDelay: "150ms" }}>
           <div className="gradient-hero absolute -inset-4 rounded-[2.5rem] opacity-20 blur-2xl" />
-          <img
-            src={settings?.profile_image_url || heroImage}
-            alt={`Foto profil ${settings?.school_name || "SDN 268 Panyileukan"}`}
-            width={1600}
-            height={1008}
-            loading="eager"
-            decoding="async"
-            fetchPriority="high"
-            className="relative aspect-[4/3] w-full rounded-[2rem] border border-border object-cover shadow-[var(--shadow-lift)]"
-          />
+          <div className="relative overflow-hidden rounded-[2rem] border border-border shadow-[var(--shadow-lift)]">
+            <img
+              src={settings?.profile_image_url || heroImage}
+              alt={`Foto profil ${settings?.school_name || "SDN 268 Panyileukan"}`}
+              width={1600}
+              height={1008}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              className="aspect-[4/3] w-full object-cover"
+            />
+            <ImageEffectOverlay effect={(settings as { profile_effect?: ImageEffect } | null)?.profile_effect} />
+          </div>
         </div>
       </div>
 
