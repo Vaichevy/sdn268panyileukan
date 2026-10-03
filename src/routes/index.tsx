@@ -3,7 +3,6 @@ import { AnimatedBackground } from "@/components/site/AnimatedBackground";
 import { CursorParticles } from "@/components/site/CursorParticles";
 import { SiteNav } from "@/components/site/SiteNav";
 import { Hero } from "@/components/site/Hero";
-import { RunningText } from "@/components/site/RunningText";
 import { Profil } from "@/components/site/Profil";
 import { Sekilas } from "@/components/site/Sekilas";
 import { Sambutan } from "@/components/site/Sambutan";
@@ -82,11 +81,6 @@ function Beranda() {
       <AnimatedBackground />
       <CursorParticles />
       <SiteNav schoolName={value?.school_name ?? FALLBACK_SETTINGS.school_name} />
-      <RunningText
-        text={(value as { running_text?: string | null })?.running_text}
-        enabled={(value as { running_text_enabled?: boolean | null })?.running_text_enabled}
-        speed={(value as { running_text_speed?: number | null })?.running_text_speed}
-      />
       <main>
         <Hero settings={value} />
         <ReelsInstagram items={reels ?? []} limit={4} />
