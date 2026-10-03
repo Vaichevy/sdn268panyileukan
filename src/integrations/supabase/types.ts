@@ -136,6 +136,7 @@ export type Database = {
           about_text: string
           address: string
           apps_items: string
+          banner_effect: Json
           banner_height: number
           banner_pos_x: number
           banner_pos_y: number
@@ -192,6 +193,7 @@ export type Database = {
           penilaian_syarat: string
           penilaian_syarat_heading: string
           phone: string
+          profile_effect: Json
           profile_image_url: string | null
           running_text: string | null
           running_text_enabled: boolean
@@ -215,6 +217,7 @@ export type Database = {
           about_text?: string
           address?: string
           apps_items?: string
+          banner_effect?: Json
           banner_height?: number
           banner_pos_x?: number
           banner_pos_y?: number
@@ -271,6 +274,7 @@ export type Database = {
           penilaian_syarat?: string
           penilaian_syarat_heading?: string
           phone?: string
+          profile_effect?: Json
           profile_image_url?: string | null
           running_text?: string | null
           running_text_enabled?: boolean
@@ -294,6 +298,7 @@ export type Database = {
           about_text?: string
           address?: string
           apps_items?: string
+          banner_effect?: Json
           banner_height?: number
           banner_pos_x?: number
           banner_pos_y?: number
@@ -350,6 +355,7 @@ export type Database = {
           penilaian_syarat?: string
           penilaian_syarat_heading?: string
           phone?: string
+          profile_effect?: Json
           profile_image_url?: string | null
           running_text?: string | null
           running_text_enabled?: boolean
