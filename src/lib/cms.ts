@@ -270,3 +270,8 @@ export function parseApps(value?: string | null): AppLink[] {
     })
     .filter((item) => item.href !== "#");
 }
+
+/** True when a media URL points to an MP4/WebM video. */
+export function isVideoUrl(url?: string | null): boolean {
+  return !!url && /\.(mp4|webm)(\?|#|$)/i.test(url);
+}

@@ -1,6 +1,7 @@
 import bannerAsset from "@/assets/banner-sekolah.jpeg.asset.json";
 const bannerFallback = bannerAsset.url;
 type BannerCfg = { banner_height: number; banner_zoom: number; banner_pos_x: number; banner_pos_y: number };
+import { isVideoUrl } from "@/lib/cms";
 import { ImageEffectEditor, ImageEffectOverlay, type ImageEffect } from "@/components/site/ImageEffect";
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
@@ -67,10 +68,12 @@ function UploadButton({
   label,
   folder,
   onDone,
+  accept = "image/*",
 }: {
   label: string;
   folder: string;
   onDone: (url: string) => void;
+  accept?: string;
 }) {
   const [busy, setBusy] = useState(false);
   return (
@@ -79,7 +82,7 @@ function UploadButton({
       {label}
       <input
         type="file"
-        accept="image/*"
+        accept={accept}
         className="hidden"
         disabled={busy}
         onChange={async (e) => {
@@ -412,11 +415,14 @@ function AdminPage() {
                   </div>
                   <div className="flex flex-wrap items-center gap-3">
                     <UploadButton
-                      label="Ganti Foto Hero"
+                      label="Ganti Banner (Foto/GIF/MP4/WebM)"
                       folder="hero"
+                      accept="image/*,video/mp4,video/webm"
                       onDone={(url) => set("hero_image_url", url)}
                     />
-                    {form.hero_image_url ? (
+                    {form.hero_image_url && isVideoUrl(form.hero_image_url) ? (
+                      <video src={form.hero_image_url} muted autoPlay loop playsInline className="h-16 w-24 rounded-xl object-cover" />
+                    ) : form.hero_image_url ? (
                       <img
                         src={form.hero_image_url}
                         alt="Pratinjau hero"
@@ -427,16 +433,16 @@ function AdminPage() {
                   <div className="space-y-3 rounded-2xl border border-border p-4">
                     <p className="text-sm font-semibold">Pengaturan Banner (ukuran & crop)</p>
                     <div className="relative w-full overflow-hidden rounded-xl border border-border" style={{ height: Math.round(((form as BannerCfg).banner_height ?? 420) / 2) }}>
-                      <img
+                      {(() => { const V = isVideoUrl(form.hero_image_url) ? "video" : "img"; return <V
+                        {...(V === "video" ? { muted: true, autoPlay: true, loop: true, playsInline: true } : { alt: "Pratinjau banner" })}
                         src={form.hero_image_url || bannerFallback}
-                        alt="Pratinjau banner"
                         className="h-full w-full object-cover"
                         style={{
                           objectPosition: `${(form as BannerCfg).banner_pos_x ?? 50}% ${(form as BannerCfg).banner_pos_y ?? 50}%`,
                           transform: `scale(${((form as BannerCfg).banner_zoom ?? 100) / 100})`,
                           transformOrigin: `${(form as BannerCfg).banner_pos_x ?? 50}% ${(form as BannerCfg).banner_pos_y ?? 50}%`,
                         }}
-                      />
+                      />; })()}
                       <ImageEffectOverlay effect={(form as { banner_effect?: ImageEffect }).banner_effect} />
                     </div>
                     <ImageEffectEditor
