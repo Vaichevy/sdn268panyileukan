@@ -21,6 +21,8 @@ import { Route as ReelsRouteImport } from './routes/reels'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as VideoRouteImport } from './routes/video'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as ArtikelIndexRouteImport } from './routes/artikel.index'
+import { Route as ArtikelIdRouteImport } from './routes/artikel.$id'
 import { Route as BeritaIndexRouteImport } from './routes/berita.index'
 import { Route as BeritaIdRouteImport } from './routes/berita.$id'
 import { Route as ApiPublicWebhooksTallyRouteImport } from './routes/api/public/webhooks/tally'
@@ -84,6 +86,16 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ArtikelIndexRoute = ArtikelIndexRouteImport.update({
+  id: '/artikel/',
+  path: '/artikel/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArtikelIdRoute = ArtikelIdRouteImport.update({
+  id: '/artikel/$id',
+  path: '/artikel/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BeritaIndexRoute = BeritaIndexRouteImport.update({
   id: '/berita/',
   path: '/berita/',
@@ -112,7 +124,9 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/video': typeof VideoRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/artikel/$id': typeof ArtikelIdRoute
   '/berita/$id': typeof BeritaIdRoute
+  '/artikel/': typeof ArtikelIndexRoute
   '/berita/': typeof BeritaIndexRoute
   '/api/public/webhooks/tally': typeof ApiPublicWebhooksTallyRoute
 }
@@ -128,7 +142,9 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/video': typeof VideoRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/artikel/$id': typeof ArtikelIdRoute
   '/berita/$id': typeof BeritaIdRoute
+  '/artikel': typeof ArtikelIndexRoute
   '/berita': typeof BeritaIndexRoute
   '/api/public/webhooks/tally': typeof ApiPublicWebhooksTallyRoute
 }
@@ -146,7 +162,9 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/video': typeof VideoRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/artikel/$id': typeof ArtikelIdRoute
   '/berita/$id': typeof BeritaIdRoute
+  '/artikel/': typeof ArtikelIndexRoute
   '/berita/': typeof BeritaIndexRoute
   '/api/public/webhooks/tally': typeof ApiPublicWebhooksTallyRoute
 }
@@ -164,7 +182,9 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/video'
     | '/admin'
+    | '/artikel/$id'
     | '/berita/$id'
+    | '/artikel/'
     | '/berita/'
     | '/api/public/webhooks/tally'
   fileRoutesByTo: FileRoutesByTo
@@ -180,7 +200,9 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/video'
     | '/admin'
+    | '/artikel/$id'
     | '/berita/$id'
+    | '/artikel'
     | '/berita'
     | '/api/public/webhooks/tally'
   id:
@@ -197,7 +219,9 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/video'
     | '/_authenticated/admin'
+    | '/artikel/$id'
     | '/berita/$id'
+    | '/artikel/'
     | '/berita/'
     | '/api/public/webhooks/tally'
   fileRoutesById: FileRoutesById
@@ -214,7 +238,9 @@ export interface RootRouteChildren {
   ReelsRoute: typeof ReelsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VideoRoute: typeof VideoRoute
+  ArtikelIdRoute: typeof ArtikelIdRoute
   BeritaIdRoute: typeof BeritaIdRoute
+  ArtikelIndexRoute: typeof ArtikelIndexRoute
   BeritaIndexRoute: typeof BeritaIndexRoute
   ApiPublicWebhooksTallyRoute: typeof ApiPublicWebhooksTallyRoute
 }
@@ -305,6 +331,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/artikel/': {
+      id: '/artikel/'
+      path: '/artikel'
+      fullPath: '/artikel/'
+      preLoaderRoute: typeof ArtikelIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/artikel/$id': {
+      id: '/artikel/$id'
+      path: '/artikel/$id'
+      fullPath: '/artikel/$id'
+      preLoaderRoute: typeof ArtikelIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/berita/': {
       id: '/berita/'
       path: '/berita'
@@ -352,7 +392,9 @@ const rootRouteChildren: RootRouteChildren = {
   ReelsRoute: ReelsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   VideoRoute: VideoRoute,
+  ArtikelIdRoute: ArtikelIdRoute,
   BeritaIdRoute: BeritaIdRoute,
+  ArtikelIndexRoute: ArtikelIndexRoute,
   BeritaIndexRoute: BeritaIndexRoute,
   ApiPublicWebhooksTallyRoute: ApiPublicWebhooksTallyRoute,
 }

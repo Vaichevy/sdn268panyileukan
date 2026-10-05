@@ -3,6 +3,7 @@ const bannerFallback = bannerAsset.url;
 type BannerCfg = { banner_height: number; banner_zoom: number; banner_pos_x: number; banner_pos_y: number };
 import { isVideoUrl } from "@/lib/cms";
 import { ImageEffectEditor, ImageEffectOverlay, type ImageEffect } from "@/components/site/ImageEffect";
+import { ArticleManager } from "@/components/admin/ArticleManager";
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
@@ -305,6 +306,7 @@ function AdminPage() {
             <TabsTrigger value="reels">Reels Instagram</TabsTrigger>
             <TabsTrigger value="video">Galeri Video</TabsTrigger>
             <TabsTrigger value="berita">Berita</TabsTrigger>
+            <TabsTrigger value="artikel">Artikel</TabsTrigger>
             <TabsTrigger value="komentar">Komentar</TabsTrigger>
           </TabsList>
 
@@ -928,6 +930,10 @@ function AdminPage() {
 
           <TabsContent value="berita" className="mt-6">
             <NewsManager items={news ?? []} />
+          </TabsContent>
+
+          <TabsContent value="artikel" className="mt-6">
+            <ArticleManager />
           </TabsContent>
 
           <TabsContent value="komentar" className="mt-6">
