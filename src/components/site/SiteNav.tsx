@@ -10,6 +10,8 @@ import {
   GraduationCap,
   ClipboardCheck,
   CalendarDays,
+  Newspaper,
+  FileText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { parseApps, useSiteSettings } from "@/lib/cms";
@@ -20,7 +22,6 @@ const LINKS: { href?: string; to?: string; label: string }[] = [
   { href: "#profil", label: "Profil" },
   { href: "#sambutan", label: "Sambutan" },
   { href: "#galeri", label: "Galeri" },
-  { href: "#berita", label: "Berita" },
   { href: "#kontak", label: "Kontak" },
 ];
 
@@ -31,6 +32,21 @@ type MenuItem = {
   description: string;
   icon: typeof AppWindow;
 };
+
+const BERITA_PENGUMUMAN: MenuItem[] = [
+  {
+    to: "/berita",
+    label: "Berita",
+    description: "Kabar & pengumuman terbaru sekolah",
+    icon: Newspaper,
+  },
+  {
+    to: "/artikel",
+    label: "Artikel",
+    description: "Artikel edukasi & bacaan warga sekolah",
+    icon: FileText,
+  },
+];
 
 const KURIKULUM: MenuItem[] = [
   {
@@ -201,6 +217,7 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
           >
             PPDB
           </Link>
+          <DropdownMenu label="Berita & Pengumuman" items={BERITA_PENGUMUMAN} />
           <DropdownMenu label="Kurikulum" items={KURIKULUM} />
           <DropdownMenu label="Aplikasi" items={APPS} />
           <Link
@@ -254,6 +271,23 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
             >
               PPDB
             </Link>
+            <div className="mt-1 rounded-2xl bg-secondary/50 p-2">
+              <p className="px-2 py-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                Berita & Pengumuman
+              </p>
+              {BERITA_PENGUMUMAN.map((item) =>
+                item.to ? (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setOpen(false)}
+                    className="flex items-start gap-2 rounded-xl px-2 py-2.5 text-sm font-medium break-words text-foreground transition-colors hover:bg-card"
+                  >
+                    <item.icon className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> {item.label}
+                  </Link>
+                ) : null,
+              )}
+            </div>
             <div className="mt-1 rounded-2xl bg-secondary/50 p-2">
               <p className="px-2 py-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                 Kurikulum
