@@ -3,7 +3,7 @@ import { ArrowRight, Award, BadgeCheck, MapPin, Phone, Sparkles } from "lucide-r
 import heroImage from "@/assets/hero-sekolah.jpg";
 import bannerAsset from "@/assets/banner-sekolah.jpeg.asset.json";
 import { RunningText } from "@/components/site/RunningText";
-import type { SiteSettings } from "@/lib/cms";
+import { isVideoUrl, type SiteSettings } from "@/lib/cms";
 import { ImageEffectOverlay, type ImageEffect } from "@/components/site/ImageEffect";
 
 export function Hero({ settings }: { settings: SiteSettings | null }) {
@@ -41,6 +41,18 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
           className="relative w-full overflow-hidden rounded-[2rem] border border-border shadow-[var(--shadow-lift)]"
           style={{ height: `clamp(160px, 45vw, ${h}px)` }}
         >
+          {isVideoUrl(settings?.hero_image_url) ? (
+            <video
+              src={settings!.hero_image_url!}
+              autoPlay
+              muted
+              loop
+              playsInline
+              aria-label={`Banner ${settings?.school_name || "SDN 268 Panyileukan"}`}
+              className="h-full w-full object-cover"
+              style={{ objectPosition: pos, transform: `scale(${(b.banner_zoom ?? 100) / 100})`, transformOrigin: pos }}
+            />
+          ) : (
           <img
             src={settings?.hero_image_url || bannerAsset.url}
             alt={`Banner ${settings?.school_name || "SDN 268 Panyileukan"}`}
@@ -49,6 +61,7 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
             className="h-full w-full object-cover"
             style={{ objectPosition: pos, transform: `scale(${(b.banner_zoom ?? 100) / 100})`, transformOrigin: pos }}
           />
+          )}
           <ImageEffectOverlay effect={(settings as { banner_effect?: ImageEffect } | null)?.banner_effect} />
         </div>
       </div>
