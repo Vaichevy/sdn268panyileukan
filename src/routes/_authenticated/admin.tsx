@@ -4,6 +4,7 @@ type BannerCfg = { banner_height: number; banner_zoom: number; banner_pos_x: num
 import { isVideoUrl } from "@/lib/cms";
 import { ImageEffectEditor, ImageEffectOverlay, type ImageEffect } from "@/components/site/ImageEffect";
 import { ArticleManager } from "@/components/admin/ArticleManager";
+import { tiktokVideoId, tiktokPlayerUrl } from "@/lib/social-reels";
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
@@ -303,7 +304,7 @@ function AdminPage() {
             <TabsTrigger value="identitas">Identitas & Profil</TabsTrigger>
             <TabsTrigger value="pembelajaran">Pembelajaran</TabsTrigger>
             <TabsTrigger value="galeri">Galeri Kegiatan</TabsTrigger>
-            <TabsTrigger value="reels">Reels Instagram</TabsTrigger>
+            <TabsTrigger value="reels">Reels &amp; Stories</TabsTrigger>
             <TabsTrigger value="video">Galeri Video</TabsTrigger>
             <TabsTrigger value="berita">Berita</TabsTrigger>
             <TabsTrigger value="artikel">Artikel</TabsTrigger>
@@ -1836,6 +1837,7 @@ function ReelFields({
 }) {
   const set = (patch: Partial<ReelForm>) => onChange({ ...value, ...patch });
   const code = instagramCode(value.instagram_url);
+  const tiktokId = tiktokVideoId(value.instagram_url);
   return (
     <div className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
@@ -1853,15 +1855,16 @@ function ReelFields({
         </div>
       </div>
       <div className="space-y-2">
-        <Label>Tautan Instagram (postingan / reels)</Label>
+        <Label htmlFor="reel-social-url">Tautan Instagram / TikTok</Label>
         <Input
-          placeholder="https://www.instagram.com/reel/XXXXXXXXXXX/"
+          id="reel-social-url"
+          placeholder="https://www.tiktok.com/@akun/video/1234567890123456789"
           value={value.instagram_url}
           onChange={(e) => set({ instagram_url: e.target.value })}
         />
         <p className="text-xs text-muted-foreground">
-          Salin tautan dari tombol Bagikan &gt; Salin tautan di Instagram. Mendukung /p/, /reel/,
-          dan /tv/.
+          Instagram: /p/, /reel/, atau /tv/. TikTok: gunakan tautan lengkap
+          https://www.tiktok.com/@akun/video/ID, bukan tautan singkat vm.tiktok.com atau vt.tiktok.com.
         </p>
       </div>
       <div className="space-y-2">
@@ -1875,7 +1878,7 @@ function ReelFields({
       <div className="space-y-2 rounded-2xl border border-border p-4">
         <Label>Klip Video (agar bisa diputar otomatis saat kursor diarahkan)</Label>
         <p className="text-xs text-muted-foreground">
-          Instagram tidak mengizinkan pemutaran otomatis dari tautan. Unggah klip video dan foto
+          Untuk cuplikan saat kursor diarahkan, unggah klip video dan foto
           sampul agar kartu memutar cuplikan saat kursor diarahkan dan diputar penuh saat diklik.
         </p>
         <div className="flex flex-wrap items-center gap-2">
@@ -1907,7 +1910,15 @@ function ReelFields({
         ) : null}
       </div>
 
-      {code ? (
+      {tiktokId ? (
+        <iframe
+          src={tiktokPlayerUrl(tiktokId)}
+          title="Pratinjau TikTok"
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+          allowFullScreen
+          className="h-[560px] w-full max-w-sm rounded-lg border border-border"
+        />
+      ) : code ? (
         <iframe
           src={`https://www.instagram.com/p/${code}/embed/captioned/`}
           title="Pratinjau Instagram"
@@ -1930,10 +1941,10 @@ function ReelsManager() {
   const [editBusy, setEditBusy] = useState(false);
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["reel_items"] });
-  const valid = (v: ReelForm) => Boolean(v.title.trim()) && Boolean(instagramCode(v.instagram_url));
+  const valid = (v: ReelForm) => Boolean(v.title.trim()) && Boolean(tiktokVideoId(v.instagram_url) || instagramCode(v.instagram_url));
 
   const add = async () => {
-    if (!valid(draft)) return toast.error("Judul dan tautan Instagram yang valid wajib diisi");
+    if (!valid(draft)) return toast.error("Isi judul dan tautan Instagram atau tautan lengkap video TikTok yang valid");
     setBusy(true);
     const { error } = await supabase.from("reel_items").insert({
       title: draft.title.trim(),
@@ -1965,7 +1976,7 @@ function ReelsManager() {
 
   const saveEdit = async () => {
     if (!editId) return;
-    if (!valid(edit)) return toast.error("Judul dan tautan Instagram yang valid wajib diisi");
+    if (!valid(edit)) return toast.error("Isi judul dan tautan Instagram atau tautan lengkap video TikTok yang valid");
     setEditBusy(true);
     const { error } = await supabase
       .from("reel_items")
@@ -1996,7 +2007,7 @@ function ReelsManager() {
   return (
     <div className="space-y-6">
       <section className="surface-card space-y-4 p-6">
-        <h2 className="font-display text-xl font-semibold">Tambah Reels / Stories Instagram</h2>
+        <h2 className="font-display text-xl font-semibold">Tambah Reels / Stories Instagram &amp; TikTok</h2>
         <ReelFields value={draft} onChange={setDraft} />
         <Button onClick={add} disabled={busy}>
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
