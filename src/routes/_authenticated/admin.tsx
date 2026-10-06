@@ -5,6 +5,7 @@ import { isVideoUrl } from "@/lib/cms";
 import { ImageEffectEditor, ImageEffectOverlay, type ImageEffect } from "@/components/site/ImageEffect";
 import { ArticleManager } from "@/components/admin/ArticleManager";
 import { tiktokVideoId, tiktokPlayerUrl } from "@/lib/social-reels";
+import { resolveTiktokUrl } from "@/lib/tiktok.functions";
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
@@ -1942,13 +1943,27 @@ function ReelsManager() {
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["reel_items"] });
   const valid = (v: ReelForm) => Boolean(v.title.trim()) && Boolean(tiktokVideoId(v.instagram_url) || instagramCode(v.instagram_url));
+  const expandShort = async (raw: string) => {
+    const url = raw.trim();
+    if (!/^https:\/\/(vt|vm)\.tiktok\.com\//i.test(url)) return url;
+    try {
+      const res = await resolveTiktokUrl({ data: { url } });
+      return res.url ?? url;
+    } catch {
+      return url;
+    }
+  };
 
   const add = async () => {
-    if (!valid(draft)) return toast.error("Isi judul dan tautan Instagram atau tautan lengkap video TikTok yang valid");
     setBusy(true);
+    const url = await expandShort(draft.instagram_url);
+    if (!valid({ ...draft, instagram_url: url })) {
+      setBusy(false);
+      return toast.error("Isi judul dan tautan Instagram atau tautan video TikTok yang valid");
+    }
     const { error } = await supabase.from("reel_items").insert({
       title: draft.title.trim(),
-      instagram_url: draft.instagram_url.trim(),
+      instagram_url: url,
       caption: draft.caption.trim(),
       event_date: draft.event_date || null,
       video_url: draft.video_url,
@@ -1976,13 +1991,17 @@ function ReelsManager() {
 
   const saveEdit = async () => {
     if (!editId) return;
-    if (!valid(edit)) return toast.error("Isi judul dan tautan Instagram atau tautan lengkap video TikTok yang valid");
     setEditBusy(true);
+    const editUrl = await expandShort(edit.instagram_url);
+    if (!valid({ ...edit, instagram_url: editUrl })) {
+      setEditBusy(false);
+      return toast.error("Isi judul dan tautan Instagram atau tautan video TikTok yang valid");
+    }
     const { error } = await supabase
       .from("reel_items")
       .update({
         title: edit.title.trim(),
-        instagram_url: edit.instagram_url.trim(),
+        instagram_url: editUrl,
         caption: edit.caption.trim(),
         event_date: edit.event_date || null,
         video_url: edit.video_url,
