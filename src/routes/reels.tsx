@@ -9,16 +9,16 @@ import { useReels, useSiteSettings, FALLBACK_SETTINGS } from "@/lib/cms";
 export const Route = createFileRoute("/reels")({
   head: () => ({
     meta: [
-      { title: "Reels & Stories Instagram — SDN 268 Panyileukan" },
+      { title: "Reels & Stories Instagram & TikTok — SDN 268 Panyileukan" },
       {
         name: "description",
         content:
-          "Kumpulan reels dan stories Instagram kegiatan SDN 268 Panyileukan Kota Bandung, dari pembelajaran hingga prestasi siswa.",
+          "Kumpulan video Instagram dan TikTok kegiatan SDN 268 Panyileukan Kota Bandung, dari pembelajaran hingga prestasi siswa.",
       },
-      { property: "og:title", content: "Reels & Stories Instagram — SDN 268 Panyileukan" },
+      { property: "og:title", content: "Reels & Stories Instagram & TikTok — SDN 268 Panyileukan" },
       {
         property: "og:description",
-        content: "Postingan Instagram resmi SDN 268 Panyileukan Kota Bandung.",
+        content: "Momen kegiatan SDN 268 Panyileukan Kota Bandung di Instagram dan TikTok.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -44,7 +44,7 @@ function ReelsPage() {
       </div>
       <main className="pt-12">
         <div className="section-shell">
-          <h1 className="sr-only">Reels & Stories Instagram SDN 268 Panyileukan</h1>
+          <h1 className="sr-only">Reels & Stories Instagram &amp; TikTok SDN 268 Panyileukan</h1>
 
           <Link
             to="/"

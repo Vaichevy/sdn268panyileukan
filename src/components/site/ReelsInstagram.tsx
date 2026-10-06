@@ -9,6 +9,9 @@ import {
 } from "@/components/ui/dialog";
 import { Reveal } from "./Reveal";
 import { InstagramIcon } from "./InstagramIcon";
+import { Music2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { tiktokVideoId, tiktokPlayerUrl } from "@/lib/social-reels";
 import { formatDateID, instagramCode, sortReels, type ReelItem } from "@/lib/cms";
 
 type ReelMedia = ReelItem & { video_url?: string | null; thumbnail_url?: string | null };
@@ -20,6 +23,27 @@ function ReelMediaBox({ item, onOpen }: { item: ReelMedia; onOpen: () => void })
   const code = instagramCode(item.instagram_url);
   const video = item.video_url || "";
   const poster = item.thumbnail_url || "";
+
+  if (tiktokVideoId(item.instagram_url) && !video) {
+    return (
+      <Button
+        variant="ghost"
+        onClick={onOpen}
+        aria-label={`Putar ${item.title}`}
+        className="relative block aspect-[9/14] h-auto w-full overflow-hidden rounded-none bg-secondary p-0 hover:bg-secondary"
+      >
+        {poster ? <img src={poster} alt={item.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover" /> : (
+          <Music2 className="absolute left-1/2 top-1/3 h-16 w-16 -translate-x-1/2 text-foreground" />
+        )}
+        <span className="absolute inset-0 flex items-center justify-center">
+          <span className="gradient-hero inline-flex h-14 w-14 items-center justify-center rounded-full text-primary-foreground shadow-lg">
+            <Play className="h-6 w-6" />
+          </span>
+        </span>
+        <span className="absolute bottom-4 left-4 inline-flex items-center gap-2 text-sm font-semibold text-foreground"><Music2 className="h-4 w-4" />TikTok</span>
+      </Button>
+    );
+  }
 
   if (video) {
     return (
@@ -85,6 +109,7 @@ function ReelMediaBox({ item, onOpen }: { item: ReelMedia; onOpen: () => void })
 }
 
 function ReelCard({ item, onOpen }: { item: ReelMedia; onOpen: () => void }) {
+  const isTikTok = Boolean(tiktokVideoId(item.instagram_url));
   return (
     <article className="surface-card group overflow-hidden p-0">
       <ReelMediaBox item={item} onOpen={onOpen} />
@@ -105,7 +130,7 @@ function ReelCard({ item, onOpen }: { item: ReelMedia; onOpen: () => void }) {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 pt-1 text-sm font-semibold text-primary hover:underline"
         >
-          <InstagramIcon className="h-4 w-4" /> Lihat di Instagram
+          {isTikTok ? <Music2 className="h-4 w-4 text-foreground" /> : <InstagramIcon className="h-4 w-4" />} Lihat di {isTikTok ? "TikTok" : "Instagram"}
         </a>
       </div>
     </article>
@@ -118,6 +143,7 @@ export function ReelsInstagram({ items, limit }: { items: ReelItem[]; limit?: nu
   const all = sortReels(items) as ReelMedia[];
   const data = typeof limit === "number" ? all.slice(0, limit) : all;
   const selected = data.find((d) => d.id === active);
+  const selectedTikTokId = tiktokVideoId(selected?.instagram_url);
 
   if (all.length === 0) return null;
 
@@ -129,11 +155,10 @@ export function ReelsInstagram({ items, limit }: { items: ReelItem[]; limit?: nu
             Reels &amp; Stories
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-foreground sm:text-4xl">
-            Cerita terkini dari Instagram sekolah
+            Cerita terkini dari Instagram &amp; TikTok sekolah
           </h2>
           <p className="mt-4 leading-relaxed text-muted-foreground">
-            Postingan pilihan dari akun Instagram resmi SDN 268 Panyileukan Kota Bandung. Arahkan
-            kursor untuk melihat cuplikan, klik untuk memutar penuh.
+            Momen kegiatan SDN 268 Panyileukan Kota Bandung di Instagram dan TikTok.
           </p>
         </Reveal>
 
@@ -159,12 +184,12 @@ export function ReelsInstagram({ items, limit }: { items: ReelItem[]; limit?: nu
         ) : null}
       </div>
 
-      <Dialog open={Boolean(selected?.video_url)} onOpenChange={(open) => !open && setActive(null)}>
-        {selected?.video_url ? (
+      <Dialog open={Boolean(selected && (selected.video_url || selectedTikTokId))} onOpenChange={(open) => !open && setActive(null)}>
+        {selected && (selected.video_url || selectedTikTokId) ? (
           <DialogContent className="media-dialog max-h-[94dvh] w-[calc(100%-1.5rem)] max-w-3xl gap-0 overflow-hidden rounded-2xl border-border/70 bg-card p-0 shadow-2xl sm:w-[calc(100%-2rem)]">
             <div className="grid max-h-[94dvh] min-h-0 md:grid-cols-[minmax(0,1fr)_18rem]">
               <div className="flex min-h-0 items-center justify-center bg-foreground p-2 sm:p-3">
-                <video
+                {selected.video_url ? <video
                   src={selected.video_url}
                   poster={selected.thumbnail_url || undefined}
                   controls
@@ -172,11 +197,17 @@ export function ReelsInstagram({ items, limit }: { items: ReelItem[]; limit?: nu
                   playsInline
                   className="max-h-[72dvh] w-auto max-w-full object-contain md:max-h-[90dvh]"
                   style={{ aspectRatio: "9 / 16" }}
-                />
+                /> : selectedTikTokId ? <iframe
+                  src={tiktokPlayerUrl(selectedTikTokId, true)}
+                  title={`TikTok — ${selected.title}`}
+                  allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                  className="h-[min(72dvh,640px)] w-full border-0 md:h-[min(90dvh,740px)]"
+                /> : null}
               </div>
               <div className="max-h-[22dvh] overflow-y-auto p-4 pr-16 md:max-h-[94dvh] md:p-6 md:pr-16">
                 <div className="flex items-center gap-2 text-sm font-semibold text-primary">
-                  <InstagramIcon className="h-5 w-5" /> Reels &amp; Stories
+                  {selectedTikTokId ? <Music2 className="h-5 w-5 text-foreground" /> : <InstagramIcon className="h-5 w-5" />} Reels &amp; Stories
                 </div>
                 <DialogTitle className="mt-3 font-display text-xl leading-snug text-foreground">
                   {selected.title}
@@ -191,7 +222,7 @@ export function ReelsInstagram({ items, limit }: { items: ReelItem[]; limit?: nu
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"
                     >
-                      <InstagramIcon className="h-4 w-4" /> Lihat di Instagram
+                      {selectedTikTokId ? <Music2 className="h-4 w-4 text-foreground" /> : <InstagramIcon className="h-4 w-4" />} Lihat di {selectedTikTokId ? "TikTok" : "Instagram"}
                     </a>
                   </div>
                 </DialogDescription>
