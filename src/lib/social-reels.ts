@@ -10,6 +10,11 @@ export function tiktokVideoId(value?: string | null): string | null {
   }
 }
 
-export function tiktokPlayerUrl(id: string, autoplay = false): string {
-  return `https://www.tiktok.com/player/v1/${id}?autoplay=${autoplay ? 1 : 0}&controls=1`;
+export function tiktokPlayerUrl(id: string, autoplay = false, preview = false): string {
+  const params = new URLSearchParams({
+    autoplay: autoplay ? "1" : "0",
+    controls: preview ? "0" : "1",
+    ...(preview ? { muted: "1", loop: "1", description: "0", music_info: "0", rel: "0" } : {}),
+  });
+  return `https://www.tiktok.com/player/v1/${id}?${params}`;
 }
