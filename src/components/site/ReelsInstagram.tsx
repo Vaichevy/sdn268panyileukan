@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, CalendarDays, Play } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
@@ -13,48 +13,70 @@ import { Music2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { tiktokVideoId, tiktokPlayerUrl } from "@/lib/social-reels";
 import { formatDateID, instagramCode, sortReels, type ReelItem } from "@/lib/cms";
+import { TiktokReelPreview } from "./TiktokReelPreview";
 
 type ReelMedia = ReelItem & { video_url?: string | null; thumbnail_url?: string | null };
 
-/** Card media: plays the uploaded clip muted on hover, falls back to the Instagram embed. */
-function ReelMediaBox({ item, onOpen }: { item: ReelMedia; onOpen: () => void }) {
+/** Uploaded clips preview locally; TikTok previews use its official player. */
+function ReelMediaBox({ item, onOpen, suspended }: { item: ReelMedia; onOpen: () => void; suspended: boolean }) {
   const [hover, setHover] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const code = instagramCode(item.instagram_url);
   const video = item.video_url || "";
   const poster = item.thumbnail_url || "";
+  const tiktokId = tiktokVideoId(item.instagram_url);
+  const wantsPlay = useRef(false);
 
-  if (tiktokVideoId(item.instagram_url) && !video) {
+  useEffect(() => {
+    const element = videoRef.current;
+    if (!element) return;
+    const stop = () => {
+      wantsPlay.current = false;
+      element.pause();
+      setHover(false);
+    };
+    if (suspended) stop();
+    const observer = new IntersectionObserver(([entry]) => { if (!entry.isIntersecting) stop(); });
+    observer.observe(element);
+    const onVisibility = () => { if (document.hidden) stop(); };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+      element.pause();
+    };
+  }, [suspended, video]);
+
+  if (tiktokId && !video) {
     return (
-      <Button
-        variant="ghost"
-        onClick={onOpen}
-        aria-label={`Putar ${item.title}`}
-        className="relative block aspect-[9/14] h-auto w-full overflow-hidden rounded-none bg-secondary p-0 hover:bg-secondary"
-      >
-        {poster ? <img src={poster} alt={item.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover" /> : (
-          <Music2 className="absolute left-1/2 top-1/3 h-16 w-16 -translate-x-1/2 text-foreground" />
-        )}
-        <span className="absolute inset-0 flex items-center justify-center">
-          <span className="gradient-hero inline-flex h-14 w-14 items-center justify-center rounded-full text-primary-foreground shadow-lg">
-            <Play className="h-6 w-6" />
-          </span>
-        </span>
-        <span className="absolute bottom-4 left-4 inline-flex items-center gap-2 text-sm font-semibold text-foreground"><Music2 className="h-4 w-4" />TikTok</span>
-      </Button>
+      <TiktokReelPreview id={tiktokId} url={item.instagram_url} title={item.title}
+        poster={poster} suspended={suspended} onOpen={onOpen} />
     );
   }
 
   if (video) {
     return (
-      <button
+      <Button
+        variant="ghost"
         type="button"
-        onClick={onOpen}
-        onMouseEnter={() => {
-          setHover(true);
-          void videoRef.current?.play().catch(() => undefined);
+        onClick={() => {
+          wantsPlay.current = false;
+          videoRef.current?.pause();
+          setHover(false);
+          onOpen();
         }}
-        onMouseLeave={() => {
+        onPointerEnter={(event) => {
+          if (event.pointerType !== "mouse" || suspended || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+          wantsPlay.current = true;
+          const element = videoRef.current;
+          if (!element) return;
+          void element.play().then(() => {
+            if (!wantsPlay.current) element.pause();
+            else setHover(true);
+          }).catch(() => setHover(false));
+        }}
+        onPointerLeave={() => {
+          wantsPlay.current = false;
           setHover(false);
           const v = videoRef.current;
           if (v) {
@@ -62,8 +84,7 @@ function ReelMediaBox({ item, onOpen }: { item: ReelMedia; onOpen: () => void })
             v.currentTime = 0;
           }
         }}
-        className="relative block w-full overflow-hidden bg-secondary"
-        style={{ aspectRatio: "9 / 14" }}
+        className="relative block aspect-[9/14] h-auto w-full overflow-hidden rounded-none bg-secondary p-0 hover:bg-secondary"
         aria-label={`Putar ${item.title}`}
       >
         <video
@@ -83,7 +104,7 @@ function ReelMediaBox({ item, onOpen }: { item: ReelMedia; onOpen: () => void })
             </span>
           </span>
         ) : null}
-      </button>
+      </Button>
     );
   }
 
@@ -108,11 +129,11 @@ function ReelMediaBox({ item, onOpen }: { item: ReelMedia; onOpen: () => void })
   );
 }
 
-function ReelCard({ item, onOpen }: { item: ReelMedia; onOpen: () => void }) {
+function ReelCard({ item, onOpen, suspended }: { item: ReelMedia; onOpen: () => void; suspended: boolean }) {
   const isTikTok = Boolean(tiktokVideoId(item.instagram_url));
   return (
     <article className="surface-card group overflow-hidden p-0">
-      <ReelMediaBox item={item} onOpen={onOpen} />
+      <ReelMediaBox item={item} onOpen={onOpen} suspended={suspended} />
       <div className="space-y-1.5 p-5">
         {item.event_date ? (
           <p className="flex items-center gap-1.5 text-xs font-medium text-primary">
@@ -165,7 +186,7 @@ export function ReelsInstagram({ items, limit }: { items: ReelItem[]; limit?: nu
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {data.map((item, index) => (
             <Reveal key={item.id} delay={index * 70}>
-              <ReelCard item={item} onOpen={() => setActive(item.id)} />
+              <ReelCard item={item} onOpen={() => setActive(item.id)} suspended={Boolean(active)} />
             </Reveal>
           ))}
         </div>
