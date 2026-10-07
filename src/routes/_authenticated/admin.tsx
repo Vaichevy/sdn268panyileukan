@@ -1864,8 +1864,8 @@ function ReelFields({
           onChange={(e) => set({ instagram_url: e.target.value })}
         />
         <p className="text-xs text-muted-foreground">
-          Instagram: /p/, /reel/, atau /tv/. TikTok: gunakan tautan lengkap
-          https://www.tiktok.com/@akun/video/ID, bukan tautan singkat vm.tiktok.com atau vt.tiktok.com.
+          Instagram: /p/, /reel/, atau /tv/. TikTok: tautan lengkap
+          https://www.tiktok.com/@akun/video/ID atau tautan singkat vt.tiktok.com / vm.tiktok.com (otomatis diubah saat disimpan).
         </p>
       </div>
       <div className="space-y-2">
