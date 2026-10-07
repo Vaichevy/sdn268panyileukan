@@ -89,6 +89,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "google-site-verification",
         content: "4uVkR_5X0U1b73th8adxE3Bp8fmNNEFn5-SZmKfMZ5A",
       },
+      {
+        name: "google-site-verification",
+        content: "mumEMquHSWE_QqUkS6v3If-r1DiAsGBsSnNPakvNAQU",
+      },
       { property: "og:title", content: "SDN 268 Panyileukan" },
       { property: "og:description", content: "Website resmi SDN 268 Panyileukan, Kota Bandung." },
       { property: "og:type", content: "website" },
