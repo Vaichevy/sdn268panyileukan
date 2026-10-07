@@ -1879,8 +1879,8 @@ function ReelFields({
       <div className="space-y-2 rounded-2xl border border-border p-4">
         <Label>Klip Video (agar bisa diputar otomatis saat kursor diarahkan)</Label>
         <p className="text-xs text-muted-foreground">
-          Untuk cuplikan saat kursor diarahkan, unggah klip video dan foto
-          sampul agar kartu memutar cuplikan saat kursor diarahkan dan diputar penuh saat diklik.
+          TikTok menggunakan sampul otomatis dan cuplikan dari pemutar resminya; foto sampul unggahan tetap diutamakan.
+          Instagram memerlukan unggahan klip video milik sekolah untuk cuplikan otomatis karena sematan Instagram tidak mengizinkan pemutaran saat kursor diarahkan.
         </p>
         <div className="flex flex-wrap items-center gap-2">
           <VideoUploadButton label="Unggah Klip Video" onDone={(url) => set({ video_url: url })} />
