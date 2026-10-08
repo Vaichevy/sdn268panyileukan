@@ -171,7 +171,7 @@ export function SiteNav({ schoolName }: { schoolName: string }) {
     >
       <div
         className={cn(
-          "section-shell mt-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-full border px-4 py-2.5 transition-all duration-500 lg:flex lg:justify-between",
+          "nav-shell mt-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-full border px-4 py-2.5 transition-all duration-500 lg:flex lg:justify-between",
           scrolled
             ? "border-border bg-card/85 shadow-[var(--shadow-soft)]"
             : "border-transparent bg-transparent",
