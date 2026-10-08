@@ -203,7 +203,8 @@
   }
   @media (min-width: 1024px) {
     max-width: none;
-    padding-inline: 1.5rem;
+    margin-inline: 0.75rem;
+    padding-inline: 1.25rem;
   }
 }
 
