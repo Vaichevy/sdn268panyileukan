@@ -87,15 +87,13 @@ function Beranda() {
       <CursorParticles />
       <SiteNav schoolName={value?.school_name ?? FALLBACK_SETTINGS.school_name} />
       {tickerOn ? (
-        <div className="sticky top-[68px] z-40 pt-2">
-          <div className="section-shell">
-            <div className="overflow-hidden rounded-2xl border border-border/60 shadow-[var(--shadow-soft)] backdrop-blur-md">
-              <RunningText
-                text={settings?.running_text}
-                enabled={settings?.running_text_enabled}
-                speed={settings?.running_text_speed}
-              />
-            </div>
+        <div className="sticky top-[78px] z-40 pt-2">
+          <div className="w-full">
+            <RunningText
+              text={settings?.running_text}
+              enabled={settings?.running_text_enabled}
+              speed={settings?.running_text_speed}
+            />
           </div>
         </div>
       ) : null}
