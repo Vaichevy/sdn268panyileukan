@@ -11,6 +11,7 @@ import { GaleriVideo } from "@/components/site/GaleriVideo";
 import { ReelsInstagram } from "@/components/site/ReelsInstagram";
 import { Berita } from "@/components/site/Berita";
 import { Kontak } from "@/components/site/Kontak";
+import { RunningText } from "@/components/site/RunningText";
 import { Komentar } from "@/components/site/Komentar";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import {
