@@ -11,6 +11,7 @@ import { GaleriVideo } from "@/components/site/GaleriVideo";
 import { ReelsInstagram } from "@/components/site/ReelsInstagram";
 import { Berita } from "@/components/site/Berita";
 import { Kontak } from "@/components/site/Kontak";
+import { RunningText } from "@/components/site/RunningText";
 import { Komentar } from "@/components/site/Komentar";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import {
@@ -77,11 +78,27 @@ function Beranda() {
 
   const value = settings ?? (FALLBACK_SETTINGS as never);
 
+  const ticker = (settings?.running_text ?? "").trim();
+  const tickerOn = settings?.running_text_enabled !== false && ticker.length > 0;
+
   return (
     <div className="relative min-h-screen">
       <AnimatedBackground />
       <CursorParticles />
       <SiteNav schoolName={value?.school_name ?? FALLBACK_SETTINGS.school_name} />
+      {tickerOn ? (
+        <div className="sticky top-[68px] z-40 pt-2">
+          <div className="section-shell">
+            <div className="overflow-hidden rounded-2xl border border-border/60 shadow-[var(--shadow-soft)] backdrop-blur-md">
+              <RunningText
+                text={settings?.running_text}
+                enabled={settings?.running_text_enabled}
+                speed={settings?.running_text_speed}
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
       <main>
         <Hero settings={value} />
         <ReelsInstagram items={reels ?? []} limit={4} />
