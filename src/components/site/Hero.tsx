@@ -36,9 +36,9 @@ export function Hero({ settings }: { settings: SiteSettings | null }) {
           </div>
         </div>
       ) : null}
-      <div className="section-shell mb-12">
+      <div className="mb-12 w-full px-3 sm:px-4 lg:px-0">
         <div
-          className="relative w-full overflow-hidden rounded-[2rem] border border-border shadow-[var(--shadow-lift)]"
+          className="relative w-full overflow-hidden rounded-none border-y border-border shadow-[var(--shadow-lift)] sm:rounded-[2rem] sm:border"
           style={{ height: `clamp(160px, 45vw, ${h}px)` }}
         >
           {isVideoUrl(settings?.hero_image_url) ? (
