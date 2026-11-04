@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as EvaluasiKalenderRouteImport } from './routes/evaluasi-kalender'
 import { Route as GaleriRouteImport } from './routes/galeri'
+import { Route as LiterasiDigitalRouteImport } from './routes/literasi-digital'
 import { Route as PembelajaranRouteImport } from './routes/pembelajaran'
 import { Route as PembelajaranPenilaianRouteImport } from './routes/pembelajaran-penilaian'
 import { Route as PpdbRouteImport } from './routes/ppdb'
@@ -49,6 +50,11 @@ const EvaluasiKalenderRoute = EvaluasiKalenderRouteImport.update({
 const GaleriRoute = GaleriRouteImport.update({
   id: '/galeri',
   path: '/galeri',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LiterasiDigitalRoute = LiterasiDigitalRouteImport.update({
+  id: '/literasi-digital',
+  path: '/literasi-digital',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PembelajaranRoute = PembelajaranRouteImport.update({
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/evaluasi-kalender': typeof EvaluasiKalenderRoute
   '/galeri': typeof GaleriRoute
+  '/literasi-digital': typeof LiterasiDigitalRoute
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
   '/ppdb': typeof PpdbRoute
@@ -135,6 +142,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/evaluasi-kalender': typeof EvaluasiKalenderRoute
   '/galeri': typeof GaleriRoute
+  '/literasi-digital': typeof LiterasiDigitalRoute
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
   '/ppdb': typeof PpdbRoute
@@ -155,6 +163,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/evaluasi-kalender': typeof EvaluasiKalenderRoute
   '/galeri': typeof GaleriRoute
+  '/literasi-digital': typeof LiterasiDigitalRoute
   '/pembelajaran': typeof PembelajaranRoute
   '/pembelajaran-penilaian': typeof PembelajaranPenilaianRoute
   '/ppdb': typeof PpdbRoute
@@ -175,6 +184,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/evaluasi-kalender'
     | '/galeri'
+    | '/literasi-digital'
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
     | '/ppdb'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/evaluasi-kalender'
     | '/galeri'
+    | '/literasi-digital'
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
     | '/ppdb'
@@ -212,6 +223,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/evaluasi-kalender'
     | '/galeri'
+    | '/literasi-digital'
     | '/pembelajaran'
     | '/pembelajaran-penilaian'
     | '/ppdb'
@@ -232,6 +244,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   EvaluasiKalenderRoute: typeof EvaluasiKalenderRoute
   GaleriRoute: typeof GaleriRoute
+  LiterasiDigitalRoute: typeof LiterasiDigitalRoute
   PembelajaranRoute: typeof PembelajaranRoute
   PembelajaranPenilaianRoute: typeof PembelajaranPenilaianRoute
   PpdbRoute: typeof PpdbRoute
@@ -280,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: '/galeri'
       fullPath: '/galeri'
       preLoaderRoute: typeof GaleriRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/literasi-digital': {
+      id: '/literasi-digital'
+      path: '/literasi-digital'
+      fullPath: '/literasi-digital'
+      preLoaderRoute: typeof LiterasiDigitalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pembelajaran': {
@@ -386,6 +406,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   EvaluasiKalenderRoute: EvaluasiKalenderRoute,
   GaleriRoute: GaleriRoute,
+  LiterasiDigitalRoute: LiterasiDigitalRoute,
   PembelajaranRoute: PembelajaranRoute,
   PembelajaranPenilaianRoute: PembelajaranPenilaianRoute,
   PpdbRoute: PpdbRoute,

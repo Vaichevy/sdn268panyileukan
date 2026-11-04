@@ -7,6 +7,7 @@ import {
   ChevronDown,
   AppWindow,
   BookOpen,
+  Library,
   GraduationCap,
   ClipboardCheck,
   CalendarDays,
@@ -72,6 +73,12 @@ const KURIKULUM: MenuItem[] = [
     label: "Evaluasi & Kalender",
     description: "Siklus evaluasi & kalender pendidikan",
     icon: CalendarDays,
+  },
+  {
+    to: "/literasi-digital",
+    label: "Literasi Digital",
+    description: "Rak buku digital & bacaan sekolah",
+    icon: Library,
   },
 ];
 

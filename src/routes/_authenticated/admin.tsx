@@ -738,6 +738,23 @@ function AdminPage() {
 
                 <section className="surface-card space-y-4 p-6">
                   <h2 className="font-display text-xl font-semibold">
+                    Halaman Literasi Digital
+                  </h2>
+                  <Field
+                    label="Judul Halaman"
+                    value={form.literasi_digital_heading}
+                    onChange={(v) => set("literasi_digital_heading", v)}
+                  />
+                  <Field
+                    label="URL Embed Perpustakaan Digital"
+                    value={form.literasi_digital_url}
+                    onChange={(v) => set("literasi_digital_url", v)}
+                    hint="Tautan rak buku / flipbook yang dapat disematkan, mis. https://fliphtml5.com/bookcase/blozj/"
+                  />
+                </section>
+
+                <section className="surface-card space-y-4 p-6">
+                  <h2 className="font-display text-xl font-semibold">
                     Ekstrakurikuler & Pembiasaan
                   </h2>
                   <Field

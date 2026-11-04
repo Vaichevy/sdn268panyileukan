@@ -209,6 +209,8 @@ export type Database = {
           kokurikuler_heading: string
           kokurikuler_intro: string
           kokurikuler_items: string
+          literasi_digital_heading: string
+          literasi_digital_url: string
           logo_url: string | null
           maps_embed_url: string
           mission: string
@@ -290,6 +292,8 @@ export type Database = {
           kokurikuler_heading?: string
           kokurikuler_intro?: string
           kokurikuler_items?: string
+          literasi_digital_heading?: string
+          literasi_digital_url?: string
           logo_url?: string | null
           maps_embed_url?: string
           mission?: string
@@ -371,6 +375,8 @@ export type Database = {
           kokurikuler_heading?: string
           kokurikuler_intro?: string
           kokurikuler_items?: string
+          literasi_digital_heading?: string
+          literasi_digital_url?: string
           logo_url?: string | null
           maps_embed_url?: string
           mission?: string
