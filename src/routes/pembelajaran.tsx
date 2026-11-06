@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { AnimatedBackground } from "@/components/site/AnimatedBackground";
+import { RunningText } from "@/components/site/RunningText";
 import { Pembelajaran } from "@/components/site/Pembelajaran";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { useSiteSettings, FALLBACK_SETTINGS } from "@/lib/cms";
@@ -29,11 +30,19 @@ export const Route = createFileRoute("/pembelajaran")({
 
 function PembelajaranPage() {
   const { data: settings } = useSiteSettings();
+  const value = settings ?? (FALLBACK_SETTINGS as never);
 
   return (
     <div className="relative min-h-screen">
       <AnimatedBackground />
-      <main className="pt-10">
+      <div className="sticky top-0 z-40">
+        <RunningText
+          text={(value as { running_text?: string | null })?.running_text}
+          enabled={(value as { running_text_enabled?: boolean | null })?.running_text_enabled}
+          speed={(value as { running_text_speed?: number | null })?.running_text_speed}
+        />
+      </div>
+      <main className="pt-12">
         <div className="section-shell">
           <Link
             to="/"
@@ -44,7 +53,7 @@ function PembelajaranPage() {
         </div>
         <Pembelajaran />
       </main>
-      <SiteFooter settings={settings ?? (FALLBACK_SETTINGS as never)} />
+      <SiteFooter settings={value} />
     </div>
   );
 }

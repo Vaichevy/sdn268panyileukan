@@ -1,3 +1,7 @@
+# Running text on learning pages
+- [x] Display the configured running text on Literasi Digital and Pengorganisasian Belajar pages.
+- [x] Verify running text is visible on both pages and remains sticky while scrolling.
+
 # TikTok Reels & Stories
 - [x] Add automatic TikTok covers using official metadata with a player fallback.
 - [x] Add muted TikTok hover previews and verify uploaded Instagram/TikTok clips still preview on hover.
